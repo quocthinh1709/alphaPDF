@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Russian (ru) strings
+         alphaPDF  —  Russian (ru) strings
          ================================================================ -->
 
     <!-- ── Toolbar tooltips ─────────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">Развернуть боковую панель</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">Сочетания клавиш (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">Настройки</sys:String>
-    <sys:String x:Key="Str_TT_About">О программе Scalpel</sys:String>
+    <sys:String x:Key="Str_TT_About">О программе alphaPDF</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">ВЕРСИЯ</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">Копировать имя</sys:String>
     <sys:String x:Key="Str_Ready">Готово</sys:String>
     <sys:String x:Key="Str_Portable">ПОРТАТИВНАЯ</sys:String>
-    <sys:String x:Key="Str_InstallBtn">Установить Scalpel...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">Установить alphaPDF...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">Открыт {0} - стр.: {1}</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">Не удалось повернуть: {0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">Установить Scalpel</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">Установить Scalpel в ваш профиль пользователя?
+    <sys:String x:Key="Str_Dlg_InstallTitle">Установить alphaPDF</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">Установить alphaPDF в ваш профиль пользователя?
 
-Приложение будет скопировано в %LocalAppData%\Scalpel, и будет создан ярлык в меню «Пуск».
+Приложение будет скопировано в %LocalAppData%\alphaPDF, и будет создан ярлык в меню «Пуск».
 Вы можете удалить его через «Установка и удаление программ» в любое время.</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">Есть несохранённые изменения. Закрыть этот файл без сохранения?</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">Есть несохранённые изменения. Закрыть Scalpel без сохранения?</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">Есть несохранённые изменения. Закрыть alphaPDF без сохранения?</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">Не удалось открыть PDF:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">Проверять наличие обновлений?</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel может один раз в день проверять scalpel-pdf.netlify.app на наличие новой версии. Никакие сведения о вас или ваших файлах не передаются. Включить проверку обновлений?</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">alphaPDF может один раз в день проверять alphaPDF-pdf.netlify.app на наличие новой версии. Никакие сведения о вас или ваших файлах не передаются. Включить проверку обновлений?</sys:String>
     <sys:String x:Key="Str_Update_Title">Доступно обновление</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> доступен.</sys:String>
     <sys:String x:Key="Str_Update_Get">Получить обновление</sys:String>
     <sys:String x:Key="Str_Update_Later">Позже</sys:String>
@@ -324,4 +324,56 @@
     <sys:String x:Key="Str_Ocr_Progress_Starting">Подготовка…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">Распознавание страницы {0} из {1}…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">Отмена</sys:String>
+
+    <sys:String x:Key="Str_Mode_Batch">Пакетная</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">ПАКЕТНОЕ РАЗДЕЛЕНИЕ</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">Диапазоны (напр., 1-3 или 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">CSV файл с именами:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">Разделить</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">Начать пакетное разделение</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">ПАКЕТНАЯ ЗАЩИТА</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">Исходная папка:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">CSV с паролями:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">Защитить</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">Установить пароли через CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">УТИЛИТЫ</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">Список в CSV</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">Экспорт списка файлов в CSV</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">Переименовать</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">Переименовать файлы через CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">Сначала откройте исходный PDF-файл.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">Введите диапазоны страниц (напр., 1-3 или 2~).</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">Выберите действительный CSV-файл.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">Неверный формат диапазонов.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">Разделение в фоновом режиме...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">Разделение завершено. Создано файлов: {0}.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">Успешно создано {0} новых PDF-файлов.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">Ошибка пакетного разделения.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">Ошибка разделения:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">Выберите исходную папку.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">Установка паролей в фоновом режиме...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">Защита завершена. Защищено файлов: {0}.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">Успешно защищено файлов: {0}.
+Сохранено в: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">Ошибка пакетной защиты.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">Ошибка защиты:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">Экспортировано {0} файлов в CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">Успешно экспортировано {0} имен файлов в CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">Ошибка экспорта списка:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">Переименование в фоновом режиме...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">Готово. Переименовано файлов: {0}.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">Успешно переименовано {0} файлов.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">Ошибка пакетного переименования.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">Ошибка переименования:
+{0}</sys:String>
 </ResourceDictionary>

@@ -1,6 +1,6 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     internal sealed class SignatureStore
     {
@@ -9,7 +9,7 @@ namespace Scalpel.Services
 
         private static readonly string DefaultDir  = System.IO.Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Scalpel");
+            "alphaPDF");
 
         public SignatureStore()
             : this(DefaultDir, System.IO.Path.Combine(DefaultDir, "signatures.json")) { }

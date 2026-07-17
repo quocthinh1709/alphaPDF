@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
@@ -6,7 +6,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>A rendered page raster: encoded image bytes plus its pixel dimensions.</summary>
     public sealed class RasterPage

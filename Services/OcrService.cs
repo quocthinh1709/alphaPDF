@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using PdfSharpCore.Drawing;
@@ -7,7 +7,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>A single OCR-recognized word with its bounding box in PDF points (top-left origin).</summary>
     public sealed class OcrWord

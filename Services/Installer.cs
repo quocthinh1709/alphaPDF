@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Per-user install/uninstall logic and the canonical cleanup inventory.
@@ -12,8 +12,8 @@ namespace Scalpel.Services
     /// </summary>
     internal static class Installer
     {
-        private const string AppName = "Scalpel";
-        private const string ExeName = "Scalpel.exe";
+        private const string AppName = "alphaPDF";
+        private const string ExeName = "alphaPDF.exe";
 
         private static string Local =>
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -38,18 +38,18 @@ namespace Scalpel.Services
         // HKCU subtrees removed wholesale.
         public static IReadOnlyList<string> OwnedRegistryKeys { get; } =
         [
-            @"Software\Scalpel",
-            @"Software\Microsoft\Windows\CurrentVersion\Uninstall\Scalpel",
-            @"Software\Classes\Scalpel.pdf",
-            @"Software\Classes\Applications\Scalpel.exe",
-            @"Software\Classes\SystemFileAssociations\.pdf\shell\Scalpel.edit",
+            @"Software\alphaPDF",
+            @"Software\Microsoft\Windows\CurrentVersion\Uninstall\alphaPDF",
+            @"Software\Classes\alphaPDF.pdf",
+            @"Software\Classes\Applications\alphaPDF.exe",
+            @"Software\Classes\SystemFileAssociations\.pdf\shell\alphaPDF.edit",
         ];
 
         // Stray values under shared shell keys we must NOT delete wholesale.
         public static IReadOnlyList<(string KeyPath, string ValueName)> OwnedRegistryValues { get; } =
         [
-            (@"Software\Classes\.pdf\OpenWithProgids", "Scalpel.pdf"),
-            (@"Software\RegisteredApplications", "Scalpel"),
+            (@"Software\Classes\.pdf\OpenWithProgids", "alphaPDF.pdf"),
+            (@"Software\RegisteredApplications", "alphaPDF"),
         ];
 
         // Filesystem dirs + shortcut files removed on uninstall.
@@ -76,7 +76,7 @@ namespace Scalpel.Services
         /// <summary>
         /// Removes everything that can be removed while the process is still running:
         /// registry subtrees + stray values, shortcut files + the Start-Menu dir, and
-        /// %TEMP%\scalpel_*.pdf scratch. The install dir and data dir are NOT removed here
+        /// %TEMP%\alphaPDF_*.pdf scratch. The install dir and data dir are NOT removed here
         /// (they may be locked) — defer those to WriteDeferredDirWipeScript().
         /// </summary>
         public static void WipeAllData()
@@ -100,7 +100,7 @@ namespace Scalpel.Services
             try
             {
                 var temp = Path.GetTempPath();
-                foreach (var f in Directory.GetFiles(temp, "scalpel_*.pdf"))
+                foreach (var f in Directory.GetFiles(temp, "alphaPDF_*.pdf"))
                     try { File.Delete(f); } catch { }
             }
             catch { }
@@ -115,14 +115,14 @@ namespace Scalpel.Services
         /// </summary>
         public static string WriteDeferredDirWipeScript()
         {
-            string bat = Path.Combine(Path.GetTempPath(), "scalpel_uninstall.bat");
+            string bat = Path.Combine(Path.GetTempPath(), "alphaPDF_uninstall.bat");
             File.WriteAllText(bat,
                 "@echo off\r\n" +
                 "setlocal\r\n" +
                 "set /a tries=0\r\n" +
                 ":retry\r\n" +
                 $"rmdir /s /q \"{InstallDir}\" 2>nul\r\n" +
-                // Retry until the whole dir is gone — the running uninstaller (Scalpel.exe OR
+                // Retry until the whole dir is gone — the running uninstaller (alphaPDF.exe OR
                 // uninstall.exe) holds a lock on its own image until it exits.
                 $"if not exist \"{InstallDir}\" goto wipedata\r\n" +
                 "set /a tries+=1\r\n" +

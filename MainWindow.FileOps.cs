@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -83,7 +83,7 @@ namespace Scalpel
                 }
                 catch (Exception ex2)
                 {
-                    ScalpelDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    AppDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex) when (IsPasswordException(ex))
@@ -104,7 +104,7 @@ namespace Scalpel
                 }
                 catch (Exception ex2)
                 {
-                    ScalpelDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    AppDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex) when (IsXRefException(ex))
@@ -118,16 +118,16 @@ namespace Scalpel
                     _currentFile = srcPath;
                     FinishOpenFile(path, srcPath);
                     SetStatus(string.Format(Loc("Str_OpenedReadOnlyXRef"), System.IO.Path.GetFileName(path), _doc.PageCount));
-                    ScalpelDialog.Show(this,
+                    AppDialog.Show(this,
                         $"\"{System.IO.Path.GetFileName(path)}\" has a non-standard structure and was opened read-only.\n\nEditing, saving, and some other features may not work correctly.",
-                        "Scalpel", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 catch
                 {
                     // ReadOnly also failed — offer to repair.
-                    var result = ScalpelDialog.Show(this,
-                        $"This PDF has a damaged structure and couldn't be opened.\n\nWould you like Scalpel to attempt a repair? A repaired copy will be created — the original file will not be changed.\n\nNote: repaired files may be missing bookmarks, forms, and other interactive features.",
-                        "Scalpel", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var result = AppDialog.Show(this,
+                        $"This PDF has a damaged structure and couldn't be opened.\n\nWould you like alphaPDF to attempt a repair? A repaired copy will be created — the original file will not be changed.\n\nNote: repaired files may be missing bookmarks, forms, and other interactive features.",
+                        "alphaPDF", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                         TryRepairAndOpen(srcPath);
                 }
@@ -156,12 +156,12 @@ namespace Scalpel
                 }
                 catch (Exception ex2)
                 {
-                    ScalpelDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    AppDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex2.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, string.Format(Loc("Str_Dlg_FailedOpen"), ex.Message), Loc("Str_Dlg_AppTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -447,9 +447,9 @@ namespace Scalpel
                 FinishOpenFile(path, repairedPath);
                 MarkDirty(true); // repaired copy lives in temp — user must Save As
                 SetStatus(string.Format(Loc("Str_OpenedRepaired"), System.IO.Path.GetFileName(path), _doc.PageCount));
-                ScalpelDialog.Show(this,
+                AppDialog.Show(this,
                     $"\"{System.IO.Path.GetFileName(path)}\" was repaired successfully.\n\nBookmarks, forms, and other interactive features may have been lost. Use Save As to write the repaired file to a new location.",
-                    "Scalpel", MessageBoxButton.OK, MessageBoxImage.None);
+                    "alphaPDF", MessageBoxButton.OK, MessageBoxImage.None);
                 return;
             }
             catch { }
@@ -465,9 +465,9 @@ namespace Scalpel
             }
             catch { }
 
-            ScalpelDialog.Show(this,
+            AppDialog.Show(this,
                 "Repair failed — the file is too severely damaged to recover.\n\nTry opening the original in a different application (Adobe Acrobat, browsers) which may have additional recovery options.",
-                "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         /// <summary>
@@ -535,9 +535,9 @@ namespace Scalpel
             FinishOpenFile(path, repairedPath);
             MarkDirty(true); // repaired copy lives in temp — user must Save As
             SetStatus(string.Format(Loc("Str_OpenedRasterRepair"), System.IO.Path.GetFileName(path), _doc.PageCount));
-            ScalpelDialog.Show(this,
+            AppDialog.Show(this,
                 $"\"{System.IO.Path.GetFileName(path)}\" was repaired by rasterizing through PDFium.\n\nText is not selectable in the repaired copy. Use Save As to write it to a new location.",
-                "Scalpel", MessageBoxButton.OK, MessageBoxImage.None);
+                "alphaPDF", MessageBoxButton.OK, MessageBoxImage.None);
         }
 
         private static bool IsOwnerPasswordException(Exception ex) =>
@@ -597,7 +597,7 @@ namespace Scalpel
                     }));
             }
             SetStatus(string.Format(Loc("Str_Opened"), System.IO.Path.GetFileName(displayPath), _doc.PageCount));
-            Scalpel.Services.Logger.Info("File", "open.success", "PDF opened", new { path = displayPath, pages = _doc.PageCount });
+            AlphaPDF.Services.Logger.Info("File", "open.success", "PDF opened", new { path = displayPath, pages = _doc.PageCount });
             AddTab(_originalFile); // register/refresh the document tab (no-op for non-disk paths)
         }
 
@@ -1132,12 +1132,13 @@ namespace Scalpel
             _availableFamiliesCache = set;
             return set;
         }
-
+        
         private void VersionLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             ShowAboutOverlay();
         }
+        
 
         /// <summary>
         /// Re-renders secondary pages and then link overlays for the current page.

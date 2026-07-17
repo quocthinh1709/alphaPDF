@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Arabic (ar) strings
+         alphaPDF  —  Arabic (ar) strings
          ================================================================ -->
 
     <!-- ── Toolbar tooltips ─────────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">توسيع الشريط الجانبي</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">اختصارات لوحة المفاتيح (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">الإعدادات</sys:String>
-    <sys:String x:Key="Str_TT_About">حول Scalpel</sys:String>
+    <sys:String x:Key="Str_TT_About">حول alphaPDF</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">الإصدار</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">نسخ الاسم</sys:String>
     <sys:String x:Key="Str_Ready">جاهز</sys:String>
     <sys:String x:Key="Str_Portable">محمول</sys:String>
-    <sys:String x:Key="Str_InstallBtn">تثبيت Scalpel...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">تثبيت alphaPDF...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">تم فتح {0} - {1} صفحة</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">فشل التدوير: {0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">تثبيت Scalpel</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">هل تريد تثبيت Scalpel في ملف تعريف المستخدم الخاص بك؟
+    <sys:String x:Key="Str_Dlg_InstallTitle">تثبيت alphaPDF</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">هل تريد تثبيت alphaPDF في ملف تعريف المستخدم الخاص بك؟
 
-سيؤدي هذا إلى نسخ التطبيق إلى %LocalAppData%\Scalpel وإنشاء اختصار في قائمة ابدأ.
+سيؤدي هذا إلى نسخ التطبيق إلى %LocalAppData%\alphaPDF وإنشاء اختصار في قائمة ابدأ.
 يمكنك إلغاء التثبيت عبر إضافة/إزالة البرامج في أي وقت.</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">لديك تغييرات غير محفوظة. إغلاق هذا الملف دون حفظ؟</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">لديك تغييرات غير محفوظة. إغلاق Scalpel دون حفظ؟</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">لديك تغييرات غير محفوظة. إغلاق alphaPDF دون حفظ؟</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">تعذّر فتح ملف PDF:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">التحقق من التحديثات؟</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">يمكن لـ Scalpel التحقق مرة يومياً من scalpel-pdf.netlify.app بحثاً عن إصدار جديد. لا يُرسَل أي معلومات عنك أو عن ملفاتك. تفعيل التحقق من التحديثات؟</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">تفعيل التحقق من التحديثات؟</sys:String>
     <sys:String x:Key="Str_Update_Title">تحديث متاح</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> متاح.</sys:String>
     <sys:String x:Key="Str_Update_Get">الحصول على التحديث</sys:String>
     <sys:String x:Key="Str_Update_Later">لاحقاً</sys:String>
@@ -324,4 +324,56 @@
     <sys:String x:Key="Str_Ocr_Progress_Starting">جارٍ التحضير…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">التعرف على الصفحة {0} من {1}…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">إلغاء</sys:String>
+
+    <sys:String x:Key="Str_Mode_Batch">دفعة</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">تقسيم دفعة</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">نطاق الصفحات (مثل 1-3 أو 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">ملف أسماء CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">بدء التقسيم</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">بدء تقسيم الدفعة</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">حماية دفعة</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">المجلد المصدر:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">ملف كلمات المرور CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">حماية</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">حماية المستندات عبر CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">أدوات الملفات</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">قائمة إلى CSV</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">تصدير قائمة الملفات إلى CSV</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">إعادة تسمية</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">إعادة تسمية الملفات عبر CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">يرجى فتح ملف PDF أولاً لاستخدامه كمصدر.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">الرجاء إدخال نطاق الصفحات (مثل 1-3 أو 2~).</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">الرجاء تحديد ملف CSV صالح.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">تنسيق النطاق غير صالح.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">جاري التقسيم في الخلفية...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">اكتمل التقسيم. تم إنشاء {0} ملفات.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">تم إنشاء {0} ملفات PDF بنجاح.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">فشل التقسيم.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">فشل التقسيم:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">الرجاء تحديد مجلد مصدر صالح.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">جاري تطبيق كلمات المرور في الخلفية...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">اكتملت الحماية. تم تأمين {0} ملفات.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">تم تأمين {0} ملفات بنجاح.
+تم الحفظ في: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">فشلت الحماية.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">فشلت الحماية:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">تم تصدير {0} ملفات إلى CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">تم تصدير {0} أسماء ملفات بنجاح.</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">فشل تصدير القائمة:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">جاري إعادة التسمية في الخلفية...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">اكتملت إعادة التسمية. تم تعديل {0} ملفات.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">تمت إعادة التسمية بنجاح لـ {0} ملفات.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">فشلت إعادة التسمية.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">فشلت إعادة التسمية:
+{0}</sys:String>
 </ResourceDictionary>

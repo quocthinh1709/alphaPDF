@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -58,7 +58,7 @@ namespace Scalpel
                         FontSize = Math.Max(existingEdit.FontSize, 10),
                         FontWeight = ToWeight(existingEdit.IsBold),
                         FontStyle = ToStyle(existingEdit.IsItalic),
-                        FlowDirection = Scalpel.Services.BidiReorder.ContainsRtl(existingEdit.NewContent)
+                        FlowDirection = AlphaPDF.Services.BidiReorder.ContainsRtl(existingEdit.NewContent)
                             ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
                         MinWidth = Math.Max(reb.Width + 20, 100),
                         // Height from the font size so the box fits the text at any size
@@ -212,7 +212,7 @@ namespace Scalpel
                 // Reconstruct the line in LOGICAL order. PdfPig returns words left-to-right, so a
                 // Hebrew/Arabic line's words would join reversed; JoinWordsLogical walks RTL lines
                 // right-to-left so the edit box (and the burned-in edit) reads correctly.
-                string lineText = Scalpel.Services.BidiReorder.JoinWordsLogical(
+                string lineText = AlphaPDF.Services.BidiReorder.JoinWordsLogical(
                     [.. lineWords.Select(w => (w.Word.Text, w.Rect.Left))]);
 
                 // Get actual font info from PdfPig letter data
@@ -244,7 +244,7 @@ namespace Scalpel
                         {
                             try { rawFont = firstWord.FontName; } catch { }
                         }
-                        var resolved = Scalpel.Services.FontResolver.Resolve(rawFont, AvailableFontFamilies());
+                        var resolved = AlphaPDF.Services.FontResolver.Resolve(rawFont, AvailableFontFamilies());
                         fontName = resolved.FamilyName;
                         isBold = resolved.IsBold;
                         isItalic = resolved.IsItalic;
@@ -256,12 +256,12 @@ namespace Scalpel
                             // Unicode cmap covering the line (subset CID fonts usually don't — then we
                             // fall back to a substitute and tell the user to install the font).
                             byte[]? emb = _currentFile is null ? null
-                                : Scalpel.Services.EmbeddedFontExtractor.TryExtract(_currentFile, rawFont ?? resolved.DisplayName, out _);
-                            if (emb is { Length: > 0 } && Scalpel.Services.TrueTypeCmap.CoversAllText(emb, lineText))
+                                : AlphaPDF.Services.EmbeddedFontExtractor.TryExtract(_currentFile, rawFont ?? resolved.DisplayName, out _);
+                            if (emb is { Length: > 0 } && AlphaPDF.Services.TrueTypeCmap.CoversAllText(emb, lineText))
                             {
                                 embeddedBytes = emb;
-                                embeddedKey = "__emb_" + Scalpel.Services.EmbeddedFontExtractor.Normalize(resolved.DisplayName) + "_" + emb.Length;
-                                Scalpel.Services.PdfFontResolver.Instance.RegisterBundledFont(embeddedKey, emb, isBold, isItalic);
+                                embeddedKey = "__emb_" + AlphaPDF.Services.EmbeddedFontExtractor.Normalize(resolved.DisplayName) + "_" + emb.Length;
+                                AlphaPDF.Services.PdfFontResolver.Instance.RegisterBundledFont(embeddedKey, emb, isBold, isItalic);
                                 // Exact font available — no toast.
                             }
                             else
@@ -287,7 +287,7 @@ namespace Scalpel
                     FontSize = Math.Max(canvasFontSize, 10),
                     // Hebrew/Arabic lines read right-to-left: base the box direction on the text
                     // so the caret, alignment and typing behave naturally while editing.
-                    FlowDirection = Scalpel.Services.BidiReorder.ContainsRtl(lineText)
+                    FlowDirection = AlphaPDF.Services.BidiReorder.ContainsRtl(lineText)
                         ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
                     MinWidth = Math.Max(cWidth + 20, 100),
                     // Fit the box height to the FONT (line height ~1.35em + borders), not the
@@ -317,10 +317,10 @@ namespace Scalpel
                 _activeCanvas.Children.Add(tb);
                 _activeTextBox = tb;
 
-                if (Scalpel.Services.BidiReorder.ContainsRtl(lineText))
+                if (AlphaPDF.Services.BidiReorder.ContainsRtl(lineText))
                 {
                     tb.FlowDirection = FlowDirection.RightToLeft;
-                    int rtlProbe = Scalpel.Services.ArabicShaper.ContainsArabic(lineText) ? 0x0628 : 0x05D0;
+                    int rtlProbe = AlphaPDF.Services.ArabicShaper.ContainsArabic(lineText) ? 0x0628 : 0x05D0;
                     if (!FontCovers(fontName, isBold, isItalic, rtlProbe))
                         tb.FontFamily = new FontFamily("Segoe UI, Noto Sans Hebrew, Noto Sans Arabic");
                 }
@@ -439,9 +439,9 @@ namespace Scalpel
             // Otherwise fall back to the substitute font and warn that the original isn't installed.
             byte[]? embBytes = ctx.EmbeddedFontBytes;
             if (embBytes is null && ctx.EmbeddedFamilyKey is not null)
-                Scalpel.Services.PdfFontResolver.Instance.TryGetExactFontBytes(ctx.EmbeddedFamilyKey, ctx.IsBold, ctx.IsItalic, out embBytes);
+                AlphaPDF.Services.PdfFontResolver.Instance.TryGetExactFontBytes(ctx.EmbeddedFamilyKey, ctx.IsBold, ctx.IsItalic, out embBytes);
             string? exactFamily = (ctx.EmbeddedFamilyKey is not null && embBytes is { Length: > 0 }
-                                   && Scalpel.Services.TrueTypeCmap.CoversAllText(embBytes, newText))
+                                   && AlphaPDF.Services.TrueTypeCmap.CoversAllText(embBytes, newText))
                 ? ctx.EmbeddedFamilyKey : null;
             // Had an exact font for the original text, but the new text adds glyphs it lacks → substitute + warn.
             if (exactFamily is null && ctx.EmbeddedFamilyKey is not null && !string.IsNullOrEmpty(ctx.FontDisplay))

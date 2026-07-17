@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Consumer-facing release notes shown in the "What's New" popup, newest first.
@@ -24,7 +24,7 @@ namespace Scalpel.Services
             {
                 "Make Searchable (OCR) now shows live progress (\"Recognizing page X of Y\") and can be cancelled with the button or Esc, so long scans no longer leave you waiting with no feedback.",
                 "The saved-signatures chooser now drops down directly beneath the Sign button and follows your theme (it used to float in the page and stay dark in Light mode); clicking away closes it cleanly.",
-                "New Digitally Sign tool (Tools menu): add a real, invisible cryptographic signature to a PDF using your own certificate (.pfx/.p12). Scalpel appends the signature without re-writing the rest of the file, so the signed copy stays valid in PDF readers — all on your machine, no online service.",
+                "New Digitally Sign tool (Tools menu): add a real, invisible cryptographic signature to a PDF using your own certificate (.pfx/.p12). alphaPDF appends the signature without re-writing the rest of the file, so the signed copy stays valid in PDF readers — all on your machine, no online service.",
                 "Document tabs: open several PDFs and switch between them from a tab strip above the page — click a tab, press Ctrl+Tab to cycle, or close one with its ×. Switching prompts you to save any unsaved changes first. The strip stays hidden until you have more than one file open.",
                 "Form fields are now positioned correctly on cropped PDFs and appear in every view mode — including the continuous scroll, two-page, and grid views, not just single-page view.",
                 "New Transform Pages tool (Tools menu): rotate pages in 90° steps, fine-deskew by a small angle, scale up or down, and flip horizontally or vertically — over the whole document or a page range. A plain 90° rotation stays crisp and text-selectable; deskew, scale, and flip re-render the affected pages as images.",
@@ -37,7 +37,7 @@ namespace Scalpel.Services
                 "New Line tool in the Edit tab: drag to draw a straight line, and hold Shift to snap it to horizontal, vertical, or 45°. It uses the same color, width, and opacity as the Draw tool.",
                 "Fixed: editing existing Hebrew (and other right-to-left) text now keeps the words in their correct order — a line with more than one Hebrew word used to come back reversed in the edit box.",
                 "Hebrew and Arabic edit boxes now read and align right-to-left while you type, so editing existing text feels natural.",
-                "Editing existing text now matches the original font: if that font isn't installed, Scalpel uses the document's own embedded font when it can, and otherwise tells you exactly which font to install and uses a close substitute in the meantime — for any language.",
+                "Editing existing text now matches the original font: if that font isn't installed, alphaPDF uses the document's own embedded font when it can, and otherwise tells you exactly which font to install and uses a close substitute in the meantime — for any language.",
                 "Fixed: Redact now works on PDFs with damaged or unusual internal structure that previously failed with an \"Unexpected token 'xref'\" error — such files are now safely flattened and redacted instead.",
                 "Fixed: OCR (Make Searchable) now actually produces searchable text. Previously the recognized text could be silently dropped, leaving the saved PDF non-searchable; the page text is now selectable and searchable as intended.",
                 "The Tools operations (Redact, Compress, Make Searchable) are also more robust: if something goes wrong they now show a clear message instead of closing the app.",
@@ -45,7 +45,7 @@ namespace Scalpel.Services
             }),
             new Release("1.8.0", "June 2026", new[]
             {
-                "Optional update notifications: Scalpel can now let you know when a new version is out. It's off until you turn it on, sends no information about you or your files, and you can toggle it anytime in Settings.",
+                "Optional update notifications: alphaPDF can now let you know when a new version is out. It's off until you turn it on, sends no information about you or your files, and you can toggle it anytime in Settings.",
                 "The notification links you straight to the right place to update — the Microsoft Store for Store installs, the website for portable and installed copies.",
                 "Fixed: the Settings checkboxes are now clearly legible in Dark and High Contrast themes.",
             }),

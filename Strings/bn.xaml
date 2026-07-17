@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Bengali (bn) strings
+         alphaPDF  —  Bengali (bn) strings
          ================================================================ -->
 
     <!-- ── Toolbar tooltips ─────────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">সাইডবার প্রসারিত করুন</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">কীবোর্ড শর্টকাট (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">সেটিংস</sys:String>
-    <sys:String x:Key="Str_TT_About">Scalpel সম্পর্কে</sys:String>
+    <sys:String x:Key="Str_TT_About">alphaPDF সম্পর্কে</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">সংস্করণ</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">নাম কপি করুন</sys:String>
     <sys:String x:Key="Str_Ready">প্রস্তুত</sys:String>
     <sys:String x:Key="Str_Portable">পোর্টেবল</sys:String>
-    <sys:String x:Key="Str_InstallBtn">Scalpel ইনস্টল করুন...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">alphaPDF ইনস্টল করুন...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">{0} খোলা হয়েছে - {1} পৃষ্ঠা</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">ঘোরানো ব্যর্থ হয়েছে: {0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">Scalpel ইনস্টল করুন</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">আপনার ব্যবহারকারী প্রোফাইলে Scalpel ইনস্টল করবেন?
+    <sys:String x:Key="Str_Dlg_InstallTitle">alphaPDF ইনস্টল করুন</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">আপনার ব্যবহারকারী প্রোফাইলে alphaPDF ইনস্টল করবেন?
 
-এটি অ্যাপটি %LocalAppData%\Scalpel-এ কপি করবে এবং স্টার্ট মেনু শর্টকাট তৈরি করবে।
+এটি অ্যাপটি %LocalAppData%\alphaPDF-এ কপি করবে এবং স্টার্ট মেনু শর্টকাট তৈরি করবে।
 যেকোনো সময় Add/Remove Programs-এর মাধ্যমে আনইনস্টল করা যাবে।</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">আপনার অসংরক্ষিত পরিবর্তন রয়েছে। সংরক্ষণ না করে এই ফাইলটি বন্ধ করবেন?</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">আপনার অসংরক্ষিত পরিবর্তন রয়েছে। সংরক্ষণ না করে Scalpel বন্ধ করবেন?</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">আপনার অসংরক্ষিত পরিবর্তন রয়েছে। সংরক্ষণ না করে alphaPDF বন্ধ করবেন?</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">PDF খুলতে ব্যর্থ হয়েছে:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">আপডেট খুঁজবেন?</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel প্রতিদিন একবার scalpel-pdf.netlify.app-এ নতুন সংস্করণ আছে কিনা পরীক্ষা করতে পারে। আপনার বা আপনার ফাইলের কোনো তথ্য পাঠানো হয় না। আপডেট পরীক্ষা চালু করবেন?</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">alphaPDF প্রতিদিন একবার alphaPDF-pdf.netlify.app-এ নতুন সংস্করণ আছে কিনা পরীক্ষা করতে পারে। আপনার বা আপনার ফাইলের কোনো তথ্য পাঠানো হয় না। আপডেট পরীক্ষা চালু করবেন?</sys:String>
     <sys:String x:Key="Str_Update_Title">আপডেট পাওয়া গেছে</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> পাওয়া যাচ্ছে।</sys:String>
     <sys:String x:Key="Str_Update_Get">আপডেট নিন</sys:String>
     <sys:String x:Key="Str_Update_Later">পরে</sys:String>
@@ -324,4 +324,56 @@
     <sys:String x:Key="Str_Ocr_Progress_Starting">প্রস্তুত হচ্ছে…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">পৃষ্ঠা {0}/{1} শনাক্ত করা হচ্ছে…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">বাতিল</sys:String>
+
+    <sys:String x:Key="Str_Mode_Batch">ব্যাচ</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">ব্যাচ বিভাজন</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">পৃষ্ঠা পরিসীমা (যেমন 1-3 বা 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">CSV নাম ফাইল:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">বিভাজন শুরু করুন</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">ব্যাচ বিভাজন শুরু করুন</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">ব্যাচ সুরক্ষা</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">উৎস ফোল্ডার:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">পাসওয়ার্ড CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">সুরক্ষা</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">CSV দ্বারা ব্যাচ সুরক্ষা</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">ফাইল টুলস</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">CSV-তে তালিকা</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">ফাইল তালিকা CSV-তে সংরক্ষণ করুন</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">নাম পরিবর্তন</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">CSV দ্বারা নাম পরিবর্তন করুন</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">উৎস হিসেবে ব্যবহারের জন্য একটি PDF ফাইল খুলুন।</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">অনুগ্রহ করে পৃষ্ঠা পরিসীমা লিখুন (যেমন 1-3 বা 2~)।</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">একটি বৈধ CSV ফাইল নির্বাচন করুন।</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">পৃষ্ঠা পরিসীমার বিন্যাস অবৈধ।</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">ব্যাকগ্রাউন্ডে ব্যাচ বিভাজন চলছে...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">বিভাজন সম্পন্ন। {0} টি ফাইল তৈরি হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">সফলভাবে {0} টি নতুন PDF তৈরি হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">ব্যাচ বিভাজন ব্যর্থ হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">বিভাজন ব্যর্থ:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">উৎস ফোল্ডার নির্বাচন করুন।</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">ব্যাকগ্রাউন্ডে পাসওয়ার্ড প্রয়োগ করা হচ্ছে...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">সুরক্ষা সম্পন্ন। {0} টি ফাইল সুরক্ষিত।</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">সফলভাবে {0} টি ফাইল সুরক্ষিত হয়েছে।
+সংরক্ষিত: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">ব্যাচ সুরক্ষা ব্যর্থ হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">সুরক্ষা ব্যর্থ:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">{0} টি ফাইল CSV-তে এক্সপোর্ট করা হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">সফলভাবে {0} টি ফাইলের নাম CSV-তে এক্সপোর্ট হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">তালিকা তৈরি ব্যর্থ:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">ব্যাকগ্রাউন্ডে নাম পরিবর্তন চলছে...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">নাম পরিবর্তন সম্পন্ন। {0} টি ফাইলের নাম পরিবর্তন হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">সফলভাবে {0} টি ফাইলের নাম পরিবর্তন হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">ব্যাচ নাম পরিবর্তন ব্যর্থ হয়েছে।</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">নাম পরিবর্তন ব্যর্থ:
+{0}</sys:String>
 </ResourceDictionary>

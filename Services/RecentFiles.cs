@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Pure most-recently-used list logic for recently-opened files. No registry, no WPF — the

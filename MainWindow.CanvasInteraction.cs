@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -252,6 +252,42 @@ namespace Scalpel
                     _activePreview = lpoly;
                     _activeCanvas.CaptureMouse();
                     break;
+                // Thêm vào switch (_currentTool)
+                case EditTool.Rectangle:
+                case EditTool.Ellipse:
+                    ClearSelection();
+                    _isDrawing = true; 
+                    _drawStart = pos; 
+                    _activeInk = new InkAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, Tag = _currentTool }; // Lưu loại Tool vào Tag để phân biệt khi Render
+                    _activeInk.SetColor(_drawColor);
+
+                    Shape shape = _currentTool == EditTool.Rectangle ? new Rectangle() : new Ellipse();
+                    shape.Stroke = new SolidColorBrush(_drawColor);
+                    shape.StrokeThickness = _drawWidth;
+                    shape.Fill = Brushes.Transparent;
+
+                    Canvas.SetLeft(shape, pos.X);
+                    Canvas.SetTop(shape, pos.Y);
+                    shape.Width = 0; shape.Height = 0;
+
+                    _activeCanvas.Children.Add(shape);
+                    _activePreview = shape;
+                    _activeCanvas.CaptureMouse();
+                    break;
+
+                case EditTool.Arrow:
+                    ClearSelection();
+                    _isDrawing = true;
+                    _activeInk = new InkAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, Tag = EditTool.Arrow };
+                    _activeInk.SetColor(_drawColor);
+                    _activeInk.Points.Add(pos);
+                    _activeInk.Points.Add(pos);
+
+                    var arrowPath = new System.Windows.Shapes.Path { Stroke = new SolidColorBrush(_drawColor), StrokeThickness = _drawWidth, StrokeLineJoin = PenLineJoin.Round };
+                    _activeCanvas.Children.Add(arrowPath);
+                    _activePreview = arrowPath;
+                    _activeCanvas.CaptureMouse();
+                    break;
 
                 case EditTool.Signature:
                     if (_pendingSignature is not null)
@@ -440,6 +476,56 @@ namespace Scalpel
                     Canvas.SetTop(crect, Math.Min(pos.Y, _drawStart.Y));
                     crect.Width = Math.Abs(pos.X - _drawStart.X);
                     crect.Height = Math.Abs(pos.Y - _drawStart.Y);
+                    break;
+                case EditTool.Rectangle:
+                case EditTool.Ellipse:
+                    if (_activePreview is Shape preShape)
+                    {
+                        double x = Math.Min(pos.X, _drawStart.X);
+                        double y = Math.Min(pos.Y, _drawStart.Y);
+                        double w = Math.Abs(pos.X - _drawStart.X);
+                        double h = Math.Abs(pos.Y - _drawStart.Y);
+
+                        if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                        {
+                            w = h = Math.Max(w, h);
+                            x = pos.X < _drawStart.X ? _drawStart.X - w : _drawStart.X;
+                            y = pos.Y < _drawStart.Y ? _drawStart.Y - h : _drawStart.Y;
+                        }
+
+                        Canvas.SetLeft(preShape, x);
+                        Canvas.SetTop(preShape, y);
+                        preShape.Width = w;
+                        preShape.Height = h;
+                    }
+                    break;
+
+                case EditTool.Arrow:
+                    if (_activePreview is System.Windows.Shapes.Path aPath && _activeInk != null && _activeInk.Points.Count == 2)
+                    {
+                        var startPt = _activeInk.Points[0];
+                        var endPt = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
+                                        ? LineSnap.SnapEndpoint(startPt, pos) : pos;
+                        _activeInk.Points[1] = endPt;
+
+                        double headSize = _drawWidth * 3 + 5;
+                        double angle = Math.Atan2(endPt.Y - startPt.Y, endPt.X - startPt.X);
+                        double theta = Math.PI / 6;
+
+                        Point p1 = new Point(endPt.X - headSize * Math.Cos(angle - theta), endPt.Y - headSize * Math.Sin(angle - theta));
+                        Point p2 = new Point(endPt.X - headSize * Math.Cos(angle + theta), endPt.Y - headSize * Math.Sin(angle + theta));
+
+                        var geometry = new StreamGeometry();
+                        using (var ctx = geometry.Open())
+                        {
+                            ctx.BeginFigure(startPt, false, false);
+                            ctx.LineTo(endPt, true, true);
+                            ctx.BeginFigure(p1, false, false);
+                            ctx.LineTo(endPt, true, true);
+                            ctx.LineTo(p2, true, true);
+                        }
+                        aPath.Data = geometry;
+                    }
                     break;
             }
         }

@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -57,7 +57,7 @@ namespace Scalpel
             _activeTextBox = tb;
             tb.TextChanged += (s, e) =>
             {
-                tb.FlowDirection = Scalpel.Services.BidiReorder.ContainsRtl(tb.Text)
+                tb.FlowDirection = AlphaPDF.Services.BidiReorder.ContainsRtl(tb.Text)
                     ? FlowDirection.RightToLeft
                     : FlowDirection.LeftToRight;
             };
@@ -143,7 +143,8 @@ namespace Scalpel
                     PageIndex = pageIdx,
                     Position = new Point(x, y),
                     Content = content,
-                    FontSize = tb.FontSize
+                    FontSize = tb.FontSize,
+                    FontName = tb.FontFamily.Source
                 };
                 ta.SetColor(tb.Foreground is SolidColorBrush scb ? scb.Color : Colors.Black);
                 AddAnnotation(ta);

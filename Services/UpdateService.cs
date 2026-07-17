@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Latest-version metadata fetched from the website's version.json.</summary>
     public sealed record UpdateInfo(string Version, string SiteUrl, string StoreUrl, string[] Notes);
@@ -17,7 +17,7 @@ namespace Scalpel.Services
     public static class UpdateService
     {
         /// <summary>Fallback when a packaged build has no explicit storeUrl.</summary>
-        public const string StoreSearchUrl = "https://apps.microsoft.com/search?query=Scalpel+PDF";
+        public const string StoreSearchUrl = "https://apps.microsoft.com/search?query=alphaPDF+PDF";
 
         public static readonly TimeSpan CheckInterval = TimeSpan.FromHours(24);
         public const string VersionJsonUrl = "https://scalpel-pdf.netlify.app/version.json";
@@ -40,7 +40,7 @@ namespace Scalpel.Services
             {
                 ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
                 using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
-                http.DefaultRequestHeaders.Add("User-Agent", "Scalpel-UpdateCheck");
+                http.DefaultRequestHeaders.Add("User-Agent", "alphaPDF-UpdateCheck");
                 string json = await http.GetStringAsync(url).ConfigureAwait(false);
                 return TryParse(json);
             }

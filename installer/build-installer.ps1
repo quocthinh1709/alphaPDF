@@ -1,20 +1,20 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
-    Compiles the Scalpel Inno Setup installer into installer\out\Scalpel-<version>-Setup.exe.
+    Compiles the alphaPDF Inno Setup installer into installer\out\alphaPDF-<version>-Setup.exe.
 .DESCRIPTION
     Locates ISCC.exe (the Inno Setup command-line compiler), derives the version
-    from Scalpel.csproj (Major.Minor.Build) unless -Version is given, and builds
-    Scalpel.iss against the published EXE.
+    from alphaPDF.csproj (Major.Minor.Build) unless -Version is given, and builds
+    alphaPDF.iss against the published EXE.
 
     Prerequisites:
       - Inno Setup 6 installed (winget install JRSoftware.InnoSetup), and
-      - a published EXE at bin\Release\net48\publish\Scalpel.exe
+      - a published EXE at bin\Release\net48\publish\alphaPDF.exe
         (run: dotnet publish -c Release   — or release.ps1).
 .PARAMETER Version
     Override the version stamped into the installer (defaults to the csproj version, 3 parts).
 .PARAMETER SourceExe
-    Override the source EXE path (defaults to bin\Release\net48\publish\Scalpel.exe).
+    Override the source EXE path (defaults to bin\Release\net48\publish\alphaPDF.exe).
 .EXAMPLE
     pwsh -File installer\build-installer.ps1
 #>
@@ -25,7 +25,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot   # repo root (installer\ is one level down)
-$iss  = Join-Path $PSScriptRoot "Scalpel.iss"
+$iss  = Join-Path $PSScriptRoot "alphaPDF.iss"
 
 # ── Locate ISCC.exe ──────────────────────────────────────────────────────────
 $iscc = @(
@@ -45,7 +45,7 @@ Write-Host "ISCC: $iscc" -ForegroundColor Cyan
 
 # ── Resolve version (csproj -> Major.Minor.Build) ────────────────────────────
 if (-not $Version) {
-    $csproj = Join-Path $root "Scalpel.csproj"
+    $csproj = Join-Path $root "alphaPDF.csproj"
     if (Test-Path $csproj) {
         $m = Select-String -Path $csproj -Pattern '<Version>([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
         if ($m) { $Version = $m.Matches[0].Groups[1].Value }
@@ -55,7 +55,7 @@ if (-not $Version) {
 Write-Host "Version: $Version" -ForegroundColor Cyan
 
 # ── Resolve source EXE ───────────────────────────────────────────────────────
-if (-not $SourceExe) { $SourceExe = Join-Path $root "bin\Release\net48\publish\Scalpel.exe" }
+if (-not $SourceExe) { $SourceExe = Join-Path $root "bin\Release\net48\publish\alphaPDF.exe" }
 if (-not (Test-Path $SourceExe)) {
     throw "Published EXE not found: $SourceExe`n  Build it first:  dotnet publish -c Release"
 }
@@ -65,7 +65,7 @@ Write-Host "Source EXE: $SourceExe" -ForegroundColor Cyan
 & $iscc "/DAppVersion=$Version" "/DSourceExe=$SourceExe" $iss
 if ($LASTEXITCODE -ne 0) { throw "ISCC failed (exit $LASTEXITCODE)." }
 
-$out = Join-Path $PSScriptRoot "out\Scalpel-Setup.exe"
+$out = Join-Path $PSScriptRoot "out\alphaPDF-Setup.exe"
 if (Test-Path $out) {
     $size = "{0:N0}" -f (Get-Item $out).Length
     Write-Host "`nInstaller built: $out ($size bytes)" -ForegroundColor Green

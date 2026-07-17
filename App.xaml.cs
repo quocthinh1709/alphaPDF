@@ -14,10 +14,11 @@ using System.Windows.Input;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using Microsoft.Win32;
+using alphaPDF;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class App : Application
     {
@@ -25,7 +26,7 @@ namespace Scalpel
         // Paths
         // ============================================================
 
-        private static readonly string AppName   = "Scalpel";
+        private static readonly string AppName   = "alphaPDF";
 
         // ============================================================
         // Shell interop
@@ -40,7 +41,7 @@ namespace Scalpel
         // Packaging identity (MSIX / Microsoft Store)
         // ============================================================
         //
-        // When Scalpel runs from an MSIX package (Store install or sideload), the
+        // When alphaPDF runs from an MSIX package (Store install or sideload), the
         // package — not the app — owns install, uninstall, file associations, and
         // shortcuts. All of the self-installer machinery below is therefore disabled
         // in packaged mode; see IsPackaged() callers.
@@ -110,11 +111,11 @@ namespace Scalpel
             if (uninstallRequested && (runningAsUninstaller || !IsPackaged()))
             {
                 InstallerUI.RunUninstallFlow(
-                    Scalpel.Services.Installer.WipeAllData,
-                    Scalpel.Services.Installer.WriteDeferredDirWipeScript,
+                    AlphaPDF.Services.Installer.WipeAllData,
+                    AlphaPDF.Services.Installer.WriteDeferredDirWipeScript,
                     () =>
                     {
-                        var bat = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "scalpel_uninstall.bat");
+                        var bat = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "alphaPDF_uninstall.bat");
                         Process.Start(new ProcessStartInfo("cmd.exe", $"/c \"{bat}\"")
                         {
                             WindowStyle = ProcessWindowStyle.Hidden, UseShellExecute = true,
@@ -129,16 +130,16 @@ namespace Scalpel
 
             // Logging is on by default; "0" disables it.
             bool loggingEnabled = GetSetting("LoggingEnabled") != "0";
-            // Test hook: SCALPEL_LOG_DIR redirects this session's log to a private dir so the
+            // Test hook: ALPHAPDF_LOG_DIR redirects this session's log to a private dir so the
             // E2E harness can run several instances in parallel and read each one's log without
             // ambiguity (default file name is timestamp-to-second only). Unset → default dir.
-            string? logDirOverride = Environment.GetEnvironmentVariable("SCALPEL_LOG_DIR");
-            Scalpel.Services.Logger.Init(
+            string? logDirOverride = Environment.GetEnvironmentVariable("ALPHAPDF_LOG_DIR");
+            AlphaPDF.Services.Logger.Init(
                 baseDir: string.IsNullOrWhiteSpace(logDirOverride) ? null : logDirOverride,
                 enabled: loggingEnabled);
             RegisterGlobalClickLogging();
             var ver = typeof(App).Assembly.GetName().Version?.ToString() ?? "?";
-            Scalpel.Services.Logger.Info("App", "app.start", $"Scalpel {ver} starting",
+            AlphaPDF.Services.Logger.Info("App", "app.start", $"Alpha {ver} starting",
                 new { packaged = IsPackaged() });
 
             ThemeManager.Initialize();
@@ -171,7 +172,7 @@ namespace Scalpel
                         using var src = info.Stream;
                         using var ms = new System.IO.MemoryStream();
                         src.CopyTo(ms);
-                        Scalpel.Services.PdfFontResolver.Instance
+                        AlphaPDF.Services.PdfFontResolver.Instance
                             .RegisterBundledFont("Geist", ms.ToArray(), bold, italic: false);
                     }
                     catch { /* skip a missing/locked font resource */ }
@@ -185,7 +186,7 @@ namespace Scalpel
                         using var hsrc = hInfo.Stream;
                         using var hms = new System.IO.MemoryStream();
                         hsrc.CopyTo(hms);
-                        Scalpel.Services.PdfFontResolver.Instance
+                        AlphaPDF.Services.PdfFontResolver.Instance
                             .RegisterBundledFont("Noto Sans Hebrew", hms.ToArray(), bold: false, italic: false);
                     }
                 }
@@ -204,13 +205,13 @@ namespace Scalpel
                         using var src = info.Stream;
                         using var ms = new System.IO.MemoryStream();
                         src.CopyTo(ms);
-                        Scalpel.Services.PdfFontResolver.Instance
+                        AlphaPDF.Services.PdfFontResolver.Instance
                             .RegisterBundledFont(family, ms.ToArray(), bold: false, italic: false);
                     }
                     catch { /* skip a missing/locked font resource */ }
                 }
                 PdfSharpCore.Fonts.GlobalFontSettings.FontResolver =
-                    Scalpel.Services.PdfFontResolver.Instance;
+                    AlphaPDF.Services.PdfFontResolver.Instance;
             }
             catch { /* never block startup over font setup */ }
         }
@@ -251,7 +252,7 @@ namespace Scalpel
                 string name = !string.IsNullOrEmpty(src?.Name) ? src!.Name : src?.GetType().Name ?? "?";
                 string? label = (src as ContentControl)?.Content as string
                                 ?? (src as ContentControl)?.Content?.ToString();
-                Scalpel.Services.Logger.Info("UI", "click", name,
+                AlphaPDF.Services.Logger.Info("UI", "click", name,
                     new { label, type = src?.GetType().Name });
             }
             catch { }
@@ -266,8 +267,8 @@ namespace Scalpel
 
         private void OnDispatcherException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Scalpel.Services.Logger.Error("Error", "crash.dispatcher", e.Exception.Message, e.Exception);
-            Scalpel.Services.Logger.Flush();
+            AlphaPDF.Services.Logger.Error("Error", "crash.dispatcher", e.Exception.Message, e.Exception);
+            AlphaPDF.Services.Logger.Flush();
             var logPath = CrashReporter.Capture(e.Exception, "Dispatcher");
             bool cont   = ShowCrashDialog(e.Exception, logPath, isFatal: false);
             e.Handled   = true; // always handle; we manage the exit ourselves
@@ -282,8 +283,8 @@ namespace Scalpel
         {
             var ex = e.ExceptionObject as Exception
                      ?? new Exception(e.ExceptionObject?.ToString() ?? "Unknown error");
-            Scalpel.Services.Logger.Error("Error", "crash.appdomain", ex.Message, ex);
-            Scalpel.Services.Logger.Flush();
+            AlphaPDF.Services.Logger.Error("Error", "crash.appdomain", ex.Message, ex);
+            AlphaPDF.Services.Logger.Flush();
             var logPath = CrashReporter.Capture(ex, "AppDomain");
 
             try
@@ -302,8 +303,8 @@ namespace Scalpel
         private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
         {
             e.SetObserved(); // prevent process teardown
-            Scalpel.Services.Logger.Error("Error", "crash.task", e.Exception.Message, e.Exception);
-            Scalpel.Services.Logger.Flush();
+            AlphaPDF.Services.Logger.Error("Error", "crash.task", e.Exception.Message, e.Exception);
+            AlphaPDF.Services.Logger.Flush();
             var logPath = CrashReporter.Capture(e.Exception, "TaskScheduler");
 
             try
@@ -340,7 +341,7 @@ namespace Scalpel
 
             var win = new Window
             {
-                Title                 = "Scalpel — Unexpected Error",
+                Title                 = "alphaPDF — Unexpected Error",
                 Width                 = 680,
                 Height                = 520,
                 MinWidth              = 480,
@@ -373,7 +374,7 @@ namespace Scalpel
             titleBar.Children.Add(xBtn);
             titleBar.Children.Add(new TextBlock
             {
-                Text              = "Scalpel — Unexpected Error",
+                Text              = "alphaPDF — Unexpected Error",
                 Foreground        = dimText,
                 FontSize          = 12,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -502,7 +503,7 @@ namespace Scalpel
                         $"```\n{stack}\n```\n\n" +
                         $"_Log folder: `{CrashReporter.LogDir}`_");
                     Process.Start(new ProcessStartInfo(
-                        $"https://github.com/blakazulu/ScalpelPDF/issues/new?title={title}&body={body}")
+                        $"https://github.com/quocthinh1709/alphaPDF/issues/new?title={title}&body={body}")
                         { UseShellExecute = true });
                 }
                 catch { }
@@ -614,7 +615,7 @@ namespace Scalpel
         {
             var sb  = new StringBuilder();
             var ver = Assembly.GetExecutingAssembly().GetName().Version;
-            sb.AppendLine($"Scalpel v{ver?.ToString(3)}");
+            sb.AppendLine($"alphaPDF v{ver?.ToString(3)}");
             sb.AppendLine($"Time : {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
             sb.AppendLine($"OS   : {Environment.OSVersion}");
             sb.AppendLine();
@@ -628,8 +629,8 @@ namespace Scalpel
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Scalpel.Services.Logger.Info("App", "app.exit", "Shutting down");
-            Scalpel.Services.Logger.Shutdown();
+            AlphaPDF.Services.Logger.Info("App", "app.exit", "Shutting down");
+            AlphaPDF.Services.Logger.Shutdown();
             base.OnExit(e);
         }
 
@@ -661,7 +662,7 @@ namespace Scalpel
                 CopyDirectoryRecursive(sub, Path.Combine(destDir, Path.GetFileName(sub)));
         }
 
-        /// Installs Scalpel, offers to set as default PDF handler, then relaunches
+        /// Installs alphaPDF, offers to set as default PDF handler, then relaunches
         /// from the installed location. Returns false if installation failed or was
         /// already installed from this path.
         /// </summary>
@@ -676,15 +677,15 @@ namespace Scalpel
 
             if (!IsDefaultPdfHandler())
             {
-                var res = ScalpelDialog.Show(null,
-                    "Make Scalpel your default PDF viewer?\n\n" +
+                var res = AppDialog.Show(null,
+                    "Make alphaPDF your default PDF viewer?\n\n" +
                     "Windows only lets you change this yourself. Click \"Yes\" to open " +
                     "Default Apps settings, then:\n\n" +
                     "    1.  Search for  .pdf  (or scroll to it)\n" +
                     "    2.  Click the app currently shown (e.g. your browser)\n" +
-                    "    3.  Pick Scalpel, then choose Set default\n\n" +
+                    "    3.  Pick alphaPDF, then choose Set default\n\n" +
                     "Open Default Apps settings now?",
-                    "Set Scalpel as default", MessageBoxButton.YesNo);
+                    "Set alphaPDF as default", MessageBoxButton.YesNo);
                 if (res == MessageBoxResult.Yes)
                 {
                     try
@@ -707,7 +708,7 @@ namespace Scalpel
             {
                 MessageBox.Show(
                     "Installation did not complete: the installed copy was not created. " +
-                    "Scalpel will keep running from its current location.",
+                    "alphaPDF will keep running from its current location.",
                     AppName, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -737,13 +738,13 @@ namespace Scalpel
 
         /// <summary>
         /// Creates a tracked temp path of the form scalpel_&lt;tag&gt;_&lt;guid&gt;.pdf
-        /// under %LOCALAPPDATA%\Scalpel\Temp\.
+        /// under %LOCALAPPDATA%\alphaPDF\Temp\.
         /// All registered paths are deleted when CleanupSessionTemps() is called.
         /// </summary>
         internal static string MakeTempFile(string tag)
         {
             try { Directory.CreateDirectory(TempDir); } catch { }
-            var path = Path.Combine(TempDir, $"scalpel_{tag}_{Guid.NewGuid():N}.pdf");
+            var path = Path.Combine(TempDir, $"alphaPDF_{tag}_{Guid.NewGuid():N}.pdf");
             lock (_sessionTemps) _sessionTemps.Add(path);
             return path;
         }
@@ -760,7 +761,7 @@ namespace Scalpel
         }
 
         /// <summary>
-        /// Deletes scalpel_*.pdf files left over from previous crashed sessions.
+        /// Deletes alphaPDF_*.pdf files left over from previous crashed sessions.
         /// Sweeps both the current TempDir and the legacy %TEMP% location.
         /// Locked files (still open by another instance) are silently skipped.
         /// </summary>
@@ -770,7 +771,7 @@ namespace Scalpel
             try
             {
                 if (Directory.Exists(TempDir))
-                    foreach (var f in Directory.GetFiles(TempDir, "scalpel_*.pdf"))
+                    foreach (var f in Directory.GetFiles(TempDir, "alphaPDF_*.pdf"))
                         try { File.Delete(f); } catch { }
             }
             catch { }
@@ -778,7 +779,7 @@ namespace Scalpel
             // Legacy %TEMP% location — sweep once for users upgrading from older builds
             try
             {
-                foreach (var f in Directory.GetFiles(Path.GetTempPath(), "scalpel_*.pdf"))
+                foreach (var f in Directory.GetFiles(Path.GetTempPath(), "alphaPDF_*.pdf"))
                     try { File.Delete(f); } catch { }
             }
             catch { }
@@ -788,7 +789,7 @@ namespace Scalpel
         {
             try
             {
-                using var key = Registry.CurrentUser.OpenSubKey(@"Software\Scalpel\Settings");
+                using var key = Registry.CurrentUser.OpenSubKey(@"Software\alphaPDF\Settings");
                 return key?.GetValue(name) as string;
             }
             catch { return null; }
@@ -798,7 +799,7 @@ namespace Scalpel
         {
             try
             {
-                using var key = Registry.CurrentUser.CreateSubKey(@"Software\Scalpel\Settings");
+                using var key = Registry.CurrentUser.CreateSubKey(@"Software\alphaPDF\Settings");
                 key.SetValue(name, value);
             }
             catch { /* best-effort */ }
@@ -806,19 +807,19 @@ namespace Scalpel
 
         // ── Recent files (most-recent first, capped, de-duplicated) ──────────
         internal static System.Collections.Generic.List<string> GetRecentFiles() =>
-            Scalpel.Services.RecentFiles.Parse(GetSetting("RecentFiles"));
+            AlphaPDF.Services.RecentFiles.Parse(GetSetting("RecentFiles"));
 
         internal static void AddRecentFile(string path)
         {
-            try { SetSetting("RecentFiles", Scalpel.Services.RecentFiles.Serialize(
-                Scalpel.Services.RecentFiles.Add(GetRecentFiles(), path))); }
+            try { SetSetting("RecentFiles", AlphaPDF.Services.RecentFiles.Serialize(
+                AlphaPDF.Services.RecentFiles.Add(GetRecentFiles(), path))); }
             catch { }
         }
 
         internal static void RemoveRecentFile(string path)
         {
-            try { SetSetting("RecentFiles", Scalpel.Services.RecentFiles.Serialize(
-                Scalpel.Services.RecentFiles.Remove(GetRecentFiles(), path))); }
+            try { SetSetting("RecentFiles", AlphaPDF.Services.RecentFiles.Serialize(
+                AlphaPDF.Services.RecentFiles.Remove(GetRecentFiles(), path))); }
             catch { }
         }
 
@@ -826,7 +827,7 @@ namespace Scalpel
 
         private static bool IsInstalled()
         {
-            using var key = Registry.CurrentUser.OpenSubKey(@"Software\Scalpel");
+            using var key = Registry.CurrentUser.OpenSubKey(@"Software\alphaPDF");
             if (key is null) return false;
             return key.GetValue("Installed") is int i && i == 1;
         }
@@ -836,7 +837,7 @@ namespace Scalpel
             using var key = Registry.CurrentUser.OpenSubKey(
                 @"Software\Microsoft\Windows\Shell\Associations\FileAssociations\.pdf\UserChoice");
             return key?.GetValue("ProgId") is string progId &&
-                   progId.Equals("Scalpel.pdf", StringComparison.OrdinalIgnoreCase);
+                   progId.Equals("alphaPDF.pdf", StringComparison.OrdinalIgnoreCase);
         }
 
         // ============================================================
@@ -1042,7 +1043,7 @@ namespace Scalpel
                         "Security check failed: pdfium.dll integrity verification failed.\n\n" +
                         $"Expected: {BuildInfo.PdfiumSha256}\n" +
                         $"Actual  : {actual}\n\n" +
-                        "The bundled PDF engine may have been tampered with. Scalpel will exit.",
+                        "The bundled PDF engine may have been tampered with. alphaPDF will exit.",
                         $"{AppName} — Security", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
@@ -1068,7 +1069,7 @@ namespace Scalpel
             {
                 MessageBox.Show(
                     "Installation refused: the running EXE does not carry a valid Authenticode " +
-                    "signature.\n\nOnly signed builds of Scalpel can be installed.",
+                    "signature.\n\nOnly signed builds of alphaPDF can be installed.",
                     AppName, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -1101,7 +1102,7 @@ namespace Scalpel
                 // (tesseract.exe + tessdata) next to the EXE — carry it into the install dir so OCR
                 // works offline out of the box. The portable bare-EXE has no such folder and fetches
                 // language data on demand instead. Both OCR locations are covered by uninstall cleanup
-                // (InstallDir and %LOCALAPPDATA%\Scalpel are both wiped).
+                // (InstallDir and %LOCALAPPDATA%\alphaPDF are both wiped).
                 try
                 {
                     string srcOcr = Path.Combine(Path.GetDirectoryName(src)!, "ocr");
@@ -1120,7 +1121,7 @@ namespace Scalpel
                     CreateShortcut(Installer.DesktopLnk, Installer.InstallExe);
 
                 // Installed marker
-                using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Scalpel"))
+                using (var key = Registry.CurrentUser.CreateSubKey(@"Software\alphaPDF"))
                 {
                     key.SetValue("Installed",    1);
                     key.SetValue("InstallPath",  Installer.InstallExe);
@@ -1130,7 +1131,7 @@ namespace Scalpel
 
                 // Add/Remove Programs entry
                 using (var key = Registry.CurrentUser.CreateSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Uninstall\Scalpel"))
+                    @"Software\Microsoft\Windows\CurrentVersion\Uninstall\alphaPDF"))
                 {
                     key.SetValue("DisplayName",          AppName);
                     key.SetValue("DisplayVersion",
@@ -1139,7 +1140,7 @@ namespace Scalpel
                     key.SetValue("InstallLocation",      Installer.InstallDir);
                     key.SetValue("DisplayIcon",          $"{Installer.InstallExe},0");
                     // Point at the argument-less uninstall.exe — Windows 11's Settings uninstall
-                    // strips arguments from UninstallString, so "Scalpel.exe /uninstall" would just
+                    // strips arguments from UninstallString, so "alphaPDF.exe /uninstall" would just
                     // launch the app. A dedicated exe (no args) can't be mis-parsed.
                     key.SetValue("UninstallString",      $"\"{Installer.UninstallExe}\"");
                     // No QuietUninstallString — our uninstall is interactive (shows a confirm dialog).
@@ -1160,66 +1161,66 @@ namespace Scalpel
         private static void RegisterFileHandler()
         {
             // ProgID definition
-            using (var k = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Scalpel.pdf"))
+            using (var k = Registry.CurrentUser.CreateSubKey(@"Software\Classes\alphaPDF.pdf"))
                 k.SetValue("", "PDF Document");
 
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Scalpel.pdf\DefaultIcon"))
+                @"Software\Classes\alphaPDF.pdf\DefaultIcon"))
                 k.SetValue("", $"{Installer.InstallExe},0");
 
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Scalpel.pdf\shell\open\command"))
+                @"Software\Classes\alphaPDF.pdf\shell\open\command"))
                 k.SetValue("", $"\"{Installer.InstallExe}\" \"%1\"");
 
-            // Application registration — REQUIRED for Scalpel to appear in the shell's
+            // Application registration — REQUIRED for alphaPDF to appear in the shell's
             // "Open with" / "Choose another app" list (and therefore be selectable as the
-            // default). Without Applications\Scalpel.exe + SupportedTypes, the OpenWithProgids
+            // default). Without Applications\alphaPDF.exe + SupportedTypes, the OpenWithProgids
             // hint alone is unreliable on Windows 10/11.
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Applications\Scalpel.exe"))
-                k.SetValue("FriendlyAppName", "Scalpel");
+                @"Software\Classes\Applications\alphaPDF.exe"))
+                k.SetValue("FriendlyAppName", "alphaPDF");
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Applications\Scalpel.exe\DefaultIcon"))
+                @"Software\Classes\Applications\alphaPDF.exe\DefaultIcon"))
                 k.SetValue("", $"{Installer.InstallExe},0");
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Applications\Scalpel.exe\shell\open\command"))
+                @"Software\Classes\Applications\alphaPDF.exe\shell\open\command"))
                 k.SetValue("", $"\"{Installer.InstallExe}\" \"%1\"");
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\Applications\Scalpel.exe\SupportedTypes"))
+                @"Software\Classes\Applications\alphaPDF.exe\SupportedTypes"))
                 k.SetValue(".pdf", "");
 
-            // Associate .pdf extension — adds Scalpel to the "Open with" list
+            // Associate .pdf extension — adds alphaPDF to the "Open with" list
             using (var k = Registry.CurrentUser.CreateSubKey(
                 @"Software\Classes\.pdf\OpenWithProgids"))
-                k.SetValue("Scalpel.pdf", new byte[0], RegistryValueKind.None);
+                k.SetValue("alphaPDF.pdf", new byte[0], RegistryValueKind.None);
 
             // RegisteredApplications capability (used by Default Programs UI)
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Scalpel\Capabilities"))
+                @"Software\alphaPDF\Capabilities"))
             {
                 k.SetValue("ApplicationName",        AppName);
                 k.SetValue("ApplicationDescription", "Lightweight PDF viewer and editor");
             }
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Scalpel\Capabilities\FileAssociations"))
-                k.SetValue(".pdf", "Scalpel.pdf");
+                @"Software\alphaPDF\Capabilities\FileAssociations"))
+                k.SetValue(".pdf", "alphaPDF.pdf");
 
             using (var k = Registry.CurrentUser.CreateSubKey(@"Software\RegisteredApplications"))
-                k.SetValue(AppName, @"Software\Scalpel\Capabilities");
+                k.SetValue(AppName, @"Software\alphaPDF\Capabilities");
 
-            // "Edit with Scalpel PDF" context-menu verb for ALL .pdf files, independent of the
+            // "Edit with alphaPDF PDF" context-menu verb for ALL .pdf files, independent of the
             // default handler. Per-user (HKCU), no admin. On Windows 11 it appears under
             // "Show more options"; on Windows 10 on the main context menu. The verb subkey is
-            // namespaced "Scalpel.edit" (not the bare "edit") to avoid colliding with a built-in
+            // namespaced "alphaPDF.edit" (not the bare "edit") to avoid colliding with a built-in
             // edit verb. Removed on uninstall via Installer.OwnedRegistryKeys.
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\SystemFileAssociations\.pdf\shell\Scalpel.edit"))
+                @"Software\Classes\SystemFileAssociations\.pdf\shell\alphaPDF.edit"))
             {
-                k.SetValue("", "Edit with Scalpel PDF");
+                k.SetValue("", "Edit with alphaPDF PDF");
                 k.SetValue("Icon", $"{Installer.InstallExe},0");
             }
             using (var k = Registry.CurrentUser.CreateSubKey(
-                @"Software\Classes\SystemFileAssociations\.pdf\shell\Scalpel.edit\command"))
+                @"Software\Classes\SystemFileAssociations\.pdf\shell\alphaPDF.edit\command"))
                 k.SetValue("", $"\"{Installer.InstallExe}\" /edit \"%1\"");
 
             // Tell the shell file associations have changed

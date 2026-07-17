@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using PdfSharpCore.Pdf.Security;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Permission flags applied when password-protecting a PDF.</summary>
     public sealed class EncryptionOptions

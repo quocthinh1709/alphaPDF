@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Branded, self-contained install/uninstall dialogs. Fixed dark+amber palette
@@ -40,8 +40,8 @@ namespace Scalpel.Services
             content.Children.Add(Heading());
             content.Children.Add(Sub($"Version {VersionString()}"));
             content.Children.Add(Body(alreadyInstalled
-                ? "Update Scalpel on this computer. Your settings are kept."
-                : "Install Scalpel on this computer. Adds a Start-Menu entry and a PDF file association — no admin needed."));
+                ? "Update alphaPDF on this computer. Your settings are kept."
+                : "Install alphaPDF on this computer. Adds a Start-Menu entry and a PDF file association — no admin needed."));
 
             var desktopChk = new CheckBox
             {
@@ -67,9 +67,9 @@ namespace Scalpel.Services
             bool proceed = false;
             var (win, content) = MakeWindow();
 
-            content.Children.Add(Heading("Uninstall Scalpel"));
+            content.Children.Add(Heading("Uninstall alphaPDF"));
             content.Children.Add(Body(
-                "Remove Scalpel and ALL of its data from this PC — the app, your settings, " +
+                "Remove alphaPDF and ALL of its data from this PC — the app, your settings, " +
                 "saved signatures, and logs. Nothing is left behind. This cannot be undone."));
 
             var remove = DangerButton("Remove");
@@ -80,7 +80,7 @@ namespace Scalpel.Services
                 proceed = true;
                 // Swap to the progress state in-place.
                 content.Children.Clear();
-                content.Children.Add(Heading("Removing Scalpel…"));
+                content.Children.Add(Heading("Removing alphaPDF…"));
                 content.Children.Add(Body("Cleaning up files and registry entries."));
                 win.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                 {
@@ -89,7 +89,7 @@ namespace Scalpel.Services
                     // Farewell, then auto-close.
                     content.Children.Clear();
                     content.Children.Add(Heading("Done"));
-                    content.Children.Add(Body("Thanks for using Scalpel."));
+                    content.Children.Add(Body("Thanks for using alphaPDF."));
                     var t = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
                     t.Tick += (_, _) => { t.Stop(); win.Close(); };
                     t.Start();
@@ -107,7 +107,7 @@ namespace Scalpel.Services
         {
             var win = new Window
             {
-                Title                 = "Scalpel",
+                Title                 = "alphaPDF",
                 Width                 = 420,
                 SizeToContent         = SizeToContent.Height,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -117,8 +117,8 @@ namespace Scalpel.Services
                 AllowsTransparency    = false,
                 // These dialogs are launched from a process with no main window (e.g. the
                 // /uninstall invocation). Force them to the foreground so they can't open
-                // hidden behind an already-running Scalpel window.
-                Topmost               = true,
+                // hidden behind an already-running alphaPDF window.
+                Topmost = true,
                 ShowInTaskbar         = true,
             };
             win.Loaded += (_, _) => { win.Activate(); };
@@ -143,7 +143,7 @@ namespace Scalpel.Services
             titleBar.Children.Add(close);
             titleBar.Children.Add(new TextBlock
             {
-                Text = "Scalpel", Foreground = TextDim, FontFamily = Geist, FontSize = 12,
+                Text = "alphaPDF", Foreground = TextDim, FontFamily = Geist, FontSize = 12,
                 VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(14, 0, 0, 0),
             });
             root.Children.Add(titleBar);
@@ -155,7 +155,7 @@ namespace Scalpel.Services
             return (win, content);
         }
 
-        private static TextBlock Heading(string text = "Scalpel") => new()
+        private static TextBlock Heading(string text = "alphaPDF") => new()
         {
             Text = text, FontFamily = Geist, FontSize = 26, FontWeight = FontWeights.Bold,
             Foreground = Accent, Margin = new Thickness(0, 0, 0, 4),

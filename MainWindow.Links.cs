@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -106,7 +106,7 @@ namespace Scalpel
                     links.Add(new LinkInfo(cx, cy, cw, ch, tag, tip, i));
                 }
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "GetPageLinks", "GetPageLinks failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "GetPageLinks", "GetPageLinks failed", ex); }
             return links;
         }
 
@@ -192,7 +192,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Remove link failed:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Remove link failed:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

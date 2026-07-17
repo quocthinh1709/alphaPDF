@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 
-namespace Scalpel.Services.Signing
+namespace AlphaPDF.Services.Signing
 {
     /// <summary>
     /// Best-effort collector of revocation material for a certificate chain, used to populate a DSS

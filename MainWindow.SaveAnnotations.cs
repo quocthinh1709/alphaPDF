@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -29,8 +29,8 @@ namespace Scalpel
         /// <summary>True if <paramref name="family"/> (exact face) maps <paramref name="codepoint"/>.</summary>
         private static bool FontCovers(string family, bool bold, bool italic, int codepoint)
         {
-            if (Scalpel.Services.PdfFontResolver.Instance.TryGetExactFontBytes(family, bold, italic, out var bytes))
-                return Scalpel.Services.TrueTypeCmap.CoversCodepoint(bytes, codepoint);
+            if (AlphaPDF.Services.PdfFontResolver.Instance.TryGetExactFontBytes(family, bold, italic, out var bytes))
+                return AlphaPDF.Services.TrueTypeCmap.CoversCodepoint(bytes, codepoint);
             return false;
         }
 
@@ -66,7 +66,7 @@ namespace Scalpel
             bool bold = style == XFontStyle.Bold || style == XFontStyle.BoldItalic;
             bool italic = style == XFontStyle.Italic || style == XFontStyle.BoldItalic;
 
-            if (!Scalpel.Services.BidiReorder.ContainsRtl(text))
+            if (!AlphaPDF.Services.BidiReorder.ContainsRtl(text))
             {
                 // LTR (incl. Cyrillic): pick a covering face so Russian doesn't render as boxes.
                 // forceCandidate (an extracted embedded font already verified to cover the text)
@@ -77,12 +77,12 @@ namespace Scalpel
             }
 
             // RTL: shape Arabic (cursive joining) BEFORE reordering, then reverse to visual order.
-            string shaped = Scalpel.Services.ArabicShaper.ContainsArabic(text)
-                ? Scalpel.Services.ArabicShaper.Shape(text)
+            string shaped = AlphaPDF.Services.ArabicShaper.ContainsArabic(text)
+                ? AlphaPDF.Services.ArabicShaper.Shape(text)
                 : text;
             string family = forceCandidate ? candidateFamily : PickFace(shaped, candidateFamily, bold, italic);
             var font = new XFont(family, fontSizePx, style);
-            string visual = Scalpel.Services.BidiReorder.ToVisual(shaped);
+            string visual = AlphaPDF.Services.BidiReorder.ToVisual(shaped);
             double width = gfx.MeasureString(visual, font).Width;
             double x = rightX > leftX ? rightX - width : leftX;
             gfx.DrawString(visual, font, brush, x, baselineY);
@@ -146,11 +146,56 @@ namespace Scalpel
                                 LineJoin = XLineJoin.Round,
                                 LineCap = XLineCap.Round
                             };
-                            for (int i = 0; i < ia.Points.Count - 1; i++)
+
+                            // THÊM XỬ LÝ LƯU TẠI ĐÂY
+                            if (ia.Tag is EditTool.Rectangle)
                             {
-                                gfx.DrawLine(pen,
-                                    ia.Points[i].X * sx, ia.Points[i].Y * sy,
-                                    ia.Points[i + 1].X * sx, ia.Points[i + 1].Y * sy);
+                                double rx = Math.Min(ia.Points[0].X, ia.Points[1].X) * sx;
+                                double ry = Math.Min(ia.Points[0].Y, ia.Points[1].Y) * sy;
+                                double rw = Math.Abs(ia.Points[1].X - ia.Points[0].X) * sx;
+                                double rh = Math.Abs(ia.Points[1].Y - ia.Points[0].Y) * sy;
+                                gfx.DrawRectangle(pen, rx, ry, rw, rh);
+                            }
+                            else if (ia.Tag is EditTool.Ellipse)
+                            {
+                                double ex = Math.Min(ia.Points[0].X, ia.Points[1].X) * sx;
+                                double ey = Math.Min(ia.Points[0].Y, ia.Points[1].Y) * sy;
+                                double ew = Math.Abs(ia.Points[1].X - ia.Points[0].X) * sx;
+                                double eh = Math.Abs(ia.Points[1].Y - ia.Points[0].Y) * sy;
+                                gfx.DrawEllipse(pen, ex, ey, ew, eh);
+                            }
+                            else if (ia.Tag is EditTool.Arrow)
+                            {
+                                double ax1 = ia.Points[0].X * sx, ay1 = ia.Points[0].Y * sy;
+                                double ax2 = ia.Points[1].X * sx, ay2 = ia.Points[1].Y * sy;
+
+                                // Vẽ thân mũi tên
+                                gfx.DrawLine(pen, ax1, ay1, ax2, ay2);
+
+                                // Tính và vẽ đầu mũi tên (Arrow head)
+                                double headSize = (ia.StrokeWidth * 3 + 5) * sx; // Scale theo sx để đồng bộ
+                                double angle = Math.Atan2(ay2 - ay1, ax2 - ax1);
+                                double theta = Math.PI / 6;
+
+                                double px1 = ax2 - headSize * Math.Cos(angle - theta);
+                                double py1 = ay2 - headSize * Math.Sin(angle - theta);
+                                double px2 = ax2 - headSize * Math.Cos(angle + theta);
+                                double py2 = ay2 - headSize * Math.Sin(angle + theta);
+
+                                // Nối đầu mũi tên bằng Path
+                                var path = new XGraphicsPath();
+                                path.AddLine(px1, py1, ax2, ay2);
+                                path.AddLine(ax2, ay2, px2, py2);
+                                gfx.DrawPath(pen, path);
+                            }
+                            else // Logic mặc định cho Vẽ tự do (Draw) và Line
+                            {
+                                for (int i = 0; i < ia.Points.Count - 1; i++)
+                                {
+                                    gfx.DrawLine(pen,
+                                        ia.Points[i].X * sx, ia.Points[i].Y * sy,
+                                        ia.Points[i + 1].X * sx, ia.Points[i + 1].Y * sy);
+                                }
                             }
                             break;
 

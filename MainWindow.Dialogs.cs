@@ -15,15 +15,15 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     // ============================================================
     // Themed dialog — replaces MessageBox for dark-UI consistency
     // ============================================================
-    internal static class ScalpelDialog
+    internal static class AppDialog
     {
         // Pulls the current theme brush at call time so dialogs respect light/dark/HC themes.
         private static SolidColorBrush R(string key)
@@ -33,7 +33,7 @@ namespace Scalpel
         public static MessageBoxResult Show(
             Window? owner,
             string message,
-            string title = "Scalpel",
+            string title = "alphaPDF",
             MessageBoxButton buttons = MessageBoxButton.OK,
             MessageBoxImage image = MessageBoxImage.None)
 #pragma warning restore IDE0060
@@ -106,7 +106,7 @@ namespace Scalpel
             root.Children.Add(msgBorder);
 
             // Buttons — use Studio styles. Primary/confirm = StudioPrimaryButton,
-            // secondary/cancel = StudioToolButton. ScalpelDialog cannot distinguish
+            // secondary/cancel = StudioToolButton. AppDialog cannot distinguish
             // destructive from non-destructive callers, so destructive confirm
             // buttons remain StudioPrimaryButton (noted in Task 10 report).
             var btnPanel = new StackPanel

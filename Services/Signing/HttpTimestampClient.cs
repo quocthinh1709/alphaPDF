@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Tsp;
 
-namespace Scalpel.Services.Signing
+namespace AlphaPDF.Services.Signing
 {
     /// <summary>
     /// <see cref="ITimestampClient"/> over HTTP: requests an RFC-3161 timestamp token from a TSA

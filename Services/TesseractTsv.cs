@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Globalization;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Parses Tesseract's TSV output (`tesseract img out tsv`) into an <see cref="OcrPageResult"/>,

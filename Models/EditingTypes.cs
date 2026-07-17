@@ -1,9 +1,14 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
-namespace Scalpel
+namespace AlphaPDF
 {
-    public enum EditTool { Select, Text, Highlight, Draw, Signature, Image, Crop, Line }
+    public enum EditTool
+    {
+        Select, Text, Highlight, Draw, Line,
+        Rectangle, Ellipse, Arrow, // Add new
+        Signature, Image, Crop
+    }
 
     public abstract class PageAnnotation
     {
@@ -34,6 +39,8 @@ namespace Scalpel
 
         public Color GetColor() => Color.FromArgb(ColorA, ColorR, ColorG, ColorB);
         public void SetColor(Color c) { ColorR = c.R; ColorG = c.G; ColorB = c.B; ColorA = c.A; }
+        //New
+        public string FontName { get; set; } = "Segoe UI";
     }
 
     public class InkAnnotation : PageAnnotation
@@ -47,6 +54,7 @@ namespace Scalpel
 
         public Color GetColor() => Color.FromArgb(ColorA, ColorR, ColorG, ColorB);
         public void SetColor(Color c) { ColorR = c.R; ColorG = c.G; ColorB = c.B; ColorA = c.A; }
+        public object Tag { get; set; }
     }
 
     public class HighlightAnnotation : PageAnnotation

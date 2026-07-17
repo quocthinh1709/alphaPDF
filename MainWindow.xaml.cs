@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow : Window
     {
@@ -39,7 +39,7 @@ namespace Scalpel
         private System.Threading.CancellationTokenSource? _secondaryRenderCts;
         private enum ViewMode { Single, Continuous, TwoPage, Grid }
         private ViewMode _viewMode = ViewMode.Continuous;
-        private enum AppMode { View, Edit, Pages, Sign }
+        private enum AppMode { View, Edit, Pages, Sign, Batch }
         private AppMode _mode = AppMode.View;
         private bool _suppressModeEvents;
         private bool _suppressLogToggleEvent;
@@ -119,6 +119,11 @@ namespace Scalpel
         private Border? _cropConfirmBar;
         private readonly Button _toolCropBtn = null!;
         private readonly Button _toolLineBtn = null!;
+
+        private readonly Button _toolRectBtn = null!;
+        private readonly Button _toolEllipseBtn = null!;
+        private readonly Button _toolArrowBtn = null!;
+
         private readonly List<Rectangle> _cropHandles = [];
         private string? _activeCropHandleTag; // "NW" | "NE" | "SE" | "SW"
         private Point _cropHandleDragStart;
@@ -182,11 +187,16 @@ namespace Scalpel
         private readonly TextBox _pageJumpBox = null!;
         private readonly TextBlock _pageTotalLabel = null!;
 
+        
+
         // Dirty / unsaved-change tracking
         private bool _isDirty = false;
 
         // Whole-document search results (PDF-space rects per page)
         private readonly Dictionary<int, List<(double left, double bottom, double right, double top)>> _allSearchRects = [];
+
+        
+
         private readonly List<int> _searchResultPages = [];
         private int _searchPageCursor = -1;
 
@@ -194,7 +204,7 @@ namespace Scalpel
         {
             InitializeComponent();
             // LocaleManager.Initialize ran before this window existed, so mirror RTL now for he/ar.
-            this.FlowDirection = Scalpel.Services.LocaleManager.IsRtlLocale(Scalpel.Services.LocaleManager.Current)
+            this.FlowDirection = AlphaPDF.Services.LocaleManager.IsRtlLocale(AlphaPDF.Services.LocaleManager.Current)
                 ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             if (v != null) VersionLabel.Text = $"v{v.Major}.{v.Minor}.{v.Build}";
@@ -209,6 +219,11 @@ namespace Scalpel
             _toolImageBtn = (Button)FindName("ToolImageBtn")!;
             _toolCropBtn = (Button)FindName("ToolCropBtn")!;
             _toolLineBtn = (Button)FindName("ToolLineBtn")!;
+
+            _toolRectBtn = (Button)FindName("ToolRectBtn")!;
+            _toolEllipseBtn = (Button)FindName("ToolEllipseBtn")!;
+            _toolArrowBtn = (Button)FindName("ToolArrowBtn")!;
+
             _sidebarToggleBtn = (Button)FindName("SidebarToggleBtn")!;
             _sidebarBorder = (Border)FindName("SidebarBorder")!;
             _sidebarCol = (ColumnDefinition)FindName("SidebarCol")!;
@@ -216,10 +231,14 @@ namespace Scalpel
             _saveAsBtnRef = (Button)FindName("SaveAsBtn")!;
             _closeFileBtnRef = (MenuItem)FindName("CloseFileMenuItem")!;
             _zoomBox = (ComboBox)FindName("ZoomBox")!;
-            _portableBadge = (StackPanel)FindName("PortableBadge")!;
+            //_portableBadge = (StackPanel)FindName("PortableBadge")!;
             _pageJumpBox = (TextBox)FindName("PageJumpBox")!;
             _pageTotalLabel = (TextBlock)FindName("PageTotalLabel")!;
             _continuousPanel = (StackPanel)FindName("ContinuousPanel")!;
+
+            
+
+
             PagePreviewPanel.ScrollChanged += PagePreviewPanel_ScrollChanged;
             if (Enum.TryParse<ViewMode>(App.GetSetting("ViewMode"), out var savedVm))
                 _viewMode = savedVm;
@@ -242,7 +261,7 @@ namespace Scalpel
             Loaded += (_, _) =>
             {
 #if DEBUG
-                // Dev-only screenshot capture: `Scalpel.exe /shoot` renders the store
+                // Dev-only screenshot capture: `alphaPDF.exe /shoot` renders the store
                 // screenshot set and exits. Compiled out of release builds entirely.
                 if (Environment.GetCommandLineArgs()
                         .Any(a => string.Equals(a, "/shoot", StringComparison.OrdinalIgnoreCase)))
@@ -256,7 +275,7 @@ namespace Scalpel
                 var args = Environment.GetCommandLineArgs();
                 // Find the first argument that is an existing file (skipping arg[0] = exe path
                 // and flags like /edit), so flag-vs-path order doesn't matter. The "Edit with
-                // Scalpel PDF" context-menu verb launches us as: <exe> /edit "<file>".
+                // alphaPDF PDF" context-menu verb launches us as: <exe> /edit "<file>".
                 string? fileArg = null;
                 bool editMode = false;
                 for (int i = 1; i < args.Length; i++)
@@ -269,7 +288,7 @@ namespace Scalpel
                 if (fileArg is not null)
                 {
                     OpenFile(fileArg);
-                    // Jump straight to Edit mode for the "Edit with Scalpel PDF" verb — but only
+                    // Jump straight to Edit mode for the "Edit with alphaPDF PDF" verb — but only
                     // once a document actually loaded (OpenFile runs synchronously; _doc is null
                     // on failure or a declined repair prompt).
                     if (editMode && _doc is not null)
@@ -289,9 +308,9 @@ namespace Scalpel
                             App.SetSetting("LastFile", "");
                     }
                 }
-
-                if (App.IsPortable())
-                    _portableBadge.Visibility = Visibility.Visible;
+                
+                //if (App.IsPortable())
+                //   _portableBadge.Visibility = Visibility.Visible;
             };
 
             Loaded += async (_, _) =>

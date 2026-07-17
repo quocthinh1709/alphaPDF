@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Scalpel.Services;
+using AlphaPDF.Services;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -22,7 +22,7 @@ namespace Scalpel
             try
             {
                 if (App.GetSetting(KeyUpdateEnabled) != null) return; // already answered
-                var res = ScalpelDialog.Show(this,
+                var res = AppDialog.Show(this,
                     Loc("Str_Update_OptIn_Body"),
                     Loc("Str_Update_OptIn_Title"),
                     MessageBoxButton.YesNo);
@@ -105,6 +105,7 @@ namespace Scalpel
             => e.Handled = true;
 
         /// <summary>Reflects the stored setting onto the toggle; call when opening Settings.</summary>
+        /*
         private void SyncUpdateToggle()
         {
             if (UpdateCheckToggle != null)
@@ -115,5 +116,6 @@ namespace Scalpel
         {
             App.SetSetting(KeyUpdateEnabled, UpdateCheckToggle.IsChecked == true ? "1" : "0");
         }
+        */
     }
 }

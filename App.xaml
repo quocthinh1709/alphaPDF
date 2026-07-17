@@ -1,7 +1,7 @@
-<Application x:Class="Scalpel.App"
+﻿<Application x:Class="AlphaPDF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Scalpel">
+             xmlns:local="clr-namespace:AlphaPDF">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

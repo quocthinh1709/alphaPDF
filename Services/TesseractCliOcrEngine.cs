@@ -1,15 +1,15 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using SixLabors.ImageSharp;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// <see cref="IOcrEngine"/> that shells out to a local <c>tesseract.exe</c> with TSV output and
     /// parses the result via <see cref="TesseractTsv"/>. No native P/Invoke, no NuGet — the engine is
-    /// a user-provided/located binary, keeping Scalpel's own footprint unchanged.
+    /// a user-provided/located binary, keeping alphaPDF's own footprint unchanged.
     /// </summary>
     public sealed class TesseractCliOcrEngine : IOcrEngine
     {
@@ -44,7 +44,7 @@ namespace Scalpel.Services
         /// <summary>
         /// Builds the tesseract command line for TSV-on-stdout. We request TSV via
         /// <c>-c tessedit_create_tsv=1</c> rather than the <c>tsv</c> config file, because when
-        /// <c>--tessdata-dir</c> is overridden to Scalpel's own folder (the portable download dir,
+        /// <c>--tessdata-dir</c> is overridden to alphaPDF's own folder (the portable download dir,
         /// which holds only the language data) the <c>configs/tsv</c> file is absent — tesseract then
         /// errors with "Can't open tsv" and silently emits plain text, yielding a non-searchable OCR
         /// layer. Setting the parameter directly needs no config file. net48 has no ArgumentList, so

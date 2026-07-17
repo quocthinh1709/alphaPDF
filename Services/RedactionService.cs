@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +6,7 @@ using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>A rectangle (PDF points, top-left origin) to redact on a given 0-based page.</summary>
     public sealed class RedactRect

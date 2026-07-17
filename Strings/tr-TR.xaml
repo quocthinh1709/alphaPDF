@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Türkçe (tr-TR) metinleri
+         alphaPDF  —  Türkçe (tr-TR) metinleri
          ================================================================ -->
 
     <!-- ── Araç çubuğu ipuçları ─────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">Kenar çubuğunu genişlet</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">Klavye kısayolları (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">Ayarlar</sys:String>
-    <sys:String x:Key="Str_TT_About">Scalpel Hakkında</sys:String>
+    <sys:String x:Key="Str_TT_About">alphaPDF Hakkında</sys:String>
 
     <!-- ── Hakkında katmanı ──────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">SÜRÜM</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">Adı kopyala</sys:String>
     <sys:String x:Key="Str_Ready">Hazır</sys:String>
     <sys:String x:Key="Str_Portable">KURULUMSUZ</sys:String>
-    <sys:String x:Key="Str_InstallBtn">Scalpel'i yükle...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">alphaPDF'i yükle...</sys:String>
 
     <!-- ── Durum mesajları (biçim dizeleri — string.Format kullanır) ── -->
     <sys:String x:Key="Str_Opened">Açıldı {0} - {1} sayfa</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">Döndürme başarısız: {0}</sys:String>
 
     <!-- ── İletişim kutusu metinleri ────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">Scalpel'i Yükle</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">Scalpel kullanıcı profilinize yüklensin mi?
+    <sys:String x:Key="Str_Dlg_InstallTitle">alphaPDF'i Yükle</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">alphaPDF kullanıcı profilinize yüklensin mi?
 
-Bu işlem uygulamayı %LocalAppData%\Scalpel konumuna kopyalar ve bir Başlat Menüsü kısayolu oluşturur.
+Bu işlem uygulamayı %LocalAppData%\alphaPDF konumuna kopyalar ve bir Başlat Menüsü kısayolu oluşturur.
 İstediğiniz zaman Program Ekle/Kaldır üzerinden kaldırabilirsiniz.</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">Kaydedilmemiş değişiklikleriniz var. Bu dosya kaydedilmeden kapatılsın mı?</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">Kaydedilmemiş değişiklikleriniz var. Scalpel kaydedilmeden kapatılsın mı?</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">Kaydedilmemiş değişiklikleriniz var. alphaPDF kaydedilmeden kapatılsın mı?</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">PDF açılamadı:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Tema adları ───────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@ Bu işlem uygulamayı %LocalAppData%\Scalpel konumuna kopyalar ve bir Başlat Me
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">Güncellemeler kontrol edilsin mi?</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel, günde bir kez scalpel-pdf.netlify.app adresinden yeni sürüm olup olmadığını kontrol edebilir. Siz veya dosyalarınız hakkında hiçbir bilgi gönderilmez. Güncelleme kontrolü etkinleştirilsin mi?</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">alphaPDF, günde bir kez alphaPDF-pdf.netlify.app adresinden yeni sürüm olup olmadığını kontrol edebilir. Siz veya dosyalarınız hakkında hiçbir bilgi gönderilmez. Güncelleme kontrolü etkinleştirilsin mi?</sys:String>
     <sys:String x:Key="Str_Update_Title">Güncelleme mevcut</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> mevcut.</sys:String>
     <sys:String x:Key="Str_Update_Get">Güncellemeyi al</sys:String>
     <sys:String x:Key="Str_Update_Later">Sonra</sys:String>
@@ -324,4 +324,51 @@ Bu işlem uygulamayı %LocalAppData%\Scalpel konumuna kopyalar ve bir Başlat Me
     <sys:String x:Key="Str_Ocr_Progress_Starting">Hazırlanıyor…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">Sayfa {0}/{1} tanınıyor…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">İptal</sys:String>
+
+    <sys:String x:Key="Str_Mode_Batch">Toplu İşlem</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">TOPLU BÖLME</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">Sayfa Aralıkları (örn. 1-3 veya 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">CSV İsim Dosyası:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">Bölmeye Başla</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">Toplu bölme işlemini başlat</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">TOPLU KORUMA</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">Kaynak Klasör:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">Şifre CSV Dosyası:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">Koru</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">CSV üzerinden PDF'leri toplu şifrele</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">DOSYA ARAÇLARI</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">CSV'ye Listele</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">Klasördeki tüm dosyaları CSV'ye aktar</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">Yeniden Adlandır</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">CSV haritası ile dosyaları yeniden adlandır</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">Kaynak olarak kullanmak için önce bir PDF açın.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">Lütfen bölünecek sayfa aralıklarını girin (örn. 1-3, 4-5 veya 2~).</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">Lütfen geçerli bir CSV dosyası seçin.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">Geçersiz sayfa aralığı formatı.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">Arka planda toplu bölme işlemi yapılıyor...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">Bölme işlemi tamamlandı. {0} dosya oluşturuldu.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">Başarıyla {0} yeni PDF dosyası oluşturuldu.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">Toplu bölme başarısız oldu.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">Bölme başarısız: {0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">Geçerli bir kaynak klasör seçin.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">Arka planda şifreler uygulanıyor...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">Koruma tamamlandı. {0} dosya güvenceye alındı.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">Başarıyla {0} dosya güvenceye alındı.Kaydedilen yer: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">Toplu koruma başarısız oldu.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">Koruma başarısız: {0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">{0} dosya CSV'ye aktarıldı.</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">Başarıyla {0} dosya adı CSV'ye aktarıldı.</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">Dosyalar listelenemedi: {0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">Arka planda dosyalar yeniden adlandırılıyor...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">Yeniden adlandırma tamamlandı. {0} dosyanın adı değiştirildi.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">Başarıyla {0} dosyanın adı değiştirildi.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">Toplu yeniden adlandırma başarısız oldu.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">Yeniden adlandırma başarısız: {0}</sys:String>
 </ResourceDictionary>

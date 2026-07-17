@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Hebrew (he) strings
+         alphaPDF  —  Hebrew (he) strings
          ================================================================ -->
 
     <!-- ── Toolbar tooltips ─────────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">הרחבת הסרגל הצדדי</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">קיצורי מקלדת (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">הגדרות</sys:String>
-    <sys:String x:Key="Str_TT_About">אודות Scalpel</sys:String>
+    <sys:String x:Key="Str_TT_About">אודות alphaPDF</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">גרסה</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">העתקת השם</sys:String>
     <sys:String x:Key="Str_Ready">מוכן</sys:String>
     <sys:String x:Key="Str_Portable">נייד</sys:String>
-    <sys:String x:Key="Str_InstallBtn">התקנת Scalpel...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">התקנת alphaPDF...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">נפתח {0} - {1} עמודים</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">הסיבוב נכשל: {0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">התקנת Scalpel</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">להתקין את Scalpel בפרופיל המשתמש שלך?
+    <sys:String x:Key="Str_Dlg_InstallTitle">התקנת alphaPDF</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">להתקין את alphaPDF בפרופיל המשתמש שלך?
 
-הפעולה תעתיק את האפליקציה אל %LocalAppData%\Scalpel ותיצור קיצור דרך בתפריט התחל.
+הפעולה תעתיק את האפליקציה אל %LocalAppData%\alphaPDF ותיצור קיצור דרך בתפריט התחל.
 ניתן להסיר את ההתקנה דרך הוספה/הסרה של תוכניות בכל עת.</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">יש לך שינויים שלא נשמרו. לסגור את הקובץ ללא שמירה?</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">יש לך שינויים שלא נשמרו. לסגור את Scalpel ללא שמירה?</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">יש לך שינויים שלא נשמרו. לסגור את alphaPDF ללא שמירה?</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">פתיחת ה-PDF נכשלה:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">לבדוק עדכונים?</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel יכול לבדוק פעם ביום ב-scalpel-pdf.netlify.app אם יש גרסה חדשה. שום מידע עליך או על הקבצים שלך לא נשלח. להפעיל בדיקת עדכונים?</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">alphaPDF יכול לבדוק פעם ביום ב-alphaPDF-pdf.netlify.app אם יש גרסה חדשה. שום מידע עליך או על הקבצים שלך לא נשלח. להפעיל בדיקת עדכונים?</sys:String>
     <sys:String x:Key="Str_Update_Title">עדכון זמין</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> זמין.</sys:String>
     <sys:String x:Key="Str_Update_Get">קבלת העדכון</sys:String>
     <sys:String x:Key="Str_Update_Later">אחר כך</sys:String>
@@ -324,4 +324,56 @@
     <sys:String x:Key="Str_Ocr_Progress_Starting">מתכונן…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">מזהה עמוד {0} מתוך {1}…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">ביטול</sys:String>
+    
+    <sys:String x:Key="Str_Mode_Batch">אצווה</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">פיצול אצווה</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">טווחי עמודים (למשל 1-3 או 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">קובץ שמות CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">התחל פיצול</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">התחל פיצול</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">הגנת אצווה</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">תיקיית מקור:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">קובץ סיסמאות CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">הגן</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">הגנה על מסמכים באמצעות CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">כלי קבצים</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">ייצוא ל-CSV</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">רשימת קבצים ל-CSV</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">שינוי שם</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">שינוי שמות באמצעות CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">יש לפתוח קובץ PDF תחילה.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">אנא הזן טווחים לפיצול (למשל 1-3 או 2~).</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">אנא בחר קובץ CSV תקין.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">פורמט טווחים לא תקין.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">מעבד פיצול ברקע...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">הפיצול הושלם. נוצרו {0} קבצים.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">נוצרו בהצלחה {0} קבצי PDF.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">פיצול אצווה נכשל.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">הפיצול נכשל:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">יש לבחור תיקיית מקור.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">מחיל סיסמאות ברקע...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">ההגנה הושלמה. {0} קבצים אובטחו.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">אובטחו בהצלחה {0} קבצים.
+נשמרו ב- {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">הגנת אצווה נכשלה.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">ההגנה נכשלה:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">יוצאו {0} קבצים ל-CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">רשימת הקבצים יוצאה בהצלחה ({0} קבצים).</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">ייצוא נכשל:
+{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">משנה שמות ברקע...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">שינוי השם הושלם. ({0} קבצים).</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">שונו בהצלחה שמותיהם של {0} קבצים.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">שינוי שם נכשל.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">שינוי שם נכשל:
+{0}</sys:String>
 </ResourceDictionary>

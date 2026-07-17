@@ -8,12 +8,12 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
-    /// Scalpel-styled modal RGB color picker: an HSV saturation/value square + vertical hue strip,
+    /// alphaPDF-styled modal RGB color picker: an HSV saturation/value square + vertical hue strip,
     /// live R/G/B and #hex inputs, a color preview, and a desktop-wide eyedropper. Opaque RGB only —
-    /// opacity stays with the toolbar's own slider. Built in code to match <c>ScalpelDialog</c>'s
+    /// opacity stays with the toolbar's own slider. Built in code to match <c>AppDialog</c>'s
     /// look (dark card, AccentBorder, Geist font, rounded corners).
     /// </summary>
     internal sealed class ColorPickerDialog : Window

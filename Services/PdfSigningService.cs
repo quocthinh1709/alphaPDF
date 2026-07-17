@@ -17,13 +17,13 @@ using Org.BouncyCastle.X509;
 using BcX509Certificate = Org.BouncyCastle.X509.X509Certificate;
 using DotNetX509 = System.Security.Cryptography.X509Certificates.X509Certificate2;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Cryptographically signs a PDF with a PKCS#7 / CMS detached signature
     /// (PAdES-style, SubFilter <c>adbe.pkcs7.detached</c>, invisible signature).
     ///
-    /// IMPORTANT — this is DISTINCT from Scalpel's drawn-ink "signatures". A real
+    /// IMPORTANT — this is DISTINCT from alphaPDF's drawn-ink "signatures". A real
     /// digital signature signs a <c>/ByteRange</c> of the file with the signature
     /// <c>/Contents</c> hole excluded, so the signed bytes must NOT change afterwards.
     /// PdfSharpCore re-serializes the whole document on Save (which would invalidate the

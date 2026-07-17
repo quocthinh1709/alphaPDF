@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -58,7 +58,7 @@ namespace Scalpel
                 FontSize = ta.FontSize,
                 Padding = new Thickness(2)
             };
-            if (Scalpel.Services.BidiReorder.ContainsRtl(ta.Content))
+            if (AlphaPDF.Services.BidiReorder.ContainsRtl(ta.Content))
             {
                 tb.FontFamily = new FontFamily("Segoe UI, Noto Sans Hebrew, Noto Sans Arabic");
                 tb.FlowDirection = FlowDirection.RightToLeft;
@@ -98,16 +98,67 @@ namespace Scalpel
                         break;
                     case InkAnnotation ia:
                         if (ia.Points.Count < 2) continue;
-                        var poly = new Polyline
-                        {
-                            Stroke = new SolidColorBrush(ia.GetColor()),
-                            StrokeThickness = ia.StrokeWidth,
-                            StrokeLineJoin = PenLineJoin.Round,
-                            StrokeStartLineCap = PenLineCap.Round,
-                            StrokeEndLineCap = PenLineCap.Round
-                        };
-                        foreach (var pt in ia.Points) poly.Points.Add(pt);
-                        _activeCanvas.Children.Add(poly);
+                            if (ia.Tag is EditTool.Rectangle)
+                            {
+                                var rectShape = new Rectangle
+                                {
+                                    Stroke = new SolidColorBrush(ia.GetColor()),
+                                    StrokeThickness = ia.StrokeWidth,
+                                    Width = Math.Abs(ia.Points[1].X - ia.Points[0].X),
+                                    Height = Math.Abs(ia.Points[1].Y - ia.Points[0].Y)
+                                };
+                                Canvas.SetLeft(rectShape, Math.Min(ia.Points[0].X, ia.Points[1].X));
+                                Canvas.SetTop(rectShape, Math.Min(ia.Points[0].Y, ia.Points[1].Y));
+                                _activeCanvas.Children.Add(rectShape);
+                            }
+                            else if (ia.Tag is EditTool.Ellipse)
+                            {
+                                var ell = new Ellipse
+                                {
+                                    Stroke = new SolidColorBrush(ia.GetColor()),
+                                    StrokeThickness = ia.StrokeWidth,
+                                    Width = Math.Abs(ia.Points[1].X - ia.Points[0].X),
+                                    Height = Math.Abs(ia.Points[1].Y - ia.Points[0].Y)
+                                };
+                                Canvas.SetLeft(ell, Math.Min(ia.Points[0].X, ia.Points[1].X));
+                                Canvas.SetTop(ell, Math.Min(ia.Points[0].Y, ia.Points[1].Y));
+                                _activeCanvas.Children.Add(ell);
+                            }
+                            else if (ia.Tag is EditTool.Arrow)
+                            {
+                                var arrowPath = new System.Windows.Shapes.Path { Stroke = new SolidColorBrush(ia.GetColor()), StrokeThickness = ia.StrokeWidth, StrokeLineJoin = PenLineJoin.Round };
+                                double headSize = ia.StrokeWidth * 3 + 5;
+                                double angle = Math.Atan2(ia.Points[1].Y - ia.Points[0].Y, ia.Points[1].X - ia.Points[0].X);
+                                double theta = Math.PI / 6;
+
+                                Point p1 = new Point(ia.Points[1].X - headSize * Math.Cos(angle - theta), ia.Points[1].Y - headSize * Math.Sin(angle - theta));
+                                Point p2 = new Point(ia.Points[1].X - headSize * Math.Cos(angle + theta), ia.Points[1].Y - headSize * Math.Sin(angle + theta));
+
+                                var geometry = new StreamGeometry();
+                                using (var ctx = geometry.Open())
+                                {
+                                    ctx.BeginFigure(ia.Points[0], false, false);
+                                    ctx.LineTo(ia.Points[1], true, true);
+                                    ctx.BeginFigure(p1, false, false);
+                                    ctx.LineTo(ia.Points[1], true, true);
+                                    ctx.LineTo(p2, true, true);
+                                }
+                                arrowPath.Data = geometry;
+                                _activeCanvas.Children.Add(arrowPath);
+                            }
+                            else
+                            {
+                                var poly = new Polyline
+                                {
+                                    Stroke = new SolidColorBrush(ia.GetColor()),
+                                    StrokeThickness = ia.StrokeWidth,
+                                    StrokeLineJoin = PenLineJoin.Round,
+                                    StrokeStartLineCap = PenLineCap.Round,
+                                    StrokeEndLineCap = PenLineCap.Round
+                                };
+                                foreach (var pt in ia.Points) poly.Points.Add(pt);
+                                _activeCanvas.Children.Add(poly);
+                            }
                         break;
                     case TextEditAnnotation tea:
                         // White-out original text

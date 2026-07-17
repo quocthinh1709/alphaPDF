@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Text;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Minimal TrueType/OpenType 'name'-table reader. Extracts family (name ID 1, or

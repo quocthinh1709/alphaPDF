@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -34,6 +34,9 @@ namespace Scalpel
             EditTool.Highlight => Cursors.Cross,
             EditTool.Draw => Cursors.Pen,
             EditTool.Line => Cursors.Cross,
+            EditTool.Rectangle => Cursors.Cross, // THÊM MỚI
+            EditTool.Ellipse => Cursors.Cross,   // THÊM MỚI
+            EditTool.Arrow => Cursors.Cross,     // THÊM MỚI
             EditTool.Signature => Cursors.Pen,
             EditTool.Image => Cursors.Hand,
             EditTool.Crop => Cursors.Cross,
@@ -54,6 +57,9 @@ namespace Scalpel
                 (_toolHighlightBtn, EditTool.Highlight),
                 (_toolDrawBtn, EditTool.Draw),
                 (_toolLineBtn, EditTool.Line),
+                (_toolRectBtn, EditTool.Rectangle), // THÊM MỚI
+                (_toolEllipseBtn, EditTool.Ellipse), // THÊM MỚI
+                (_toolArrowBtn, EditTool.Arrow),    // THÊM MỚI
                 (_toolSignatureBtn, EditTool.Signature),
                 (_toolImageBtn, EditTool.Image),
                 (_toolCropBtn, EditTool.Crop)
@@ -82,7 +88,8 @@ namespace Scalpel
                 overlay.Cursor = toolCursor;
 
             // Show/hide draw settings bar
-            if (tool == EditTool.Draw || tool == EditTool.Highlight || tool == EditTool.Line)
+            if (tool == EditTool.Draw || tool == EditTool.Highlight || tool == EditTool.Line ||
+                tool == EditTool.Rectangle || tool == EditTool.Ellipse || tool == EditTool.Arrow ) //Thêm mới
                 ShowDrawSettings(tool);
             else
                 HideDrawSettings();

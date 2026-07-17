@@ -1,11 +1,11 @@
-<Window x:Class="Scalpel.MainWindow" Icon="pack://application:,,,/Resources/scalpel.ico"
+﻿<Window x:Class="AlphaPDF.MainWindow" Icon="Resources/alphaPDF.ico"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Scalpel"
+        xmlns:local="clr-namespace:AlphaPDF"
         mc:Ignorable="d"
-        Title="Scalpel" Height="700" Width="1000"
+        Title="αPDF" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -447,7 +447,7 @@
                 MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
             <Grid>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
-                    <TextBlock Text="Scalpel" FontFamily="{DynamicResource FontUI}" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource ChromeText}" VerticalAlignment="Center"/>
+                    <TextBlock Text="α" FontFamily="{DynamicResource FontUI}" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource ChromeText}" VerticalAlignment="Center"/>
                     <TextBlock Text="PDF" FontFamily="{DynamicResource FontUI}" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource AccentLogo}" VerticalAlignment="Center"/>
                     <!-- QAT divider -->
                     <Border Width="1" Height="18" Background="{DynamicResource BorderDim}" Margin="12,0,8,0"/>
@@ -491,14 +491,18 @@
                 <RadioButton x:Name="ModeEditTab"  GroupName="AppModeTabs" Style="{StaticResource RibbonTab}" Content="{DynamicResource Str_Mode_Edit}"  Checked="ModeTab_Checked" Tag="Edit"  Margin="2,0,0,0"/>
                 <RadioButton x:Name="ModePagesTab" GroupName="AppModeTabs" Style="{StaticResource RibbonTab}" Content="{DynamicResource Str_Mode_Pages}" Checked="ModeTab_Checked" Tag="Pages" Margin="2,0,0,0"/>
                 <RadioButton x:Name="ModeSignTab"  GroupName="AppModeTabs" Style="{StaticResource RibbonTab}" Content="{DynamicResource Str_Mode_Sign}"  Checked="ModeTab_Checked" Tag="Sign"  Margin="2,0,0,0"/>
+                <RadioButton x:Name="ModeBatchTab" GroupName="AppModeTabs" Style="{StaticResource RibbonTab}" Content="{DynamicResource Str_Mode_Batch}" Checked="ModeTab_Checked" Tag="Batch" Margin="2,0,0,0"/>
+
 
                 <!-- Right-aligned utilities -->
                 <Button DockPanel.Dock="Right" Style="{StaticResource StudioIconButton}" Click="SettingsBtn_Click"
                         Content="{StaticResource Ico_Settings}" FontFamily="{DynamicResource FontIcon}" ToolTip="{DynamicResource Str_TT_Settings}" Margin="0,2,0,2"/>
                 <Button DockPanel.Dock="Right" Style="{StaticResource StudioIconButton}" Click="OpenSearch_Click"
                         Content="{StaticResource Ico_Search}" FontFamily="{DynamicResource FontIcon}" ToolTip="{DynamicResource Str_TT_Search}" Margin="0,2,4,2"/>
+                <!--
                 <Button x:Name="ModeWhatsNewTab" DockPanel.Dock="Right" Style="{StaticResource StudioModeTabButton}"
                         Content="{DynamicResource Str_Mode_WhatsNew}" Click="WhatsNewTab_Click" Margin="0,2,2,2"/>
+                -->
                 <Button x:Name="ModeAboutTab" DockPanel.Dock="Right" Style="{StaticResource StudioModeTabButton}"
                         Content="{DynamicResource Str_Mode_About}" Click="AboutTab_Click" Margin="0,2,2,2"/>
                 <!-- Tools menu (document-level operations) -->
@@ -592,6 +596,38 @@
                         <TextBlock Text="{DynamicResource Str_Lbl_Line}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
                       </StackPanel>
                     </Button>
+
+                            <!-- Nút Vẽ Hình Chữ Nhật -->
+                            <Button x:Name="ToolRectBtn" Style="{StaticResource RibbonButton}" Click="ToolRect_Click" ToolTip="Rectangle Tool">
+                                <StackPanel>
+                                    <Rectangle Width="22" Height="16" StrokeThickness="2.2" Margin="0,3,0,4"
+            Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+            Fill="Transparent" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Rect" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Nút Vẽ Hình Oval -->
+                            <Button x:Name="ToolEllipseBtn" Style="{StaticResource RibbonButton}" Click="ToolEllipse_Click" ToolTip="Ellipse Tool">
+                                <StackPanel>
+                                    <Ellipse Width="22" Height="16" StrokeThickness="2.2" Margin="0,3,0,4"
+            Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+            Fill="Transparent" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Oval" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                <!-- Nút Vẽ Mũi Tên -->
+                    <Button x:Name="ToolArrowBtn" Style="{StaticResource RibbonButton}" Click="ToolArrow_Click" ToolTip="Arrow Tool">
+                        <StackPanel>
+                            <Path Data="M 4,19 L 19,4 M 10,4 L 19,4 L 19,13" StrokeThickness="2.2" Width="23" Height="23"
+                                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                    StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Arrow" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+
                     <Button x:Name="ToolImageBtn" Style="{StaticResource RibbonButton}" Click="ToolImage_Click" ToolTip="{DynamicResource Str_TT_ImageTool}">
                       <StackPanel><TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="{StaticResource Ico_Image}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource Str_Lbl_Image}" Margin="0,5,0,0" HorizontalAlignment="Center"/></StackPanel>
                     </Button>
@@ -662,7 +698,101 @@
                   <TextBlock Text="{StaticResource Grp_Signature}" FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsSidebarLabel}" FontWeight="SemiBold" Foreground="{DynamicResource RibbonGroupLabel}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                 </StackPanel>
               </StackPanel>
-            </Grid>
+
+                    <!-- Batch panel: Batch Operations -->
+                    
+
+                    <StackPanel x:Name="ModePanelBatch" Orientation="Horizontal" Visibility="Collapsed">
+
+                        <StackPanel Margin="2,0">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="5,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource Str_Batch_SplitRanges}" Foreground="{DynamicResource TextSecondary}" FontSize="11" Margin="0,0,0,3" FontFamily="{DynamicResource FontUI}"/>
+                                    <TextBox x:Name="BatchSplitRangesBox" Width="150" Height="24" VerticalContentAlignment="Center" Background="{DynamicResource BgControl}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource BorderDim}" BorderThickness="1" FontFamily="{DynamicResource FontUI}"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="5,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource Str_Batch_CsvNames}" Foreground="{DynamicResource TextSecondary}" FontSize="11" Margin="0,0,0,3" FontFamily="{DynamicResource FontUI}"/>
+                                    <Grid Width="160">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="BatchSplitCsvPathBox" Height="24" IsReadOnly="True" VerticalContentAlignment="Center" Background="{DynamicResource BgControl}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource BorderDim}" BorderThickness="1" FontFamily="{DynamicResource FontUI}"/>
+                                        <Button Grid.Column="1" Content="..." Width="28" Height="24" Click="SelectBatchSplitCsv_Click" Margin="2,0,0,0" Style="{StaticResource DarkButton}" Padding="0"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Button Style="{StaticResource RibbonButton}" Click="StartBatchSplit_Click" Margin="5,0,0,0" ToolTip="{DynamicResource Str_TT_BatchSplit}">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="{StaticResource Ico_Extract}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Str_Batch_StartSplit}" Margin="0,5,0,0" HorizontalAlignment="Center" FontFamily="{DynamicResource FontUI}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource Str_Batch_GroupSplit}" FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsSidebarLabel}" FontWeight="SemiBold" Foreground="{DynamicResource RibbonGroupLabel}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <Border Width="1" Background="{DynamicResource BorderDim}" Margin="10,4,10,4"/>
+
+                        <StackPanel Margin="2,0">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="5,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource Str_Batch_SourceFolder}" Foreground="{DynamicResource TextSecondary}" FontSize="11" Margin="0,0,0,3" FontFamily="{DynamicResource FontUI}"/>
+                                    <Grid Width="140">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="BatchProtectSourceBox" Height="24" IsReadOnly="True" VerticalContentAlignment="Center" Background="{DynamicResource BgControl}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource BorderDim}" BorderThickness="1"/>
+                                        <Button Grid.Column="1" Content="..." Width="28" Height="24" Click="SelectBatchProtectSource_Click" Margin="2,0,0,0" Style="{StaticResource DarkButton}" Padding="0"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Margin="5,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource Str_Batch_CsvPasswords}" Foreground="{DynamicResource TextSecondary}" FontSize="11" Margin="0,0,0,3" FontFamily="{DynamicResource FontUI}"/>
+                                    <Grid Width="140">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="BatchProtectCsvBox" Height="24" IsReadOnly="True" VerticalContentAlignment="Center" Background="{DynamicResource BgControl}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource BorderDim}" BorderThickness="1"/>
+                                        <Button Grid.Column="1" Content="..." Width="28" Height="24" Click="SelectBatchProtectCsv_Click" Margin="2,0,0,0" Style="{StaticResource DarkButton}" Padding="0"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Button Style="{StaticResource RibbonButton}" Click="StartBatchProtect_Click" Margin="5,0,0,0" ToolTip="{DynamicResource Str_TT_BatchProtect}">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="{StaticResource Ico_Signature}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Str_Batch_StartProtect}" Margin="0,5,0,0" HorizontalAlignment="Center" FontFamily="{DynamicResource FontUI}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource Str_Batch_GroupProtect}" FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsSidebarLabel}" FontWeight="SemiBold" Foreground="{DynamicResource RibbonGroupLabel}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <Border Width="1" Background="{DynamicResource BorderDim}" Margin="10,4,10,4"/>
+
+                        <StackPanel Margin="2,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource RibbonButton}" Click="BatchListFiles_Click" ToolTip="{DynamicResource Str_TT_BatchListCsv}">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="&#xE8F1;" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Str_Batch_ListCsv}" Margin="0,5,0,0" HorizontalAlignment="Center" FontFamily="{DynamicResource FontUI}"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource RibbonButton}" Click="BatchRename_Click" ToolTip="{DynamicResource Str_TT_BatchRename}">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="&#xE8AC;" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Str_Batch_Rename}" Margin="0,5,0,0" HorizontalAlignment="Center" FontFamily="{DynamicResource FontUI}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource Str_Batch_GroupUtils}" FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsSidebarLabel}" FontWeight="SemiBold" Foreground="{DynamicResource RibbonGroupLabel}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                </Grid>
           </ScrollViewer>
         </Border>
 
@@ -975,12 +1105,14 @@
                            Typography.NumeralAlignment="Tabular"
                            VerticalAlignment="Center"/>
                 <!-- Portable mode indicator (hidden when installed) -->
+                <!--
                 <StackPanel x:Name="PortableBadge" Orientation="Horizontal"
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             Visibility="Collapsed">
                     <TextBlock Text="{DynamicResource Str_Portable}" Foreground="{DynamicResource ChromeTextDim}"
                                FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsStatus}"
                                VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    
                     <Button x:Name="InstallBtn" Content="{DynamicResource Str_InstallBtn}"
                             Click="Install_Click"
                             FontFamily="{DynamicResource FontUI}" FontSize="{DynamicResource FsStatus}"
@@ -1005,7 +1137,9 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    
                 </StackPanel>
+                -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock x:Name="VersionLabel" Text="v1.5.1"
                                Foreground="{DynamicResource ChromeTextDim}" FontFamily="{DynamicResource FontUI}"
@@ -1016,10 +1150,10 @@
                     <TextBlock FontSize="{DynamicResource FsStatus}" VerticalAlignment="Center"
                                FontFamily="{DynamicResource FontUI}">
                         <Run Text="&#x00A9; 2026 " Foreground="{DynamicResource ChromeTextDim}"/>
-                        <Hyperlink NavigateUri="https://github.com/blakazulu/ScalpelPDF"
+                        <Hyperlink NavigateUri="https://github.com/quocthinh1709/alphaPDF"
                                    RequestNavigate="Hyperlink_RequestNavigate"
                                    Foreground="{DynamicResource ChromeTextDim}" TextDecorations="None">
-                            <Run Text="Liraz Amir"/>
+                            <Run Text="HQT"/>
                         </Hyperlink>
                     </TextBlock>
                     <!-- Zoom cluster (relocated from the old toolbar) -->
@@ -1172,8 +1306,13 @@
                                   GroupName="LangGroup"
                                   Style="{StaticResource ThemeRadio}"
                                   Checked="LangRuRadio_Checked"/>
+                      <RadioButton x:Name="LangViRadio" 
+                                Content="Tiếng Việt" 
+                                GroupName="LangGroup" 
+                                Checked="LangViRadio_Checked"/>
                     </StackPanel>
 
+                     <!--
                     <CheckBox x:Name="UpdateCheckToggle"
                               Foreground="{DynamicResource TextPrimary}"
                               Margin="0,8,0,0"
@@ -1211,6 +1350,7 @@
                                 Style="{StaticResource StudioToolButton}"
                                 Click="ClearLogsBtn_Click"/>
                     </StackPanel>
+                          -->
                       </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
@@ -1341,16 +1481,16 @@
                                 <TextBlock Text="{DynamicResource Str_About_Author}" Foreground="{DynamicResource TextDim}"
                                            FontFamily="{DynamicResource FontUI}" FontSize="11" Margin="0,0,0,2"/>
                                 <TextBlock FontFamily="{DynamicResource FontUI}" FontSize="12"
-                                           Foreground="{DynamicResource TextPrimary}" Text="Liraz Amir"/>
+                                           Foreground="{DynamicResource TextPrimary}" Text="HQThinh"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="{DynamicResource Str_About_Repository}" Foreground="{DynamicResource TextDim}"
                                            FontFamily="{DynamicResource FontUI}" FontSize="11" Margin="0,0,0,2"/>
                                 <TextBlock FontFamily="{DynamicResource FontUI}" FontSize="12">
-                                    <Hyperlink NavigateUri="https://github.com/blakazulu/ScalpelPDF"
+                                    <Hyperlink NavigateUri="https://github.com/quocthinh1709/alphaPDF"
                                                RequestNavigate="Hyperlink_RequestNavigate"
                                                Foreground="{DynamicResource Accent}" TextDecorations="None">
-                                        <Run Text="github.com/blakazulu/ScalpelPDF"/>
+                                        <Run Text="github.com/quocthinh1709/alphaPDF"/>
                                     </Hyperlink>
                                 </TextBlock>
                             </StackPanel>
@@ -1366,12 +1506,23 @@
                                 </TextBlock>
                             </StackPanel>
                             <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Thanks to" Foreground="{DynamicResource TextDim}"
+                                    FontFamily="{DynamicResource FontUI}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBlock x:Name="AcknowledgeBlock"
+                                           TextWrapping="Wrap"
+                                           Text="This project builds upon GPLv3-licensed code from Steve the Killer (KillerPDF) and Liraz Amir (ScapelPDF). We gratefully acknowledge their contributions."
+                                    FontFamily="{DynamicResource FontUI}" FontSize="12"
+                                    Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                                <!--
+                            <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="{DynamicResource Str_About_Publisher}" Foreground="{DynamicResource TextDim}"
                                            FontFamily="{DynamicResource FontUI}" FontSize="11" Margin="0,0,0,2"/>
                                 <TextBlock x:Name="AboutPublisherBlock"
                                            FontFamily="{DynamicResource FontUI}" FontSize="12"
                                            Foreground="{DynamicResource TextPrimary}"/>
                             </StackPanel>
+                            
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="{DynamicResource Str_About_Thumbprint}" Foreground="{DynamicResource TextDim}"
                                            FontFamily="{DynamicResource FontUI}" FontSize="11" Margin="0,0,0,2"/>
@@ -1388,6 +1539,7 @@
                                            Foreground="{DynamicResource TextPrimary}"
                                            TextWrapping="Wrap"/>
                             </StackPanel>
+                            -->
                         </StackPanel>
                     </Border>
                     </StackPanel>

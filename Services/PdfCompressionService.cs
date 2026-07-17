@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using PdfSharpCore.Pdf;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     public sealed class CompressionOptions
     {

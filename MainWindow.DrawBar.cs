@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -46,6 +46,9 @@ namespace Scalpel
 
         private void ShowDrawSettings(EditTool tool)
         {
+            bool isShapeTool = tool == EditTool.Draw || tool == EditTool.Line ||
+                       tool == EditTool.Rectangle || tool == EditTool.Ellipse || tool == EditTool.Arrow;
+
             if (_drawSettingsBar is not null)
             {
                 var previewGrid = PagePreviewPanel.Parent as Grid;
@@ -66,7 +69,8 @@ namespace Scalpel
             panel.Children.Add(colorLbl);
 
             // Color swatches
-            var activeColor = (tool == EditTool.Draw || tool == EditTool.Line) ? _drawColor : Color.FromRgb(_highlightColor.R, _highlightColor.G, _highlightColor.B);
+            //var activeColor = (tool == EditTool.Draw || tool == EditTool.Line) ? _drawColor : Color.FromRgb(_highlightColor.R, _highlightColor.G, _highlightColor.B);
+            var activeColor = isShapeTool ? _drawColor : Color.FromRgb(_highlightColor.R, _highlightColor.G, _highlightColor.B);
             foreach (var color in SwatchColors)
             {
                 bool isActive = color == activeColor;
@@ -87,7 +91,8 @@ namespace Scalpel
                 swatch.MouseLeftButtonDown += (s, e) =>
                 {
                     var c = (Color)((Border)s!).Tag;
-                    if (tool == EditTool.Draw || tool == EditTool.Line)
+                    //if (tool == EditTool.Draw || tool == EditTool.Line)
+                    if (isShapeTool)
                         _drawColor = Color.FromArgb(_drawOpacity, c.R, c.G, c.B);
                     else
                         _highlightColor = Color.FromArgb(_highlightColor.A, c.R, c.G, c.B);
@@ -99,7 +104,8 @@ namespace Scalpel
             // Custom-color picker affordance ("+"): opens the RGB/eyedropper dialog.
             panel.Children.Add(MakeCustomColorButton(activeColor, picked =>
             {
-                if (tool == EditTool.Draw || tool == EditTool.Line)
+                //if (tool == EditTool.Draw || tool == EditTool.Line)
+                if (isShapeTool)
                     _drawColor = Color.FromArgb(_drawOpacity, picked.R, picked.G, picked.B);
                 else
                     _highlightColor = Color.FromArgb(_highlightColor.A, picked.R, picked.G, picked.B);
@@ -112,7 +118,8 @@ namespace Scalpel
             panel.Children.Add(sep1);
 
             // Size slider (draw / line only)
-            if (tool == EditTool.Draw || tool == EditTool.Line)
+            //if (tool == EditTool.Draw || tool == EditTool.Line)
+            if (isShapeTool)
             {
                 var sizeLbl = new TextBlock
                 {
@@ -174,7 +181,8 @@ namespace Scalpel
             {
                 byte a = (byte)e.NewValue;
                 opacityLabel.Text = $"{(int)(a / 255.0 * 100)}%";
-                if (tool == EditTool.Draw || tool == EditTool.Line)
+                //if (tool == EditTool.Draw || tool == EditTool.Line)
+                if (isShapeTool)
                 {
                     _drawOpacity = a;
                     _drawColor = Color.FromArgb(a, _drawColor.R, _drawColor.G, _drawColor.B);

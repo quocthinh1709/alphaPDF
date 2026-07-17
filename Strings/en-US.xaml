@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  English (en-US) strings
+         alphaPDF  —  English (en-US) strings
          ================================================================ -->
 
     <!-- ── Toolbar tooltips ─────────────────────────────────────────── -->
@@ -37,7 +37,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">Expand sidebar</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">Keyboard shortcuts (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">Settings</sys:String>
-    <sys:String x:Key="Str_TT_About">About Scalpel</sys:String>
+    <sys:String x:Key="Str_TT_About">About alphaPDF</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">VERSION</sys:String>
@@ -98,7 +98,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">Copy name</sys:String>
     <sys:String x:Key="Str_Ready">Ready</sys:String>
     <sys:String x:Key="Str_Portable">PORTABLE</sys:String>
-    <sys:String x:Key="Str_InstallBtn">Install Scalpel...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">Install alphaPDF...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">Opened {0} - {1} page(s)</sys:String>
@@ -127,16 +127,16 @@
     <sys:String x:Key="Str_RotateFailed">Rotate failed: {0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">Install Scalpel</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">Install Scalpel to your user profile?
+    <sys:String x:Key="Str_Dlg_InstallTitle">Install alphaPDF</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">Install alphaPDF to your user profile?
 
-This will copy the app to %LocalAppData%\Scalpel and create a Start Menu shortcut.
+This will copy the app to %LocalAppData%\alphaPDF and create a Start Menu shortcut.
 You can uninstall via Add/Remove Programs at any time.</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">You have unsaved changes. Close this file without saving?</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">You have unsaved changes. Close Scalpel without saving?</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">You have unsaved changes. Close alphaPDF without saving?</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">Failed to open PDF:
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -270,9 +270,9 @@ You can uninstall via Add/Remove Programs at any time.</sys:String>
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">Check for updates?</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel can check scalpel-pdf.netlify.app once a day for a new version. No information about you or your files is sent. Enable update checks?</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">Enable update checks?</sys:String>
     <sys:String x:Key="Str_Update_Title">Update available</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> is available.</sys:String>
     <sys:String x:Key="Str_Update_Get">Get the update</sys:String>
     <sys:String x:Key="Str_Update_Later">Later</sys:String>
@@ -324,4 +324,52 @@ You can uninstall via Add/Remove Programs at any time.</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Starting">Preparing…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">Recognizing page {0} of {1}…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">Cancel</sys:String>
+
+
+    <sys:String x:Key="Str_Mode_Batch">Batch</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">BATCH SPLIT</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">Page Ranges (e.g., 1-3 or 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">CSV Names File:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">Start Split</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">Start Split</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">BATCH PROTECT</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">Source Folder:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">Passwords CSV:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">Protect</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">Batch Protect PDFs via CSV</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">FILE UTILITIES</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">List to CSV</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">List all files in a folder to CSV</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">Rename</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">Rename any files using a CSV map</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">Please open a PDF file first to use as the source.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">Please enter the page ranges to split (e.g.,2~ or 1-3, 4-5).</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">Please select a valid CSV file.</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">Invalid page ranges format.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">Processing batch split in background...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">Batch split complete. Created {0} files.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">Successfully created {0} new PDF files.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">Batch split failed.</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">Batch split failed:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">Select a valid source folder.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">Applying passwords in background...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">Batch protect complete. Secured {0} files.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">Successfully secured {0} files. Saved in: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">Batch protect failed.</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">Batch protect failed:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">Exported {0} files to CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">Successfully exported {0} file names to CSV.</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">Failed to list files:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">Renaming files in background...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">Batch rename complete. Renamed {0} files.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">Successfully renamed {0} files.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">Batch rename failed.</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">Rename failed:{0}</sys:String>
 </ResourceDictionary>

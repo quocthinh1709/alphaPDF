@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -437,7 +437,7 @@ namespace Scalpel
                         name, curVal, onValue, isReadOnly, cx, cy, cw, ch, options));
                 }
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "GetPageFormFields", "GetPageFormFields failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "GetPageFormFields", "GetPageFormFields failed", ex); }
 
             return result;
         }
@@ -574,7 +574,7 @@ namespace Scalpel
                 }
                 catch { }
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "WriteFormValuesToDocument", "WriteFormValuesToDocument failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "WriteFormValuesToDocument", "WriteFormValuesToDocument failed", ex); }
         }
 
         /// <summary>
@@ -604,7 +604,7 @@ namespace Scalpel
 
                 AttachAppearance(widgetAnn, xobj);
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "GenerateTextFieldAppearance", "GenerateTextFieldAppearance failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "GenerateTextFieldAppearance", "GenerateTextFieldAppearance failed", ex); }
         }
 
         /// <summary>
@@ -646,7 +646,7 @@ namespace Scalpel
 
                 widgetAnn.Elements["/AP"] = apDict;
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "GenerateCheckBoxAppearance", "GenerateCheckBoxAppearance failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "GenerateCheckBoxAppearance", "GenerateCheckBoxAppearance failed", ex); }
         }
 
         /// <summary>

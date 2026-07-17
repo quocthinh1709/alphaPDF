@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.Advanced;
 using PdfSharpCore.Pdf.IO;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Pulls an embedded font program (TrueType <c>/FontFile2</c> or OpenType <c>/FontFile3</c>)

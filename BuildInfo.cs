@@ -1,4 +1,4 @@
-namespace Scalpel
+namespace alphaPDF
 {
     /// <summary>
     /// Build-time constants written or verified by release.ps1.

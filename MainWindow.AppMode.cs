@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -42,12 +42,14 @@ namespace Scalpel
             ModeEditTab.IsChecked  = mode == AppMode.Edit;
             ModePagesTab.IsChecked = mode == AppMode.Pages;
             ModeSignTab.IsChecked  = mode == AppMode.Sign;
+            ModeBatchTab.IsChecked= mode == AppMode.Batch;
             _suppressModeEvents = false;
 
             ModePanelView.Visibility  = mode == AppMode.View  ? Visibility.Visible : Visibility.Collapsed;
             ModePanelEdit.Visibility  = mode == AppMode.Edit  ? Visibility.Visible : Visibility.Collapsed;
             ModePanelPages.Visibility = mode == AppMode.Pages ? Visibility.Visible : Visibility.Collapsed;
             ModePanelSign.Visibility  = mode == AppMode.Sign  ? Visibility.Visible : Visibility.Collapsed;
+            ModePanelBatch.Visibility = _mode == AppMode.Batch ? Visibility.Visible : Visibility.Collapsed;
         }
 
     }

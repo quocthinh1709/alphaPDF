@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -54,9 +54,9 @@ namespace Scalpel
             }
             if (_isDirty)
             {
-                var res = ScalpelDialog.Show(this,
+                var res = AppDialog.Show(this,
                     Loc("Str_Dlg_UnsavedClose"),
-                    "Scalpel", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    "alphaPDF", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res != MessageBoxResult.Yes) return;
             }
             _doc.Close();

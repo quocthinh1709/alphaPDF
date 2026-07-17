@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using Docnet.Core;
 using Docnet.Core.Models;
@@ -9,7 +9,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// <see cref="IPageRasterizer"/> backed by Docnet/PDFium. Renders each page to a PNG and reads

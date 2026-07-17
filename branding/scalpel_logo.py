@@ -37,8 +37,8 @@ def P(*parts):
     return os.path.join(ROOT, *parts)
 
 
-MASTER = P("branding", "scalpel-master-1024.png")
-GLYPH_MASTER = P("branding", "scalpel-glyph-master-1024.png")
+MASTER = P("branding", "alphaPDFLogo1024_2.png")
+GLYPH_MASTER = P("branding", "alphaPDFLogo.png")
 ICO_FRAMES = (16, 24, 32, 48, 64, 128, 256)
 GLYPH_MAX = 56  # at/below this px the simplified glyph reads better than the full mark
 

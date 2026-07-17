@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -168,7 +168,7 @@ namespace Scalpel
             }
             else if (e.Key == Key.F11) { ToggleFullScreen(); e.Handled = true; }
             else if (e.Key == Key.F1)  { ShortcutOverlay.Visibility = ShortcutOverlay.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible; e.Handled = true; }
-            else if (e.Key == Key.F2)  { ShowAboutOverlay(); e.Handled = true; }
+            //else if (e.Key == Key.F2)  { ShowAboutOverlay(); e.Handled = true; }
             else if (e.Key == Key.F5)  { SetViewMode(ViewMode.Single);     e.Handled = true; }
             else if (e.Key == Key.F6)  { SetViewMode(ViewMode.Continuous); e.Handled = true; }
             else if (e.Key == Key.F7)  { SetViewMode(ViewMode.TwoPage);    e.Handled = true; }

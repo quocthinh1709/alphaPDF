@@ -9,9 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     /// <summary>
     /// "Tools" features: page/Bates numbering, password protection, metadata sanitize,
@@ -64,7 +64,7 @@ namespace Scalpel
         {
             if (_doc is null || _currentFile is null)
             {
-                ScalpelDialog.Show(this, "Open a PDF first.");
+                AppDialog.Show(this, "Open a PDF first.");
                 return false;
             }
             return true;
@@ -342,7 +342,7 @@ namespace Scalpel
 
             if (string.IsNullOrWhiteSpace(text.Value) && string.IsNullOrEmpty(imagePath))
             {
-                ScalpelDialog.Show(this, "Enter watermark text or choose an image to stamp.");
+                AppDialog.Show(this, "Enter watermark text or choose an image to stamp.");
                 return;
             }
 
@@ -408,7 +408,7 @@ namespace Scalpel
             if (turns == 0 && Math.Abs(fineAngle) < 0.001 && Math.Abs(scaleFactor - 1.0) < 0.001
                 && !flipH.Checked && !flipV.Checked)
             {
-                ScalpelDialog.Show(this, Loc("Str_Tf_NothingToDo"));
+                AppDialog.Show(this, Loc("Str_Tf_NothingToDo"));
                 return;
             }
 
@@ -445,12 +445,12 @@ namespace Scalpel
 
             if (string.IsNullOrEmpty(pw.Value))
             {
-                ScalpelDialog.Show(this, "Password cannot be empty.");
+                AppDialog.Show(this, "Password cannot be empty.");
                 return;
             }
             if (pw.Value != confirm.Value)
             {
-                ScalpelDialog.Show(this, "Passwords do not match.");
+                AppDialog.Show(this, "Passwords do not match.");
                 return;
             }
 
@@ -470,11 +470,11 @@ namespace Scalpel
                     AllowCopy = allowCopy.Checked,
                 });
                 SetStatus($"Saved password-protected copy to {System.IO.Path.GetFileName(dlg.FileName)}");
-                ScalpelDialog.Show(this, "Saved a password-protected copy. Keep your password safe — it cannot be recovered.");
+                AppDialog.Show(this, "Saved a password-protected copy. Keep your password safe — it cannot be recovered.");
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Could not protect the PDF:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Could not protect the PDF:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -485,7 +485,7 @@ namespace Scalpel
 
             // 1) Choose the certificate source: a .pfx/.p12 file, or the Windows certificate store
             //    (the latter only offered when the store is available — i.e. on Windows).
-            bool storeAvailable = Scalpel.Services.Signing.WindowsCertificateStore.IsAvailable;
+            bool storeAvailable = AlphaPDF.Services.Signing.WindowsCertificateStore.IsAvailable;
             string fileOpt = Loc("Str_Sign_SourceFile");
             string storeOpt = Loc("Str_Sign_SourceStore");
             var sourceField = new ToolField(Loc("Str_Sign_Source"), ToolFieldKind.Combo,
@@ -505,12 +505,12 @@ namespace Scalpel
                 return;
 
             // Optional RFC-3161 trusted timestamp (PAdES-T). Uses the configured TSA URL or a default.
-            Scalpel.Services.ITimestampClient? timestamp = timestampField.Checked
-                ? new Scalpel.Services.Signing.HttpTimestampClient(App.GetSetting("SignTimestampUrl"))
+            AlphaPDF.Services.ITimestampClient? timestamp = timestampField.Checked
+                ? new AlphaPDF.Services.Signing.HttpTimestampClient(App.GetSetting("SignTimestampUrl"))
                 : null;
 
             // Optional visible signature: a captioned box in a chosen corner of the first page.
-            Scalpel.Services.SignatureAppearance? appearance = null;
+            AlphaPDF.Services.SignatureAppearance? appearance = null;
             if (visibleField.Value != visOff && _doc is not null && _doc.PageCount > 0)
             {
                 var p0 = _doc.Pages[0];
@@ -522,7 +522,7 @@ namespace Scalpel
                 else if (visibleField.Value == visTL) { x1 = margin; y1 = ph - margin - boxH; }
                 else { x1 = pw - margin - boxW; y1 = margin; } // bottom-right (default)
                 x1 = Math.Max(0, x1); y1 = Math.Max(0, y1);
-                appearance = new Scalpel.Services.SignatureAppearance
+                appearance = new AlphaPDF.Services.SignatureAppearance
                 {
                     X1 = x1, Y1 = y1, X2 = x1 + boxW, Y2 = y1 + boxH,
                     ShowName = true, ShowDate = true,
@@ -537,16 +537,16 @@ namespace Scalpel
 
             if (storeAvailable && sourceField.Value == storeOpt)
             {
-                var certs = Scalpel.Services.Signing.WindowsCertificateStore.ListSigningCertificates();
-                if (certs.Count == 0) { ScalpelDialog.Show(this, Loc("Str_Sign_NoCerts")); return; }
-                var labels = certs.Select(Scalpel.Services.Signing.WindowsCertificateStore.Describe).ToArray();
+                var certs = AlphaPDF.Services.Signing.WindowsCertificateStore.ListSigningCertificates();
+                if (certs.Count == 0) { AppDialog.Show(this, Loc("Str_Sign_NoCerts")); return; }
+                var labels = certs.Select(AlphaPDF.Services.Signing.WindowsCertificateStore.Describe).ToArray();
                 var certField = new ToolField(Loc("Str_Sign_CertLabel"), ToolFieldKind.Combo,
                     value: labels[0], options: labels);
                 if (!ShowToolForm(Loc("Str_Tool_Sign"), new[] { certField }, Loc("Str_Sign_Apply"))) return;
                 int idx = Array.IndexOf(labels, certField.Value);
                 if (idx < 0) idx = 0;
                 storeSigner = certs[idx];
-                storeChain = Scalpel.Services.Signing.WindowsCertificateStore.BuildChain(storeSigner);
+                storeChain = AlphaPDF.Services.Signing.WindowsCertificateStore.BuildChain(storeSigner);
             }
             else
             {
@@ -591,20 +591,20 @@ namespace Scalpel
                         ? new[] { storeSigner }.Concat(storeChain
                             ?? Array.Empty<System.Security.Cryptography.X509Certificates.X509Certificate2>()).ToArray()
                         : PdfSigningService.LoadCertificates(pfxPath!, pfxPassword);
-                    var crls = Scalpel.Services.Signing.RevocationCollector.CollectCrls(ltvCerts);
+                    var crls = AlphaPDF.Services.Signing.RevocationCollector.CollectCrls(ltvCerts);
                     byte[] signedBytes = System.IO.File.ReadAllBytes(dlg.FileName);
                     byte[] withDss = PdfSigningService.AddDss(signedBytes, ltvCerts, crls);
                     System.IO.File.WriteAllBytes(dlg.FileName, withDss);
                 }
 
                 SetStatus(string.Format(Loc("Str_Sign_Done"), System.IO.Path.GetFileName(dlg.FileName)));
-                ScalpelDialog.Show(this, Loc("Str_Sign_DoneMsg"));
+                AppDialog.Show(this, Loc("Str_Sign_DoneMsg"));
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "sign.fail", ex.Message, ex);
+                AlphaPDF.Services.Logger.Error("Tools", "sign.fail", ex.Message, ex);
                 SetStatus(Loc("Str_Sign_Failed"));
-                ScalpelDialog.Show(this, $"{Loc("Str_Sign_Failed")}:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"{Loc("Str_Sign_Failed")}:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -612,7 +612,7 @@ namespace Scalpel
         private void ToolsSanitize_Click(object sender, RoutedEventArgs e)
         {
             if (!RequireOpenDoc()) return;
-            if (ScalpelDialog.Show(this,
+            if (AppDialog.Show(this,
                     "Remove document metadata (author, title, subject, keywords, and hidden XMP data)?\n\nThis applies to the working copy; use Save As to write it out.",
                     "Remove Metadata", MessageBoxButton.OKCancel, MessageBoxImage.None) != MessageBoxResult.OK)
                 return;
@@ -662,9 +662,9 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "compress.fail", ex.Message, ex);
+                AlphaPDF.Services.Logger.Error("Tools", "compress.fail", ex.Message, ex);
                 SetStatus("Compression failed");
-                ScalpelDialog.Show(this, $"Compression failed:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Compression failed:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -677,23 +677,23 @@ namespace Scalpel
             string? exe = OcrAssets.FindTesseractExe();
             if (exe is null)
             {
-                ScalpelDialog.Show(this,
-                    "OCR needs the free Tesseract engine, which isn't installed.\n\nInstall it from https://github.com/UB-Mannheim/tesseract (or place tesseract.exe in %LOCALAPPDATA%\\Scalpel\\ocr) and try again.",
+                AppDialog.Show(this,
+                    "OCR needs the free Tesseract engine, which isn't installed.\n\nInstall it from https://github.com/UB-Mannheim/tesseract (or place tesseract.exe in %LOCALAPPDATA%\\alphaPDF\\ocr) and try again.",
                     "OCR Engine Needed", MessageBoxButton.OK, MessageBoxImage.None);
                 return null;
             }
             if (!OcrAssets.HasLanguage(lang, best))
             {
-                if (ScalpelDialog.Show(this,
-                        $"Download the '{lang}' OCR language data{(best ? " (high quality)" : "")} once into %LOCALAPPDATA%\\Scalpel\\ocr?\n\nThis is a one-time local download; everything stays on your machine.",
+                if (AppDialog.Show(this,
+                        $"Download the '{lang}' OCR language data{(best ? " (high quality)" : "")} once into %LOCALAPPDATA%\\alphaPDF\\ocr?\n\nThis is a one-time local download; everything stays on your machine.",
                         "Download OCR Data", MessageBoxButton.OKCancel, MessageBoxImage.None) != MessageBoxResult.OK)
                     return null;
                 SetStatus("Downloading OCR language data…");
                 bool ok = await Task.Run(() => OcrAssets.DownloadLanguage(lang, best));
                 if (!ok)
                 {
-                    ScalpelDialog.Show(this, "Could not download the OCR language data. Check your connection and try again.",
-                        "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                    AppDialog.Show(this, "Could not download the OCR language data. Check your connection and try again.",
+                        "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
@@ -743,9 +743,9 @@ namespace Scalpel
             catch (Exception ex)
             {
                 OcrProgressOverlay.Visibility = Visibility.Collapsed;
-                Scalpel.Services.Logger.Error("Tools", "ocr.fail", ex.Message, ex);
+                AlphaPDF.Services.Logger.Error("Tools", "ocr.fail", ex.Message, ex);
                 SetStatus("OCR failed");
-                ScalpelDialog.Show(this, $"OCR failed:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"OCR failed:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -799,8 +799,8 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "ocr.clip.fail", ex.Message, ex);
-                ScalpelDialog.Show(this, $"OCR failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("Tools", "ocr.clip.fail", ex.Message, ex);
+                AppDialog.Show(this, $"OCR failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -857,8 +857,8 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "ocr.region.fail", ex.Message, ex);
-                ScalpelDialog.Show(this, $"OCR failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("Tools", "ocr.region.fail", ex.Message, ex);
+                AppDialog.Show(this, $"OCR failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -893,8 +893,8 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "ocr.extract.fail", ex.Message, ex);
-                ScalpelDialog.Show(this, $"OCR failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("Tools", "ocr.extract.fail", ex.Message, ex);
+                AppDialog.Show(this, $"OCR failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -923,13 +923,13 @@ namespace Scalpel
 
             if (rects.Count == 0)
             {
-                ScalpelDialog.Show(this,
+                AppDialog.Show(this,
                     "To redact, first mark the areas to remove with the Highlight tool (Edit mode), then run this again.\n\nEach marked area's page is permanently flattened to an image with a black box, so the hidden text cannot be recovered.",
                     "Redact", MessageBoxButton.OK, MessageBoxImage.None);
                 return;
             }
 
-            if (ScalpelDialog.Show(this,
+            if (AppDialog.Show(this,
                     $"Permanently redact {rects.Count} marked area(s)?\n\nThe affected pages become flattened images — the underlying text is removed and cannot be recovered.",
                     "Confirm Redaction", MessageBoxButton.OKCancel, MessageBoxImage.None) != MessageBoxResult.OK)
                 return;
@@ -958,9 +958,9 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Tools", "redact.fail", ex.Message, ex);
+                AlphaPDF.Services.Logger.Error("Tools", "redact.fail", ex.Message, ex);
                 SetStatus("Redaction failed");
-                ScalpelDialog.Show(this, $"Redaction failed:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Redaction failed:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -978,7 +978,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Operation failed:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Operation failed:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

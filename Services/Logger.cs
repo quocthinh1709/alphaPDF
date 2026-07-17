@@ -1,14 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Local-only JSONL session logger. One file per app session under
-    /// %LOCALAPPDATA%\Scalpel\logs. Thread-safe; never throws into callers.
+    /// %LOCALAPPDATA%\alphaPDF\logs. Thread-safe; never throws into callers.
     /// </summary>
     public static class Logger
     {
@@ -27,7 +27,7 @@ namespace Scalpel.Services
 
         private static string DefaultDir => Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Scalpel", "logs");
+            "alphaPDF", "logs");
 
         /// <summary>Open a new session log, sweeping logs older than 7 days.</summary>
         public static void Init(string? baseDir = null, Level minLevel = Level.Debug, bool enabled = true)

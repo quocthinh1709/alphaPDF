@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Windows;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
-    internal enum Locale { EnUS, Es, ZhTW, ZhCN, Bn, TrTR, He, Ar, Ru }
+    internal enum Locale { EnUS, Es, ZhTW, ZhCN, Bn, TrTR, He, Ar, Ru, Vi }
 
     internal static class LocaleManager
     {
@@ -45,6 +45,7 @@ namespace Scalpel.Services
                 Locale.He   => new Uri("pack://application:,,,/Strings/he.xaml"),
                 Locale.Ar   => new Uri("pack://application:,,,/Strings/ar.xaml"),
                 Locale.Ru   => new Uri("pack://application:,,,/Strings/ru.xaml"),
+                Locale.Vi => new Uri("pack://application:,,,/Strings/vi-VN.xaml"),
                 _           => new Uri("pack://application:,,,/Strings/en-US.xaml"),
             };
 

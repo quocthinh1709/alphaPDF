@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -44,7 +44,7 @@ namespace Scalpel
 
         private void Install_Click(object sender, RoutedEventArgs e)
         {
-            var (proceed, wantDesktop) = Scalpel.Services.InstallerUI.ShowInstallConfirm(alreadyInstalled: false);
+            var (proceed, wantDesktop) = AlphaPDF.Services.InstallerUI.ShowInstallConfirm(alreadyInstalled: false);
             if (!proceed) return;
 
             // Hide the badge immediately so it doesn't flash if relaunch is slow
@@ -65,7 +65,7 @@ namespace Scalpel
         {
             if (_isDirty)
             {
-                var res = ScalpelDialog.Show(this,
+                var res = AppDialog.Show(this,
                     Loc("Str_Dlg_UnsavedExit"),
                     Loc("Str_Dlg_AppTitle"), MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res != MessageBoxResult.Yes)

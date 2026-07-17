@@ -12,10 +12,10 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     /// <summary>
-    /// Scalpel's own print dialog with a working preview. WPF's built-in PrintDialog
+    /// alphaPDF's own print dialog with a working preview. WPF's built-in PrintDialog
     /// reports "This app doesn't support print preview", so we render the rasterized
     /// pages ourselves, expose printer / orientation / copies / page-range settings,
     /// and drive the spooler via a non-UI PrintDialog when the user clicks Print.
@@ -51,7 +51,7 @@ namespace Scalpel
             _rasterW = rasterW;
             _rasterH = rasterH;
 
-            Title  = "Scalpel - Print";
+            Title  = "alphaPDF - Print";
             Width  = 920;
             Height = 700;
             MinWidth  = 720;
@@ -154,7 +154,7 @@ namespace Scalpel
             titleGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             var titleText = new TextBlock
             {
-                Text       = "Scalpel – Print",
+                Text       = "alphaPDF – Print",
                 Foreground = R("TextPrimary"),
                 FontWeight = FontWeights.SemiBold,
                 FontSize   = (double)Application.Current.FindResource("FsDialogTitle"),
@@ -421,7 +421,7 @@ namespace Scalpel
         {
             if (_queue == null)
             {
-                ScalpelDialog.Show(this, "No printer is available.", "Scalpel",
+                AppDialog.Show(this, "No printer is available.", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -429,7 +429,7 @@ namespace Scalpel
             var indices = ParseRange(_pagesBox.Text, _pages.Length);
             if (indices.Count == 0)
             {
-                ScalpelDialog.Show(this, "No valid pages in that range.", "Scalpel",
+                AppDialog.Show(this, "No valid pages in that range.", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -471,15 +471,15 @@ namespace Scalpel
                     fixedDoc.Pages.Add(pc);
                 }
 
-                pd.PrintDocument(fixedDoc.DocumentPaginator, "Scalpel");
+                pd.PrintDocument(fixedDoc.DocumentPaginator, "alphaPDF");
                 PrintedPageCount = indices.Count;
                 DialogResult = true;
                 Close();
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Print failed:\n{ex.GetType().Name}: {ex.Message}",
-                    "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Print failed:\n{ex.GetType().Name}: {ex.Message}",
+                    "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

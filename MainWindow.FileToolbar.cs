@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -43,9 +43,9 @@ namespace Scalpel
         {
             if (_isDirty)
             {
-                var res = ScalpelDialog.Show(this,
+                var res = AppDialog.Show(this,
                     "You have unsaved changes. Discard them and create a new document?",
-                    "Scalpel", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    "alphaPDF", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res != MessageBoxResult.Yes) return;
             }
 
@@ -65,8 +65,8 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Could not create new document:\n{ex.Message}",
-                    "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Could not create new document:\n{ex.Message}",
+                    "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Scalpel
 
         private void Merge_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             var doc = _doc;
             var dlg = new OpenFileDialog { Filter = "PDF files|*.pdf", Title = "Select PDF to merge", Multiselect = true };
             if (dlg.ShowDialog(this) != true) return;
@@ -103,12 +103,12 @@ namespace Scalpel
                 }
                 SaveTempAndReload();
                 SetStatus($"Merged {dlg.FileNames.Length} file(s) - {_doc?.PageCount} total pages");
-                Scalpel.Services.Logger.Info("File", "merge.success", "PDFs merged", new { added = dlg.FileNames.Length });
+                AlphaPDF.Services.Logger.Info("File", "merge.success", "PDFs merged", new { added = dlg.FileNames.Length });
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("File", "merge.fail", "Merge failed", ex);
-                ScalpelDialog.Show(this, $"Merge failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("File", "merge.fail", "Merge failed", ex);
+                AppDialog.Show(this, $"Merge failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Scalpel
                 if (destTree != null)
                     WalkNameTree(src, destTree, map);
             }
-            catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "BuildNamedDestMap", "BuildNamedDestMap failed", ex); }
+            catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "BuildNamedDestMap", "BuildNamedDestMap failed", ex); }
             return map;
         }
 
@@ -258,7 +258,7 @@ namespace Scalpel
                         }
                     }
                 }
-                catch (Exception ex) { Scalpel.Services.Logger.Error("Error", "RewriteNamedDestLinks", "RewriteNamedDestLinks failed", ex); }
+                catch (Exception ex) { AlphaPDF.Services.Logger.Error("Error", "RewriteNamedDestLinks", "RewriteNamedDestLinks failed", ex); }
             }
         }
 
@@ -289,10 +289,10 @@ namespace Scalpel
 
         private void Split_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null || _currentFile is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null || _currentFile is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             var currentFile = _currentFile;
             var selected = PageList.SelectedItems;
-            if (selected.Count == 0) { ScalpelDialog.Show(this, "Select pages to extract."); return; }
+            if (selected.Count == 0) { AppDialog.Show(this, "Select pages to extract."); return; }
             var dlg = new SaveFileDialog { Filter = "PDF files|*.pdf", Title = "Save extracted pages as",
                                            CheckFileExists = false, CheckPathExists = true };
             if (dlg.ShowDialog(this) != true) return;
@@ -306,22 +306,22 @@ namespace Scalpel
                     newDoc.AddPage(importDoc.Pages[idx]);
                 newDoc.Save(dlg.FileName);
                 SetStatus(string.Format(Loc("Str_Extracted"), indices.Count, System.IO.Path.GetFileName(dlg.FileName)));
-                Scalpel.Services.Logger.Info("File", "extract.success", "Pages extracted", new { count = indices.Count });
+                AlphaPDF.Services.Logger.Info("File", "extract.success", "Pages extracted", new { count = indices.Count });
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("File", "extract.fail", "Extract failed", ex);
-                ScalpelDialog.Show(this, $"Split failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("File", "extract.fail", "Extract failed", ex);
+                AppDialog.Show(this, $"Split failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             var doc = _doc;
             var selected = PageList.SelectedItems;
-            if (selected.Count == 0) { ScalpelDialog.Show(this, "Select pages to delete."); return; }
-            var result = ScalpelDialog.Show(this, $"Delete {selected.Count} {(selected.Count == 1 ? "page" : "pages")}?", "Scalpel",
+            if (selected.Count == 0) { AppDialog.Show(this, "Select pages to delete."); return; }
+            var result = AppDialog.Show(this, $"Delete {selected.Count} {(selected.Count == 1 ? "page" : "pages")}?", "alphaPDF",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             try
@@ -335,13 +335,13 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Delete failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Delete failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void InsertBlankPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             var doc = _doc;
             int insertAfter = PageList.SelectedIndex >= 0 ? PageList.SelectedIndex : doc.PageCount - 1;
             try
@@ -354,7 +354,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Insert failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Insert failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -384,7 +384,7 @@ namespace Scalpel
 
         private void SaveInPlace()
         {
-            if (_doc is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             // Save back to the user's real file. After a page edit (crop/rotate) _currentFile is a
             // temp working copy, so the real path is kept in _originalFile. If there is no real path
             // (e.g. a repaired temp-backed open), fall back to Save As.
@@ -422,7 +422,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Save failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Save failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -441,7 +441,7 @@ namespace Scalpel
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null || _currentFile is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null || _currentFile is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             CommitActiveTextBox();
             var dlg = new SaveFileDialog { Filter = "PDF files|*.pdf", Title = "Save PDF as",
                                            CheckFileExists = false, CheckPathExists = true };
@@ -483,18 +483,18 @@ namespace Scalpel
                     MarkDirty(false);
                     SetStatus($"Saved to {System.IO.Path.GetFileName(dlg.FileName)}");
                 }
-                Scalpel.Services.Logger.Info("File", "save.success", "PDF saved", new { path = dlg.FileName });
+                AlphaPDF.Services.Logger.Info("File", "save.success", "PDF saved", new { path = dlg.FileName });
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("File", "save.fail", "Save failed", ex);
-                ScalpelDialog.Show(this, $"Save failed:\n{ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error);
+                AlphaPDF.Services.Logger.Error("File", "save.fail", "Save failed", ex);
+                AppDialog.Show(this, $"Save failed:\n{ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private async void SaveFlattened_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null || _currentFile is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null || _currentFile is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             CommitActiveTextBox();
             var dlg = new SaveFileDialog { Filter = "PDF files|*.pdf", Title = "Save Flattened PDF",
                                            CheckFileExists = false, CheckPathExists = true };
@@ -597,12 +597,12 @@ namespace Scalpel
 
                 MarkDirty(false);
                 SetStatus($"Flattened PDF saved to {System.IO.Path.GetFileName(outputPath)}");
-                Scalpel.Services.Logger.Info("File", "flatten.success", "PDF flattened", new { path = outputPath, pages = pageCount });
+                AlphaPDF.Services.Logger.Info("File", "flatten.success", "PDF flattened", new { path = outputPath, pages = pageCount });
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("File", "flatten.fail", "Flatten failed", ex);
-                try { ScalpelDialog.Show(this, $"Flatten failed:\n{ex.GetType().Name}: {ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error); }
+                AlphaPDF.Services.Logger.Error("File", "flatten.fail", "Flatten failed", ex);
+                try { AppDialog.Show(this, $"Flatten failed:\n{ex.GetType().Name}: {ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error); }
                 catch { /* dialog failed; overlay still removed in finally */ }
             }
             finally
@@ -683,7 +683,7 @@ namespace Scalpel
 
         private async void Print_Click(object sender, RoutedEventArgs e)
         {
-            if (_doc is null || _currentFile is null) { ScalpelDialog.Show(this, "Open a PDF first."); return; }
+            if (_doc is null || _currentFile is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             CommitActiveTextBox();
 
             // Burn pending annotations into a temp copy on the UI thread before going off-thread
@@ -711,7 +711,7 @@ namespace Scalpel
 
             // Rasterize every page, then hand them to our own preview window. WPF's OS
             // PrintDialog cannot show a preview ("This app doesn't support print preview"),
-            // so Scalpel renders the preview and drives printing itself.
+            // so alphaPDF renders the preview and drives printing itself.
             var overlay = ShowFlattenProgress(pageCount, "Preparing");
             bool overlayHidden = false;
             byte[][]? pngPages = null;
@@ -757,13 +757,13 @@ namespace Scalpel
                 if (preview.ShowDialog() == true)
                 {
                     SetStatus(string.Format(Loc("Str_Printed"), preview.PrintedPageCount));
-                    Scalpel.Services.Logger.Info("Print", "print.success", "Document printed", new { pages = preview.PrintedPageCount });
+                    AlphaPDF.Services.Logger.Info("Print", "print.success", "Document printed", new { pages = preview.PrintedPageCount });
                 }
             }
             catch (Exception ex)
             {
-                Scalpel.Services.Logger.Error("Print", "print.fail", "Print failed", ex);
-                try { ScalpelDialog.Show(this, $"Print failed:\n{ex.GetType().Name}: {ex.Message}", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Error); }
+                AlphaPDF.Services.Logger.Error("Print", "print.fail", "Print failed", ex);
+                try { AppDialog.Show(this, $"Print failed:\n{ex.GetType().Name}: {ex.Message}", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Error); }
                 catch { }
             }
             finally

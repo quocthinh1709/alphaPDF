@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -142,7 +142,7 @@ namespace Scalpel
         }
 
         // ── About overlay ───────────────────────────────────────────────
-
+        
         private void AboutTab_Click(object sender, RoutedEventArgs e) => ShowAboutOverlay();
 
         private void ShowAboutOverlay()
@@ -152,19 +152,19 @@ namespace Scalpel
                                .GetName().Version?.ToString(3) ?? "?";
             var (sigValid, sigSubject, sigThumbprint) = App.GetExeSignerInfo();
 
-            AboutPublisherBlock.Text   = sigValid ? sigSubject : "(not signed or chain failed)";
-            AboutThumbprintBlock.Text  = string.IsNullOrEmpty(sigThumbprint) ? "(none)" : sigThumbprint;
-            AboutSha256Block.Text      = Loc("Str_About_Computing");
+            //AboutPublisherBlock.Text   = sigValid ? sigSubject : "(not signed or chain failed)";
+            //AboutThumbprintBlock.Text  = string.IsNullOrEmpty(sigThumbprint) ? "(none)" : sigThumbprint;
+            //AboutSha256Block.Text      = Loc("Str_About_Computing");
 
             // Logo block
             AboutLogoBlock.Inlines.Clear();
-            var logoHl = new System.Windows.Documents.Hyperlink(new System.Windows.Documents.Run("Scalpel"))
+            var logoHl = new System.Windows.Documents.Hyperlink(new System.Windows.Documents.Run("AlphaPDF"))
             {
                 Foreground      = (System.Windows.Media.Brush)FindResource("Accent"),
                 TextDecorations = null
             };
             logoHl.Click += (_, _) =>
-                Process.Start(new ProcessStartInfo("https://github.com/blakazulu/ScalpelPDF") { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("https://github.com/quocthinh1709/alphaPDF") { UseShellExecute = true });
             AboutLogoBlock.Inlines.Add(logoHl);
 
             // Tagline block
@@ -183,20 +183,23 @@ namespace Scalpel
             };
             verHl.Click += (_, _) =>
                 Process.Start(new ProcessStartInfo(
-                    $"https://github.com/blakazulu/ScalpelPDF/releases/tag/v{version}")
+                    $"https://github.com/quocthinh1709/alphaPDF/releases/tag/v{version}")
                 { UseShellExecute = true });
             AboutVersionBlock.Inlines.Add(verHl);
 
             AboutOverlay.Visibility = Visibility.Visible;
 
             // Compute SHA256 off the UI thread
+            /*
             System.Threading.Tasks.Task.Run(() =>
             {
                 var sha256 = App.GetExeSha256();
                 Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background,
                     (Action)(() => AboutSha256Block.Text = sha256));
             });
+            */
         }
+        
 
         private void AboutOverlay_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -225,7 +228,7 @@ namespace Scalpel
             var uiFont = (FontFamily)FindResource("FontUI");
 
             bool first = true;
-            foreach (var rel in Scalpel.Services.Changelog.Releases)
+            foreach (var rel in AlphaPDF.Services.Changelog.Releases)
             {
                 // Version + date header
                 var header = new TextBlock

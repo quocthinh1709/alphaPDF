@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using Docnet.Core;
 using Docnet.Core.Models;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     /// <summary>
     /// ViewModel for a single page thumbnail in the sidebar PageList.

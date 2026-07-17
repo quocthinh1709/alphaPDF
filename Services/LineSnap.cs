@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Angle-snapping for the straight-line tool.</summary>
     public static class LineSnap

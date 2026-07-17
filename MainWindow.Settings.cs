@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -41,22 +41,22 @@ namespace Scalpel
             AccentCyanRadio.IsChecked  = curAccent == Accent.Cyan;
             UpdateAccentRadioState();
             // Sync language radios
-            var curLoc = Scalpel.Services.LocaleManager.Current;
-            LangEnRadio.IsChecked   = curLoc == Scalpel.Services.Locale.EnUS;
-            LangEsRadio.IsChecked   = curLoc == Scalpel.Services.Locale.Es;
-            LangZhTWRadio.IsChecked = curLoc == Scalpel.Services.Locale.ZhTW;
-            LangZhCNRadio.IsChecked = curLoc == Scalpel.Services.Locale.ZhCN;
-            LangBnRadio.IsChecked   = curLoc == Scalpel.Services.Locale.Bn;
-            LangTrRadio.IsChecked   = curLoc == Scalpel.Services.Locale.TrTR;
-            LangHeRadio.IsChecked   = curLoc == Scalpel.Services.Locale.He;
-            LangArRadio.IsChecked   = curLoc == Scalpel.Services.Locale.Ar;
-            LangRuRadio.IsChecked   = curLoc == Scalpel.Services.Locale.Ru;
+            var curLoc = AlphaPDF.Services.LocaleManager.Current;
+            LangEnRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.EnUS;
+            LangEsRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Es;
+            LangZhTWRadio.IsChecked = curLoc == AlphaPDF.Services.Locale.ZhTW;
+            LangZhCNRadio.IsChecked = curLoc == AlphaPDF.Services.Locale.ZhCN;
+            LangBnRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Bn;
+            LangTrRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.TrTR;
+            LangHeRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.He;
+            LangArRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Ar;
+            LangRuRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Ru;
             // Sync without re-triggering the toggle handler (would log a spurious
             // logging.toggle and re-save the setting on every Settings open).
             _suppressLogToggleEvent = true;
-            LogEnabledCheck.IsChecked = Scalpel.Services.Logger.Enabled;
+            //LogEnabledCheck.IsChecked = AlphaPDF.Services.Logger.Enabled;
             _suppressLogToggleEvent = false;
-            SyncUpdateToggle();
+            //SyncUpdateToggle();
             SettingsOverlay.Visibility = Visibility.Visible;
         }
 
@@ -68,22 +68,23 @@ namespace Scalpel
 
         private void SettingsOverlayClose_Click(object sender, RoutedEventArgs e)
             => SettingsOverlay.Visibility = Visibility.Collapsed;
-
+        /*
         private void LogEnabledCheck_Changed(object sender, RoutedEventArgs e)
         {
             if (_suppressLogToggleEvent) return;
             bool on = LogEnabledCheck.IsChecked == true;
-            Scalpel.Services.Logger.SetEnabled(on);
+            AlphaPDF.Services.Logger.SetEnabled(on);
             App.SetSetting("LoggingEnabled", on ? "1" : "0");
-            Scalpel.Services.Logger.Info("Settings", "logging.toggle", on ? "enabled" : "disabled");
+            AlphaPDF.Services.Logger.Info("Settings", "logging.toggle", on ? "enabled" : "disabled");
         }
+        */
 
         private void OpenLogsBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                System.IO.Directory.CreateDirectory(Scalpel.Services.Logger.LogDirectory);
-                System.Diagnostics.Process.Start("explorer.exe", Scalpel.Services.Logger.LogDirectory);
+                System.IO.Directory.CreateDirectory(AlphaPDF.Services.Logger.LogDirectory);
+                System.Diagnostics.Process.Start("explorer.exe", AlphaPDF.Services.Logger.LogDirectory);
             }
             catch { }
         }
@@ -94,7 +95,7 @@ namespace Scalpel
                 "Delete all log files except the current session?",
                 "Clear logs", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
-                Scalpel.Services.Logger.ClearLogs();
+                AlphaPDF.Services.Logger.ClearLogs();
         }
 
         private void OnThemeChanged()
@@ -151,31 +152,37 @@ namespace Scalpel
         }
 
         private void LangEnRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.EnUS);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.EnUS);
 
         private void LangEsRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.Es);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.Es);
 
         private void LangZhTWRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.ZhTW);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.ZhTW);
 
         private void LangZhCNRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.ZhCN);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.ZhCN);
 
         private void LangBnRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.Bn);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.Bn);
 
         private void LangTrRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.TrTR);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.TrTR);
 
         private void LangHeRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.He);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.He);
 
         private void LangArRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.Ar);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.Ar);
 
         private void LangRuRadio_Checked(object sender, RoutedEventArgs e)
-            => Scalpel.Services.LocaleManager.Apply(Scalpel.Services.Locale.Ru);
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.Ru);
+
+        private void LangViRadio_Checked(object sender, RoutedEventArgs e)
+            => AlphaPDF.Services.LocaleManager.Apply(AlphaPDF.Services.Locale.Vi);
+
+
+
 
         // The four exclusive view-mode buttons are grouped RadioButtons (GroupName
         // "ViewModeGroup"), so they fire Checked when activated — by mouse, keyboard, or UI

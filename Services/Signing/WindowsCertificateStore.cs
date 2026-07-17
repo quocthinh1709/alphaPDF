@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Scalpel.Services.Signing
+namespace AlphaPDF.Services.Signing
 {
     /// <summary>
     /// Lists signing-capable certificates from the current user's personal Windows certificate store,

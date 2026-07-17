@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Minimal TrueType/OpenType 'cmap' reader: does the font map a codepoint to a real

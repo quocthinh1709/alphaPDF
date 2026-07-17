@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     public enum Theme  { Dark, Light, HighContrast }
     public enum Accent { Amber, Red, Green, Cyan }

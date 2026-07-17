@@ -1,12 +1,12 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
-    Scalpel release script: build → sign → verify → hash → update BuildInfo → publish summary.
+    alphaPDF release script: build → sign → verify → hash → update BuildInfo → publish summary.
 .DESCRIPTION
     1. Locates pdfium.dll in the NuGet cache, hashes it, and writes BuildInfo.cs so the
        embedded integrity check at startup knows the expected value.
     2. Publishes using FolderProfile1 (net48, win-x64); bundle-source.ps1 also runs.
-    3. Signs Scalpel.exe. Prefers CertThumbprint (exact match) over CertName (CN match).
+    3. Signs alphaPDF.exe. Prefers CertThumbprint (exact match) over CertName (CN match).
        Retries the timestamp across three TSA endpoints if the first attempt fails.
     4. Runs "signtool verify /pa /v" as a post-sign gate — aborts if the cert chain
        is not trusted to an accepted root.
@@ -51,10 +51,10 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$proj         = Join-Path $PSScriptRoot "Scalpel.csproj"
+$proj         = Join-Path $PSScriptRoot "alphaPDF.csproj"
 $buildInfoPath = Join-Path $PSScriptRoot "BuildInfo.cs"
 $publishDir   = Join-Path $PSScriptRoot "bin\Release\net48\publish"
-$exe          = Join-Path $publishDir "Scalpel.exe"
+$exe          = Join-Path $publishDir "alphaPDF.exe"
 
 # TSA endpoints — tried in order; first success wins.
 $tsaList = @(
@@ -114,7 +114,7 @@ if ($SkipSign) {
 
 Write-Host "`n==> Writing BuildInfo.cs..." -ForegroundColor Cyan
 $buildInfoContent = @"
-namespace Scalpel
+namespace alphaPDF
 {
     /// <summary>
     /// Build-time constants written or verified by release.ps1.
@@ -189,8 +189,8 @@ if (-not $SkipSign) {
             /tr  $tsa `
             /td  sha256 `
             @certArgs `
-            /d   "Scalpel" `
-            /du  "https://scalpel.example.com" `
+            /d   "alphaPDF" `
+            /du  "https://alphaPDF.example.com" `
             /v   $exe
 
         if ($LASTEXITCODE -eq 0) {
@@ -238,7 +238,7 @@ if (-not $SkipSign) {
 # ── 4. SHA256 (final EXE) ─────────────────────────────────────────────────
 Write-Host "`n==> Computing final EXE SHA256..." -ForegroundColor Cyan
 $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash
-Write-Host "    Scalpel.exe : $exeHash" -ForegroundColor Green
+Write-Host "    alphaPDF.exe : $exeHash" -ForegroundColor Green
 if ($pdfiumPath) {
     Write-Host "    pdfium.dll    : $pdfiumHash" -ForegroundColor Green
 }
@@ -277,10 +277,10 @@ if ($haveOcr) {
     New-Item -ItemType Directory -Path $stageDir | Out-Null
 
     # Signed EXE + an adjacent ocr\ folder (matches Services/OcrAssets.AppOcrDir).
-    Copy-Item $exe (Join-Path $stageDir "Scalpel.exe")
+    Copy-Item $exe (Join-Path $stageDir "alphaPDF.exe")
     Copy-Item $OcrSourceDir (Join-Path $stageDir "ocr") -Recurse
 
-    $ocrZipPath = Join-Path $publishDir "Scalpel-$ver-win-with-ocr.zip"
+    $ocrZipPath = Join-Path $publishDir "alphaPDF-$ver-win-with-ocr.zip"
     if (Test-Path $ocrZipPath) { Remove-Item $ocrZipPath -Force }
     Compress-Archive -Path (Join-Path $stageDir "*") -DestinationPath $ocrZipPath
     Write-Host "    With-OCR bundle: $ocrZipPath" -ForegroundColor Green
@@ -299,7 +299,7 @@ if ($srcZip) {
 # ── 6. Write SHA256SUMS.txt ──────────────────────────────────────────────────
 $sumsPath = Join-Path $PSScriptRoot "SHA256SUMS.txt"
 $lines    = [System.Collections.Generic.List[string]]::new()
-$lines.Add("Scalpel.exe           $exeHash")
+$lines.Add("alphaPDF.exe           $exeHash")
 if ($pdfiumPath) { $lines.Add("pdfium.dll              $pdfiumHash") }
 if ($ocrZipPath -and (Test-Path $ocrZipPath)) {
     $ocrHash = (Get-FileHash $ocrZipPath -Algorithm SHA256).Hash
@@ -314,7 +314,7 @@ Write-Host "`n==> SHA256SUMS.txt written to: $sumsPath" -ForegroundColor Green
 
 # ── 7. Summary ───────────────────────────────────────────────────────────────
 Write-Host "`n╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host   "  Scalpel release artifacts" -ForegroundColor White
+Write-Host   "  alphaPDF release artifacts" -ForegroundColor White
 Write-Host   "  EXE  : $exe"
 if ($ocrZipPath -and (Test-Path $ocrZipPath)) { Write-Host "  OCR  : $ocrZipPath" }
 if ($srcZip) { Write-Host "  SRC  : $($srcZip.FullName)" }
@@ -327,5 +327,5 @@ Write-Host   "  Signer : $actualCN"
 Write-Host   "  Thumbprint: $actualThumb"
 Write-Host   ""
 Write-Host   "  Paste EXE SHA256 into:"
-Write-Host   "    Scalpel\pdf-landing\index.html (line ~183)"
+Write-Host   "    alphaPDF\pdf-landing\index.html (line ~183)"
 Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan

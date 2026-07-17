@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ================================================================
-         Scalpel  —  Traditional Chinese (zh-TW) strings
+         alphaPDF  —  Traditional Chinese (zh-TW) strings
          Stub file — translations to be provided by leox243 (PR #61).
          All keys fall back to English until filled in.
          ================================================================ -->
@@ -39,7 +39,7 @@
     <sys:String x:Key="Str_TT_ExpandSidebar">展開側邊欄</sys:String>
     <sys:String x:Key="Str_TT_KeyboardShortcuts">鍵盤快速鍵 (Ctrl+?)</sys:String>
     <sys:String x:Key="Str_TT_Settings">設定</sys:String>
-    <sys:String x:Key="Str_TT_About">關於 Scalpel</sys:String>
+    <sys:String x:Key="Str_TT_About">關於 alphaPDF</sys:String>
 
     <!-- ── About overlay ─────────────────────────────────────────────── -->
     <sys:String x:Key="Str_About_Version">版本</sys:String>
@@ -100,7 +100,7 @@
     <sys:String x:Key="Str_FontMissing_CopyName">複製名稱</sys:String>
     <sys:String x:Key="Str_Ready">就緒</sys:String>
     <sys:String x:Key="Str_Portable">可攜版</sys:String>
-    <sys:String x:Key="Str_InstallBtn">安裝 Scalpel...</sys:String>
+    <sys:String x:Key="Str_InstallBtn">安裝 alphaPDF...</sys:String>
 
     <!-- ── Status messages (format strings — use string.Format) ─────── -->
     <sys:String x:Key="Str_Opened">已開啟 {0} - {1} 頁</sys:String>
@@ -129,16 +129,16 @@
     <sys:String x:Key="Str_RotateFailed">旋轉失敗：{0}</sys:String>
 
     <!-- ── Dialog strings ───────────────────────────────────────────── -->
-    <sys:String x:Key="Str_Dlg_InstallTitle">安裝 Scalpel</sys:String>
-    <sys:String x:Key="Str_Dlg_InstallMsg">要將 Scalpel 安裝到您的使用者設定檔嗎？
+    <sys:String x:Key="Str_Dlg_InstallTitle">安裝 alphaPDF</sys:String>
+    <sys:String x:Key="Str_Dlg_InstallMsg">要將 alphaPDF 安裝到您的使用者設定檔嗎？
 
-這將把應用程式複製到 %LocalAppData%\Scalpel 並建立開始功能表捷徑。
+這將把應用程式複製到 %LocalAppData%\alphaPDF 並建立開始功能表捷徑。
 您可以隨時透過新增或移除程式來解除安裝。</sys:String>
     <sys:String x:Key="Str_Dlg_UnsavedClose">您有未儲存的變更。要在不儲存的情況下關閉此檔案嗎？</sys:String>
-    <sys:String x:Key="Str_Dlg_UnsavedExit">您有未儲存的變更。要在不儲存的情況下關閉 Scalpel 嗎？</sys:String>
+    <sys:String x:Key="Str_Dlg_UnsavedExit">您有未儲存的變更。要在不儲存的情況下關閉 alphaPDF 嗎？</sys:String>
     <sys:String x:Key="Str_Dlg_FailedOpen">無法開啟 PDF：
 {0}</sys:String>
-    <sys:String x:Key="Str_Dlg_AppTitle">Scalpel</sys:String>
+    <sys:String x:Key="Str_Dlg_AppTitle">alphaPDF</sys:String>
 
 
     <!-- ── Theme names ────────────────────────────────────────────────── -->
@@ -272,9 +272,9 @@
 
     <!-- ── Update notification ─────────────────────────────────────── -->
     <sys:String x:Key="Str_Update_OptIn_Title">要檢查更新嗎？</sys:String>
-    <sys:String x:Key="Str_Update_OptIn_Body">Scalpel 可每天在 scalpel-pdf.netlify.app 上檢查是否有新版本。不會傳送任何關於您或您的檔案的資訊。要啟用更新檢查嗎？</sys:String>
+    <sys:String x:Key="Str_Update_OptIn_Body">alphaPDF 可每天在 alphaPDF-pdf.netlify.app 上檢查是否有新版本。不會傳送任何關於您或您的檔案的資訊。要啟用更新檢查嗎？</sys:String>
     <sys:String x:Key="Str_Update_Title">有可用更新</sys:String>
-    <sys:String x:Key="Str_Update_Body_Prefix">Scalpel </sys:String>
+    <sys:String x:Key="Str_Update_Body_Prefix">alphaPDF </sys:String>
     <sys:String x:Key="Str_Update_Body_Suffix"> 已推出。</sys:String>
     <sys:String x:Key="Str_Update_Get">取得更新</sys:String>
     <sys:String x:Key="Str_Update_Later">稍後</sys:String>
@@ -326,4 +326,51 @@
     <sys:String x:Key="Str_Ocr_Progress_Starting">準備中…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Page">正在辨識第 {0} 頁，共 {1} 頁…</sys:String>
     <sys:String x:Key="Str_Ocr_Progress_Cancel">取消</sys:String>
+
+    <sys:String x:Key="Str_Mode_Batch">批次處理</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupSplit">批次分割</sys:String>
+    <sys:String x:Key="Str_Batch_SplitRanges">頁面範圍 (如 1-3 或 2~):</sys:String>
+    <sys:String x:Key="Str_Batch_CsvNames">CSV 檔案名稱清單:</sys:String>
+    <sys:String x:Key="Str_Batch_StartSplit">開始分割</sys:String>
+    <sys:String x:Key="Str_TT_BatchSplit">開始批次分割檔案</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupProtect">批次加密</sys:String>
+    <sys:String x:Key="Str_Batch_SourceFolder">來源資料夾:</sys:String>
+    <sys:String x:Key="Str_Batch_CsvPasswords">CSV 密碼清單:</sys:String>
+    <sys:String x:Key="Str_Batch_StartProtect">加密</sys:String>
+    <sys:String x:Key="Str_TT_BatchProtect">透過 CSV 批次加密 PDF</sys:String>
+
+    <sys:String x:Key="Str_Batch_GroupUtils">檔案工具</sys:String>
+    <sys:String x:Key="Str_Batch_ListCsv">匯出至 CSV</sys:String>
+    <sys:String x:Key="Str_TT_BatchListCsv">將資料夾中的檔案清單匯出為 CSV</sys:String>
+    <sys:String x:Key="Str_Batch_Rename">重新命名</sys:String>
+    <sys:String x:Key="Str_TT_BatchRename">使用 CSV 批次重新命名檔案</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoDoc">請先開啟一個 PDF 檔案作為來源檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoRanges">請輸入分割範圍 (例如 1-3, 4-5 或 2~)。</sys:String>
+    <sys:String x:Key="Str_Batch_Err_NoCsv">請選擇有效的 CSV 檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_Err_InvalidRanges">頁面範圍格式無效。</sys:String>
+    <sys:String x:Key="Str_Batch_SplitWorking">正在背景處理批次分割...</sys:String>
+    <sys:String x:Key="Str_Batch_SplitDone">分割完成。已建立 {0} 個檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_SplitSuccess">成功建立 {0} 個新 PDF 檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFailStatus">批次分割失敗。</sys:String>
+    <sys:String x:Key="Str_Batch_SplitFail">分割失敗:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_Err_NoSourceFolder">請選擇有效的來源資料夾。</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectWorking">正在背景設定密碼...</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectDone">加密完成。已保護 {0} 個檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectSuccess">成功加密 {0} 個檔案。儲存於: {1}</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFailStatus">批次加密失敗。</sys:String>
+    <sys:String x:Key="Str_Batch_ProtectFail">加密失敗:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_ListWorking">已將 {0} 個檔案匯出到 CSV。</sys:String>
+    <sys:String x:Key="Str_Batch_ListSuccess">成功將 {0} 個檔案名稱匯出至 CSV。</sys:String>
+    <sys:String x:Key="Str_Batch_ListFail">匯出檔案清單失敗:{0}</sys:String>
+
+    <sys:String x:Key="Str_Batch_RenameWorking">正在背景重新命名檔案...</sys:String>
+    <sys:String x:Key="Str_Batch_RenameDone">重新命名完成。已重新命名 {0} 個檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_RenameSuccess">成功重新命名 {0} 個檔案。</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFailStatus">批次重新命名失敗。</sys:String>
+    <sys:String x:Key="Str_Batch_RenameFail">重新命名失敗:{0}</sys:String>
 </ResourceDictionary>

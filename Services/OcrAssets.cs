@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Locates the Tesseract engine + language data and, for portable installs, downloads language
@@ -12,7 +12,7 @@ namespace Scalpel.Services
     /// <item>Installed build: the engine + data ship in an <c>ocr</c> folder next to the EXE
     /// (<see cref="AppOcrDir"/>) — OCR works out of the box, no download.</item>
     /// <item>Portable build: nothing OCR-related ships; data is fetched once into
-    /// <c>%LOCALAPPDATA%\Scalpel\ocr</c> (<see cref="UserOcrDir"/>) on first use.</item>
+    /// <c>%LOCALAPPDATA%\alphaPDF\ocr</c> (<see cref="UserOcrDir"/>) on first use.</item>
     /// </list>
     /// </summary>
     public static class OcrAssets
@@ -23,7 +23,7 @@ namespace Scalpel.Services
         /// <summary>Writable per-user location for portable on-demand downloads.</summary>
         public static string UserOcrDir =>
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Scalpel", "ocr");
+                "alphaPDF", "ocr");
 
         /// <summary>Where on-demand fast-quality downloads are written (always the writable per-user location).</summary>
         public static string DownloadTessdataDir => Path.Combine(UserOcrDir, "tessdata");

@@ -1,8 +1,8 @@
-#if DEBUG
+﻿#if DEBUG
 using System.Collections.Generic;
 using System.Windows;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {

@@ -1,4 +1,4 @@
-#if DEBUG
+﻿#if DEBUG
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Scalpel.Services;
+using AlphaPDF.Services;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {

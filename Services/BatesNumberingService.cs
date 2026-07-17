@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Where on the page a stamp is placed.</summary>
     public enum StampPosition

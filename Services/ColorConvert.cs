@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// Pure color-math helpers for the RGB color picker: RGB&lt;-&gt;HSV conversion and

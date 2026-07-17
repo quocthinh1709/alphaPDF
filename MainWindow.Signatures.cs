@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -475,7 +475,7 @@ namespace Scalpel
             {
                 if (strokes.Count == 0)
                 {
-                    ScalpelDialog.Show(this, "Draw a signature first.", "Scalpel", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    AppDialog.Show(this, "Draw a signature first.", "alphaPDF", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -552,7 +552,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Failed to import image:\n{ex.Message}", "Scalpel",
+                AppDialog.Show(this, $"Failed to import image:\n{ex.Message}", "alphaPDF",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -591,7 +591,7 @@ namespace Scalpel
             double sigH = sig.CanvasHeight * scale;
             SelectAnnotation(annot, new Rect(pos.X, pos.Y, sigW, sigH));
             SetStatus("Signature placed — drag to reposition, use the corner handle to resize");
-            Scalpel.Services.Logger.Info("Sign", "sign.success", "Signature placed", new { page = pageIdx + 1 });
+            AlphaPDF.Services.Logger.Info("Sign", "sign.success", "Signature placed", new { page = pageIdx + 1 });
         }
 
         private void PlaceImageFromDialog(Point pos, int pageIdx)
@@ -645,7 +645,7 @@ namespace Scalpel
             }
             catch (Exception ex)
             {
-                ScalpelDialog.Show(this, $"Could not load image:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                AppDialog.Show(this, $"Could not load image:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

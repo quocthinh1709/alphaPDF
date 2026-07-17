@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Snapshot of a PDF's document-information metadata (for display + tests).</summary>
     public sealed class PdfMetadata

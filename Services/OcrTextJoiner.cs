@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Joins recognized OCR words into plain text by grouping them into lines.</summary>
     public static class OcrTextJoiner

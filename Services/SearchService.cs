@@ -1,6 +1,6 @@
-using UglyToad.PdfPig;
+﻿using UglyToad.PdfPig;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     internal sealed class SearchResult
     {

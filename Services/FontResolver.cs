@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Resolved font info for a run of existing PDF text.</summary>
     public sealed record ResolvedFont(

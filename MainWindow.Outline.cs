@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -190,6 +190,9 @@ namespace Scalpel
         private void ToolHighlight_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Highlight);
         private void ToolDraw_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Draw);
         private void ToolLine_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Line);
+        private void ToolRect_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Rectangle);
+        private void ToolEllipse_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Ellipse);
+        private void ToolArrow_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Arrow);
         private void ToolImage_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Image);
         private void ToolCrop_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Crop);
         private void ToolSignature_Click(object sender, RoutedEventArgs e)

@@ -15,10 +15,10 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using Scalpel.Services;
+using AlphaPDF.Services;
 using PdfPigDoc = UglyToad.PdfPig.PdfDocument;
 
-namespace Scalpel
+namespace AlphaPDF
 {
     public partial class MainWindow
     {
@@ -27,11 +27,13 @@ namespace Scalpel
         // ============================================================
 
         private static readonly double[] TextFontSizes = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 64, 72];
+        private FontFamily _textFontFamily = new FontFamily("Segoe UI");
 
         private void ApplyTextStyleToActiveBox()
         {
+            /*
             if (_activeTextBox is null || _activeTextBox.Tag is TextEditContext) return;
-            _activeTextBox.Foreground = new SolidColorBrush(_textColor);
+             _activeTextBox.Foreground = new SolidColorBrush(_textColor);
             int pg = _activeTextBox.Tag is int tp ? tp : PageList.SelectedIndex;
             double fontCanvas = _textFontSize;
             if (_doc is not null && pg >= 0 && _renderDims.TryGetValue(pg, out var rd) && rd.h > 0)
@@ -40,6 +42,40 @@ namespace Scalpel
                 if (sy > 0) fontCanvas = _textFontSize / sy;
             }
             _activeTextBox.FontSize = fontCanvas;
+            */
+
+            // Cập nhật TextBox đang active
+            if (_activeTextBox != null && !(_activeTextBox.Tag is TextEditContext))
+            {
+                _activeTextBox.Foreground = new SolidColorBrush(_textColor);
+
+                // Cập nhật Font Family
+                if (_textFontFamily != null)
+                {
+                    _activeTextBox.FontFamily = _textFontFamily;
+                }
+
+                int pg = _activeTextBox.Tag is int tp ? tp : PageList.SelectedIndex;
+                double fontCanvas = _textFontSize;
+                if (_doc is not null && pg >= 0 && _renderDims.TryGetValue(pg, out var rd) && rd.h > 0)
+                {
+                    double sy = _doc.Pages[pg].Height.Point / rd.h;
+                    if (sy > 0) fontCanvas = _textFontSize / sy;
+                }
+                _activeTextBox.FontSize = fontCanvas;
+            }
+
+            // THÊM MỚI: Nếu đang sử dụng công cụ Select và có chọn một TextAnnotation
+            else if (_selectedAnnotation is TextAnnotation ta)
+            {
+                ta.FontSize = _textFontSize;
+                ta.SetColor(_textColor);
+                // Lưu ý: Nếu model TextAnnotation của bạn có hỗ trợ thuộc tính FontFamily, hãy gán nó ở đây:
+                //ta.FontFamily = _textFontFamily.Source;
+
+                // Cần gọi lại hàm render lại canvas hiện tại để cập nhật UI ngay lập tức
+                RenderTextAnnotation(ta); //hoặc RenderAllAnnotations(ta.PageIndex);
+            }
         }
 
         private void ShowTextSettings()
@@ -47,6 +83,57 @@ namespace Scalpel
             HideTextSettings();
 
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(8, 4, 8, 4) };
+
+            var fontLbl = new TextBlock
+            {
+                Text = "Font:",
+                FontFamily = (FontFamily)FindResource("FontUI"),
+                FontSize = 11,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 6, 0)
+            };
+            fontLbl.SetResourceReference(TextBlock.ForegroundProperty, "TextSecondary");
+            panel.Children.Add(fontLbl);
+
+            var fontBox = new ComboBox
+            {
+                Width = 120,
+                Height = 24,
+                Style = (Style)FindResource("DarkComboBox"),
+                IsEditable = true,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 12, 0)
+            };
+
+            // Nạp danh sách font hệ thống
+            foreach (var font in Fonts.SystemFontFamilies)
+            {
+                fontBox.Items.Add(font.Source);
+            }
+
+            //fontBox.SelectedItem = _textFontFamily.Source;
+            fontBox.Text = _textFontFamily.Source;
+            fontBox.SelectionChanged += (_, _) =>
+            {
+                if (fontBox.SelectedItem is string fontName)
+                {
+                    _textFontFamily = new FontFamily(fontName);
+                    ApplyTextStyleToActiveBox();
+                }
+            };
+
+            fontBox.LostFocus += (_, _) =>
+            {
+                if (!string.IsNullOrWhiteSpace(fontBox.Text))
+                {
+                    _textFontFamily = new FontFamily(fontBox.Text);
+                    ApplyTextStyleToActiveBox();
+                }
+            };
+            panel.Children.Add(fontBox);
+
+
+
 
             // Font size label
             var sizeLbl = new TextBlock

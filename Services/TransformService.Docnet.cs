@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>
     /// App-only half of <see cref="TransformService"/>: wires the native Docnet/PDFium rasterizer

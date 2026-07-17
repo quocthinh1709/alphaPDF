@@ -6,7 +6,7 @@ using PdfSharpCore.Pdf.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Scalpel.Services
+namespace AlphaPDF.Services
 {
     /// <summary>Where a watermark / stamp is placed on the page.</summary>
     public enum WatermarkPosition
