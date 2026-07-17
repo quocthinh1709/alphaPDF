@@ -56,10 +56,16 @@ namespace AlphaPDF
                 (_toolTextBtn, EditTool.Text),
                 (_toolHighlightBtn, EditTool.Highlight),
                 (_toolDrawBtn, EditTool.Draw),
-                (_toolLineBtn, EditTool.Line),
-                (_toolRectBtn, EditTool.Rectangle), // THÊM MỚI
-                (_toolEllipseBtn, EditTool.Ellipse), // THÊM MỚI
-                (_toolArrowBtn, EditTool.Arrow),    // THÊM MỚI
+                //(_toolLineBtn, EditTool.Line),
+                //(_toolRectBtn, EditTool.Rectangle), // THÊM MỚI
+                //(_toolEllipseBtn, EditTool.Ellipse), // THÊM MỚI
+                //(_toolArrowBtn, EditTool.Arrow),    // THÊM MỚI
+
+                (_toolShapeBtn, EditTool.Line),
+                (_toolShapeBtn, EditTool.Rectangle),
+                (_toolShapeBtn, EditTool.Ellipse),
+                (_toolShapeBtn, EditTool.Arrow),
+
                 (_toolSignatureBtn, EditTool.Signature),
                 (_toolImageBtn, EditTool.Image),
                 (_toolCropBtn, EditTool.Crop)

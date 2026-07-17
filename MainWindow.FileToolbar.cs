@@ -407,7 +407,8 @@ namespace AlphaPDF
                     var tempClean = App.MakeTempFile("clean");
                     _doc.Save(tempClean);
                     DrawAnnotationsOnDocument();
-                    _doc.Save(saveTarget);
+                    //_doc.Save(saveTarget);
+                    SafeSave(_doc, saveTarget);
                     _doc.Close();
                     _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                     _currentFile = tempClean;
@@ -466,7 +467,8 @@ namespace AlphaPDF
                     var tempClean = App.MakeTempFile("clean");
                     _doc.Save(tempClean);
                     DrawAnnotationsOnDocument();
-                    _doc.Save(dlg.FileName);
+                    //_doc.Save(dlg.FileName);
+                    SafeSave(_doc, dlg.FileName);
                     _doc.Close();
                     _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                     _currentFile = tempClean;
@@ -510,7 +512,8 @@ namespace AlphaPDF
                 var tempBurned = App.MakeTempFile("burned");
                 _doc.Save(tempClean);
                 DrawAnnotationsOnDocument();
-                _doc.Save(tempBurned);
+                //_doc.Save(tempBurned);
+                SafeSave(_doc, tempBurned);
                 _doc.Close();
                 _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                 _currentFile = tempClean;
@@ -696,7 +699,8 @@ namespace AlphaPDF
                 _doc.Save(tempClean);
                 DrawAnnotationsOnDocument();
                 printPath = App.MakeTempFile("print");
-                _doc.Save(printPath);
+                //_doc.Save(printPath);
+                SafeSave(_doc, printPath);
                 tempFlattened = printPath;
                 _doc.Close();
                 _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);

@@ -217,14 +217,7 @@ namespace AlphaPDF
                     _activeInk = new InkAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth };
                     _activeInk.SetColor(_drawColor);
                     _activeInk.Points.Add(pos);
-                    var poly = new Polyline
-                    {
-                        Stroke = new SolidColorBrush(_drawColor),
-                        StrokeThickness = _drawWidth,
-                        StrokeLineJoin = PenLineJoin.Round,
-                        StrokeStartLineCap = PenLineCap.Round,
-                        StrokeEndLineCap = PenLineCap.Round
-                    };
+                    var poly = new Polyline { Stroke = new SolidColorBrush(_drawColor), StrokeThickness = _drawWidth, StrokeLineJoin = PenLineJoin.Round, StrokeStartLineCap = PenLineCap.Round, StrokeEndLineCap = PenLineCap.Round };
                     poly.Points.Add(pos);
                     _activeCanvas.Children.Add(poly);
                     _activePreview = poly;
@@ -238,14 +231,7 @@ namespace AlphaPDF
                     _activeInk.SetColor(_drawColor);
                     _activeInk.Points.Add(pos);
                     _activeInk.Points.Add(pos);
-                    var lpoly = new Polyline
-                    {
-                        Stroke = new SolidColorBrush(_drawColor),
-                        StrokeThickness = _drawWidth,
-                        StrokeLineJoin = PenLineJoin.Round,
-                        StrokeStartLineCap = PenLineCap.Round,
-                        StrokeEndLineCap = PenLineCap.Round
-                    };
+                    var lpoly = new Polyline { Stroke = new SolidColorBrush(_drawColor), StrokeThickness = _drawWidth, StrokeLineJoin = PenLineJoin.Round, StrokeStartLineCap = PenLineCap.Round, StrokeEndLineCap = PenLineCap.Round };
                     lpoly.Points.Add(pos);
                     lpoly.Points.Add(pos);
                     _activeCanvas.Children.Add(lpoly);
@@ -256,9 +242,9 @@ namespace AlphaPDF
                 case EditTool.Rectangle:
                 case EditTool.Ellipse:
                     ClearSelection();
-                    _isDrawing = true; 
-                    _drawStart = pos; 
-                    _activeInk = new InkAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, Tag = _currentTool }; // Lưu loại Tool vào Tag để phân biệt khi Render
+                    _isDrawing = true;
+                    _drawStart = pos;
+                    _activeInk = new ShapeAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, ShapeType = _currentTool }; // <-- ÉP KIỂU SHAPE
                     _activeInk.SetColor(_drawColor);
 
                     Shape shape = _currentTool == EditTool.Rectangle ? new Rectangle() : new Ellipse();
@@ -278,7 +264,7 @@ namespace AlphaPDF
                 case EditTool.Arrow:
                     ClearSelection();
                     _isDrawing = true;
-                    _activeInk = new InkAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, Tag = EditTool.Arrow };
+                    _activeInk = new ShapeAnnotation { PageIndex = pageIdx, StrokeWidth = _drawWidth, ShapeType = EditTool.Arrow }; // <-- ÉP KIỂU SHAPE
                     _activeInk.SetColor(_drawColor);
                     _activeInk.Points.Add(pos);
                     _activeInk.Points.Add(pos);
@@ -501,12 +487,11 @@ namespace AlphaPDF
                     break;
 
                 case EditTool.Arrow:
-                    if (_activePreview is System.Windows.Shapes.Path aPath && _activeInk != null && _activeInk.Points.Count == 2)
+                    if (_activePreview is System.Windows.Shapes.Path aPath && _activeInk is ShapeAnnotation sArrow && sArrow.Points.Count == 2)
                     {
-                        var startPt = _activeInk.Points[0];
-                        var endPt = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
-                                        ? LineSnap.SnapEndpoint(startPt, pos) : pos;
-                        _activeInk.Points[1] = endPt;
+                        var startPt = sArrow.Points[0];
+                        var endPt = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift ? LineSnap.SnapEndpoint(startPt, pos) : pos;
+                        sArrow.Points[1] = endPt;
 
                         double headSize = _drawWidth * 3 + 5;
                         double angle = Math.Atan2(endPt.Y - startPt.Y, endPt.X - startPt.X);
@@ -756,6 +741,29 @@ namespace AlphaPDF
                         _activeCanvas.Children.Remove(cr);
                         _cropPreviewRect = null;
                     }
+                    break;
+
+                // Thêm vào switch (_currentTool)
+                case EditTool.Rectangle:
+                case EditTool.Ellipse:
+                    var sShape = (ShapeAnnotation)_activeInk!;
+                    if (_activePreview is Shape rShape && rShape.Width > 3 && rShape.Height > 3)
+                    {
+                        sShape.Points.Add(new Point(Canvas.GetLeft(rShape), Canvas.GetTop(rShape)));
+                        sShape.Points.Add(new Point(Canvas.GetLeft(rShape) + rShape.Width, Canvas.GetTop(rShape) + rShape.Height));
+                        AddAnnotation(sShape);
+                    }
+                    else { _activeCanvas.Children.Remove(_activePreview); }
+                    _activeInk = null;
+                    break;
+
+                case EditTool.Arrow:
+                    if (_activeInk is ShapeAnnotation sArrow && sArrow.Points.Count == 2 && (sArrow.Points[1] - sArrow.Points[0]).Length > 3)
+                    {
+                        AddAnnotation(sArrow);
+                    }
+                    else { _activeCanvas.Children.Remove(_activePreview); }
+                    _activeInk = null;
                     break;
             }
             _activePreview = null;

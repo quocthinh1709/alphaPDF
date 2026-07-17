@@ -43,9 +43,22 @@ namespace AlphaPDF
                         VisualTreeHelper.GetDpi(_activeCanvas).PixelsPerDip);
                     bounds = new Rect(ta.Position.X, ta.Position.Y, ft.Width + 8, ft.Height + 8);
                     return bounds.Contains(pos);
+                case ShapeAnnotation sa when sa.Points.Count > 0:
+                    double sminX = Math.Min(sa.Points[0].X, sa.Points[1].X);
+                    double sminY = Math.Min(sa.Points[0].Y, sa.Points[1].Y);
+                    double smaxX = Math.Max(sa.Points[0].X, sa.Points[1].X);
+                    double smaxY = Math.Max(sa.Points[0].Y, sa.Points[1].Y);
+                    Rect hitbox = new Rect(sminX - 10, sminY - 10, (smaxX - sminX) + 20, (smaxY - sminY) + 20);
+                    if (hitbox.Contains(pos))
+                    {
+                        bounds = new Rect(sminX, sminY, Math.Max(smaxX - sminX, 4), Math.Max(smaxY - sminY, 4));
+                        return true;
+                    }
+                    bounds = Rect.Empty;
+                    return false;
 
                 case InkAnnotation ia when ia.Points.Count > 0:
-                    /*
+                    
                     bool near = ia.Points.Any(p =>
                         Math.Sqrt((p.X - pos.X) * (p.X - pos.X) + (p.Y - pos.Y) * (p.Y - pos.Y)) < 15);
                     if (near)
@@ -59,69 +72,8 @@ namespace AlphaPDF
                     }
                     bounds = Rect.Empty;
                     return false;
-                    */
-                    bool near = false;
-                    double minX, minY, maxX, maxY;
-
-                    // NẾU LÀ SHAPE (Chỉ có 2 điểm đại diện cho Bounding Box)
-                    if (ia.Tag is EditTool.Rectangle || ia.Tag is EditTool.Ellipse)
-                    {
-                        minX = Math.Min(ia.Points[0].X, ia.Points[1].X);
-                        minY = Math.Min(ia.Points[0].Y, ia.Points[1].Y);
-                        maxX = Math.Max(ia.Points[0].X, ia.Points[1].X);
-                        maxY = Math.Max(ia.Points[0].Y, ia.Points[1].Y);
-
-                        // Kiểm tra xem click có nằm trên đường viền không (khoảng cách sai số ~10px)
-                        bool onTop = Math.Abs(pos.Y - minY) < 10 && pos.X >= minX && pos.X <= maxX;
-                        bool onBottom = Math.Abs(pos.Y - maxY) < 10 && pos.X >= minX && pos.X <= maxX;
-                        bool onLeft = Math.Abs(pos.X - minX) < 10 && pos.Y >= minY && pos.Y <= maxY;
-                        bool onRight = Math.Abs(pos.X - maxX) < 10 && pos.Y >= minY && pos.Y <= maxY;
-
-                        near = onTop || onBottom || onLeft || onRight;
-                    }
-                    else if (ia.Tag is EditTool.Arrow)
-                    {
-                        // Arrow (Line) tính khoảng cách điểm đến đường thẳng 
-                        // Đơn giản hóa: Mượn logic quét Box như Line
-                        minX = Math.Min(ia.Points[0].X, ia.Points[1].X);
-                        minY = Math.Min(ia.Points[0].Y, ia.Points[1].Y);
-                        maxX = Math.Max(ia.Points[0].X, ia.Points[1].X);
-                        maxY = Math.Max(ia.Points[0].Y, ia.Points[1].Y);
-
-                        // Hoặc kiểm tra khoảng cách vector. Giữ logic đơn giản:
-                        near = ia.Points.Any(p => Math.Sqrt((p.X - pos.X) * (p.X - pos.X) + (p.Y - pos.Y) * (p.Y - pos.Y)) < 15);
-                        if (!near)
-                        {
-                            // Basic Point-to-Line distance check
-                            double l2 = Math.Pow(maxX - minX, 2) + Math.Pow(maxY - minY, 2);
-                            if (l2 != 0)
-                            {
-                                double t = Math.Max(0, Math.Min(1, ((pos.X - ia.Points[0].X) * (ia.Points[1].X - ia.Points[0].X) + (pos.Y - ia.Points[0].Y) * (ia.Points[1].Y - ia.Points[0].Y)) / l2));
-                                double px = ia.Points[0].X + t * (ia.Points[1].X - ia.Points[0].X);
-                                double py = ia.Points[0].Y + t * (ia.Points[1].Y - ia.Points[0].Y);
-                                near = Math.Sqrt(Math.Pow(pos.X - px, 2) + Math.Pow(pos.Y - py, 2)) < 15;
-                            }
-                        }
-                    }
-                    else // Logic vẽ tay cũ
-                    {
-                        near = ia.Points.Any(p => 
-                
-                            Math.Sqrt((p.X - pos.X) * (p.X - pos.X) + (p.Y - pos.Y) * (p.Y - pos.Y)) < 15);
-        
-                            minX = ia.Points.Min(p => p.X); 
-                            minY = ia.Points.Min(p => p.Y); 
-                            maxX = ia.Points.Max(p => p.X); 
-                            maxY = ia.Points.Max(p => p.Y); 
-                    }
-
-                    if (near)
-                    {
-                        bounds = new Rect(minX, minY, Math.Max(maxX - minX, 4), Math.Max(maxY - minY, 4));
-                        return true;
-                    }
-                    bounds = Rect.Empty;
-                    return false;
+                    
+                    
 
                 case TextEditAnnotation tea:
                     bounds = tea.OriginalBounds;

@@ -54,7 +54,11 @@ namespace AlphaPDF
 
         public Color GetColor() => Color.FromArgb(ColorA, ColorR, ColorG, ColorB);
         public void SetColor(Color c) { ColorR = c.R; ColorG = c.G; ColorB = c.B; ColorA = c.A; }
-        public object Tag { get; set; }
+        
+    }
+    public class ShapeAnnotation : InkAnnotation
+    {
+        public EditTool ShapeType { get; set; }
     }
 
     public class HighlightAnnotation : PageAnnotation

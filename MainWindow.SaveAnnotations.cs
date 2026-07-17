@@ -88,6 +88,8 @@ namespace AlphaPDF
             gfx.DrawString(visual, font, brush, x, baselineY);
         }
 
+        
+
         private void DrawAnnotationsOnDocument()
         {
             if (_doc is null) return;
@@ -138,64 +140,37 @@ namespace AlphaPDF
                                 ha.Bounds.Width * sx, ha.Bounds.Height * sy);
                             break;
 
+                        case ShapeAnnotation sa:
+                            if (sa.Points.Count < 2) break;
+                            var sc = sa.GetColor();
+                            var sPen = new XPen(XColor.FromArgb(sc.A, sc.R, sc.G, sc.B), sa.StrokeWidth * sx) { LineJoin = XLineJoin.Round, LineCap = XLineCap.Round };
+
+                            if (sa.ShapeType == EditTool.Rectangle)
+                            {
+                                gfx.DrawRectangle(sPen, Math.Min(sa.Points[0].X, sa.Points[1].X) * sx, Math.Min(sa.Points[0].Y, sa.Points[1].Y) * sy, Math.Max(0.1, Math.Abs(sa.Points[1].X - sa.Points[0].X) * sx), Math.Max(0.1, Math.Abs(sa.Points[1].Y - sa.Points[0].Y) * sy));
+                            }
+                            else if (sa.ShapeType == EditTool.Ellipse)
+                            {
+                                gfx.DrawEllipse(sPen, Math.Min(sa.Points[0].X, sa.Points[1].X) * sx, Math.Min(sa.Points[0].Y, sa.Points[1].Y) * sy, Math.Max(0.1, Math.Abs(sa.Points[1].X - sa.Points[0].X) * sx), Math.Max(0.1, Math.Abs(sa.Points[1].Y - sa.Points[0].Y) * sy));
+                            }
+                            else if (sa.ShapeType == EditTool.Arrow)
+                            {
+                                gfx.DrawLine(sPen, sa.Points[0].X * sx, sa.Points[0].Y * sy, sa.Points[1].X * sx, sa.Points[1].Y * sy);
+                                double headSize = (sa.StrokeWidth * 3 + 5) * sx;
+                                double angle = Math.Atan2(sa.Points[1].Y * sy - sa.Points[0].Y * sy, sa.Points[1].X * sx - sa.Points[0].X * sx);
+                                double theta = Math.PI / 6;
+                                gfx.DrawLine(sPen, sa.Points[1].X * sx - headSize * Math.Cos(angle - theta), sa.Points[1].Y * sy - headSize * Math.Sin(angle - theta), sa.Points[1].X * sx, sa.Points[1].Y * sy);
+                                gfx.DrawLine(sPen, sa.Points[1].X * sx, sa.Points[1].Y * sy, sa.Points[1].X * sx - headSize * Math.Cos(angle + theta), sa.Points[1].Y * sy - headSize * Math.Sin(angle + theta));
+                            }
+                            break;
+
                         case InkAnnotation ia:
                             if (ia.Points.Count < 2) break;
                             var ic = ia.GetColor();
-                            var pen = new XPen(XColor.FromArgb(ic.A, ic.R, ic.G, ic.B), ia.StrokeWidth * sx)
+                            var pen = new XPen(XColor.FromArgb(ic.A, ic.R, ic.G, ic.B), ia.StrokeWidth * sx) { LineJoin = XLineJoin.Round, LineCap = XLineCap.Round };
+                            for (int i = 0; i < ia.Points.Count - 1; i++)
                             {
-                                LineJoin = XLineJoin.Round,
-                                LineCap = XLineCap.Round
-                            };
-
-                            // THÊM XỬ LÝ LƯU TẠI ĐÂY
-                            if (ia.Tag is EditTool.Rectangle)
-                            {
-                                double rx = Math.Min(ia.Points[0].X, ia.Points[1].X) * sx;
-                                double ry = Math.Min(ia.Points[0].Y, ia.Points[1].Y) * sy;
-                                double rw = Math.Abs(ia.Points[1].X - ia.Points[0].X) * sx;
-                                double rh = Math.Abs(ia.Points[1].Y - ia.Points[0].Y) * sy;
-                                gfx.DrawRectangle(pen, rx, ry, rw, rh);
-                            }
-                            else if (ia.Tag is EditTool.Ellipse)
-                            {
-                                double ex = Math.Min(ia.Points[0].X, ia.Points[1].X) * sx;
-                                double ey = Math.Min(ia.Points[0].Y, ia.Points[1].Y) * sy;
-                                double ew = Math.Abs(ia.Points[1].X - ia.Points[0].X) * sx;
-                                double eh = Math.Abs(ia.Points[1].Y - ia.Points[0].Y) * sy;
-                                gfx.DrawEllipse(pen, ex, ey, ew, eh);
-                            }
-                            else if (ia.Tag is EditTool.Arrow)
-                            {
-                                double ax1 = ia.Points[0].X * sx, ay1 = ia.Points[0].Y * sy;
-                                double ax2 = ia.Points[1].X * sx, ay2 = ia.Points[1].Y * sy;
-
-                                // Vẽ thân mũi tên
-                                gfx.DrawLine(pen, ax1, ay1, ax2, ay2);
-
-                                // Tính và vẽ đầu mũi tên (Arrow head)
-                                double headSize = (ia.StrokeWidth * 3 + 5) * sx; // Scale theo sx để đồng bộ
-                                double angle = Math.Atan2(ay2 - ay1, ax2 - ax1);
-                                double theta = Math.PI / 6;
-
-                                double px1 = ax2 - headSize * Math.Cos(angle - theta);
-                                double py1 = ay2 - headSize * Math.Sin(angle - theta);
-                                double px2 = ax2 - headSize * Math.Cos(angle + theta);
-                                double py2 = ay2 - headSize * Math.Sin(angle + theta);
-
-                                // Nối đầu mũi tên bằng Path
-                                var path = new XGraphicsPath();
-                                path.AddLine(px1, py1, ax2, ay2);
-                                path.AddLine(ax2, ay2, px2, py2);
-                                gfx.DrawPath(pen, path);
-                            }
-                            else // Logic mặc định cho Vẽ tự do (Draw) và Line
-                            {
-                                for (int i = 0; i < ia.Points.Count - 1; i++)
-                                {
-                                    gfx.DrawLine(pen,
-                                        ia.Points[i].X * sx, ia.Points[i].Y * sy,
-                                        ia.Points[i + 1].X * sx, ia.Points[i + 1].Y * sy);
-                                }
+                                gfx.DrawLine(pen, ia.Points[i].X * sx, ia.Points[i].Y * sy, ia.Points[i + 1].X * sx, ia.Points[i + 1].Y * sy);
                             }
                             break;
 

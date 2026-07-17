@@ -189,12 +189,61 @@ namespace AlphaPDF
         private void ToolText_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Text);
         private void ToolHighlight_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Highlight);
         private void ToolDraw_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Draw);
-        private void ToolLine_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Line);
-        private void ToolRect_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Rectangle);
-        private void ToolEllipse_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Ellipse);
-        private void ToolArrow_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Arrow);
+        //private void ToolLine_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Line);
+        //private void ToolRect_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Rectangle);
+        //private void ToolEllipse_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Ellipse);
+        //private void ToolArrow_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Arrow);
         private void ToolImage_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Image);
         private void ToolCrop_Click(object sender, RoutedEventArgs e) => SetTool(EditTool.Crop);
+
+        // 1. Khi bấm trực tiếp vào nút vẽ hình (kích hoạt hình đã lưu)
+        private void ToolShapeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SetTool(_currentShapeTool);
+        }
+
+        // 2. Khi bấm vào nút mũi tên (Mở menu)
+        private void ShapeMenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b && b.ContextMenu != null)
+            {
+                b.ContextMenu.PlacementTarget = b;
+                b.ContextMenu.IsOpen = true;
+            }
+        }
+
+        // 3. Khi chọn 1 hình khối từ Menu xổ xuống
+        private void ShapeMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item && item.Tag is string shapeStr && Enum.TryParse(shapeStr, out EditTool tool))
+            {
+                // Lưu lại hình đang chọn
+                _currentShapeTool = tool;
+
+                // Đổi Text hiển thị dưới nút
+                _shapeTextContent.Text = tool == EditTool.Ellipse ? "Oval" : tool.ToString();
+
+                // Tắt hết các Icon đi
+                _iconLine.Visibility = Visibility.Collapsed;
+                _iconRect.Visibility = Visibility.Collapsed;
+                _iconEllipse.Visibility = Visibility.Collapsed;
+                _iconArrow.Visibility = Visibility.Collapsed;
+
+                // Chỉ bật Icon tương ứng
+                switch (tool)
+                {
+                    case EditTool.Line: _iconLine.Visibility = Visibility.Visible; break;
+                    case EditTool.Rectangle: _iconRect.Visibility = Visibility.Visible; break;
+                    case EditTool.Ellipse: _iconEllipse.Visibility = Visibility.Visible; break;
+                    case EditTool.Arrow: _iconArrow.Visibility = Visibility.Visible; break;
+                }
+
+                // Kích hoạt luôn tool vừa chọn
+                SetTool(_currentShapeTool);
+            }
+        }
+
+
         private void ToolSignature_Click(object sender, RoutedEventArgs e)
         {
             if (_signaturePopup is not null)

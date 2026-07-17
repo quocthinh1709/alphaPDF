@@ -588,47 +588,39 @@
                     <Button x:Name="ToolDrawBtn" Style="{StaticResource RibbonButton}" Click="ToolDraw_Click" ToolTip="{DynamicResource Str_TT_DrawTool}">
                       <StackPanel><TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="{StaticResource Ico_Draw}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource Str_Lbl_Draw}" Margin="0,5,0,0" HorizontalAlignment="Center"/></StackPanel>
                     </Button>
-                    <Button x:Name="ToolLineBtn" Style="{StaticResource RibbonButton}" Click="ToolLine_Click" ToolTip="{DynamicResource Str_TT_LineTool}">
-                      <StackPanel>
-                        <Line X1="3" Y1="20" X2="20" Y2="3" StrokeThickness="2.2" Width="23" Height="23"
-                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{DynamicResource Str_Lbl_Line}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
-                      </StackPanel>
-                    </Button>
+                      
+                    <StackPanel Orientation="Horizontal" Margin="2,0">
+                        <!-- Nút vẽ chính -->
+                        <Button x:Name="ToolShapeBtn" Style="{StaticResource RibbonButton}" Click="ToolShapeBtn_Click" ToolTip="Shapes">
+                            <StackPanel>
+                                <Grid Width="23" Height="23" Margin="0,3,0,4">
+                                    <!-- Chứa sẵn 4 Icon, ta sẽ dùng C# để Ẩn/Hiện chúng -->
+                                    <Line x:Name="IconLine" Visibility="Visible" X1="3" Y1="20" X2="20" Y2="3" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                    <Rectangle x:Name="IconRect" Visibility="Collapsed" Width="22" Height="16" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Fill="Transparent"/>
+                                    <Ellipse x:Name="IconEllipse" Visibility="Collapsed" Width="22" Height="16" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Fill="Transparent"/>
+                                    <Path x:Name="IconArrow" Visibility="Collapsed" Data="M 4,19 L 19,4 M 10,4 L 19,4 L 19,13" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Grid>
+                                <TextBlock x:Name="ShapeTextContent" Text="Line" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-                            <!-- Nút Vẽ Hình Chữ Nhật -->
-                            <Button x:Name="ToolRectBtn" Style="{StaticResource RibbonButton}" Click="ToolRect_Click" ToolTip="Rectangle Tool">
-                                <StackPanel>
-                                    <Rectangle Width="22" Height="16" StrokeThickness="2.2" Margin="0,3,0,4"
-            Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-            Fill="Transparent" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Rect" Margin="0,5,0,0" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <!-- Nút Vẽ Hình Oval -->
-                            <Button x:Name="ToolEllipseBtn" Style="{StaticResource RibbonButton}" Click="ToolEllipse_Click" ToolTip="Ellipse Tool">
-                                <StackPanel>
-                                    <Ellipse Width="22" Height="16" StrokeThickness="2.2" Margin="0,3,0,4"
-            Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-            Fill="Transparent" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Oval" Margin="0,5,0,0" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                <!-- Nút Vẽ Mũi Tên -->
-                    <Button x:Name="ToolArrowBtn" Style="{StaticResource RibbonButton}" Click="ToolArrow_Click" ToolTip="Arrow Tool">
-                        <StackPanel>
-                            <Path Data="M 4,19 L 19,4 M 10,4 L 19,4 L 19,13" StrokeThickness="2.2" Width="23" Height="23"
-                                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                                    StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Arrow" Margin="0,5,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                        <!-- Nút mũi tên mở Menu -->
+                        <Button Style="{StaticResource RibbonButton}" Width="16" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes">
+                            <TextBlock FontFamily="Consolas" FontSize="10" Text="▼" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- Context Menu chứa danh sách -->
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Line" Tag="Line" Click="ShapeMenuItem_Click"/>
+                                    <MenuItem Header="Rectangle" Tag="Rectangle" Click="ShapeMenuItem_Click"/>
+                                    <MenuItem Header="Ellipse (Oval)" Tag="Ellipse" Click="ShapeMenuItem_Click"/>
+                                    <MenuItem Header="Arrow" Tag="Arrow" Click="ShapeMenuItem_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                    </StackPanel>
 
 
-                    <Button x:Name="ToolImageBtn" Style="{StaticResource RibbonButton}" Click="ToolImage_Click" ToolTip="{DynamicResource Str_TT_ImageTool}">
+                                <Button x:Name="ToolImageBtn" Style="{StaticResource RibbonButton}" Click="ToolImage_Click" ToolTip="{DynamicResource Str_TT_ImageTool}">
                       <StackPanel><TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="{StaticResource Ico_Image}" HorizontalAlignment="Center"/><TextBlock Text="{DynamicResource Str_Lbl_Image}" Margin="0,5,0,0" HorizontalAlignment="Center"/></StackPanel>
                     </Button>
                     <Button x:Name="ToolCropBtn" Style="{StaticResource RibbonButton}" Click="ToolCrop_Click" ToolTip="{DynamicResource Str_TT_CropTool}">

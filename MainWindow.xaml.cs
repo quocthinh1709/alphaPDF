@@ -118,11 +118,21 @@ namespace AlphaPDF
         private readonly List<System.Windows.Shapes.Path> _cropBrackets = []; // L-bracket corner visuals
         private Border? _cropConfirmBar;
         private readonly Button _toolCropBtn = null!;
-        private readonly Button _toolLineBtn = null!;
 
-        private readonly Button _toolRectBtn = null!;
-        private readonly Button _toolEllipseBtn = null!;
-        private readonly Button _toolArrowBtn = null!;
+        //private readonly Button _toolLineBtn = null!;
+        //private readonly Button _toolRectBtn = null!;
+        //private readonly Button _toolEllipseBtn = null!;
+        //private readonly Button _toolArrowBtn = null!;
+
+        private readonly Button _toolShapeBtn = null!;
+        private readonly UIElement _iconLine = null!;
+        private readonly UIElement _iconRect = null!;
+        private readonly UIElement _iconEllipse = null!;
+        private readonly UIElement _iconArrow = null!;
+        private readonly TextBlock _shapeTextContent = null!;
+
+        // Thêm biến để lưu trạng thái hình khối đang chọn (mặc định là Line):
+        private EditTool _currentShapeTool = EditTool.Line;
 
         private readonly List<Rectangle> _cropHandles = [];
         private string? _activeCropHandleTag; // "NW" | "NE" | "SE" | "SW"
@@ -218,11 +228,19 @@ namespace AlphaPDF
             _toolSignatureBtn = (Button)FindName("ToolSignatureBtn")!;
             _toolImageBtn = (Button)FindName("ToolImageBtn")!;
             _toolCropBtn = (Button)FindName("ToolCropBtn")!;
-            _toolLineBtn = (Button)FindName("ToolLineBtn")!;
 
-            _toolRectBtn = (Button)FindName("ToolRectBtn")!;
-            _toolEllipseBtn = (Button)FindName("ToolEllipseBtn")!;
-            _toolArrowBtn = (Button)FindName("ToolArrowBtn")!;
+            //_toolLineBtn = (Button)FindName("ToolLineBtn")!;
+            //_toolRectBtn = (Button)FindName("ToolRectBtn")!;
+            //_toolEllipseBtn = (Button)FindName("ToolEllipseBtn")!;
+            //_toolArrowBtn = (Button)FindName("ToolArrowBtn")!;
+
+            _toolShapeBtn = (Button)FindName("ToolShapeBtn")!;
+            _iconLine = (UIElement)FindName("IconLine")!;
+            _iconRect = (UIElement)FindName("IconRect")!;
+            _iconEllipse = (UIElement)FindName("IconEllipse")!;
+            _iconArrow = (UIElement)FindName("IconArrow")!;
+            _shapeTextContent = (TextBlock)FindName("ShapeTextContent")!;
+
 
             _sidebarToggleBtn = (Button)FindName("SidebarToggleBtn")!;
             _sidebarBorder = (Border)FindName("SidebarBorder")!;
