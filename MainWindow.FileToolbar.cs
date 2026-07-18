@@ -279,8 +279,11 @@ namespace AlphaPDF
         }
 
         // Static version of DerefItem for use in static helpers.
-        private static PdfItem DerefItemStatic(PdfItem item)
+        private static PdfItem? DerefItemStatic(PdfItem? item)
         {
+            // Thêm dòng kiểm tra null ở đây
+            if (item is null) return null;
+
             var valueProp = item.GetType().GetProperty("Value",
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             if (valueProp?.GetValue(item) is PdfObject resolved) return resolved;
@@ -393,6 +396,10 @@ namespace AlphaPDF
             string saveTarget = _originalFile!;
             try
             {
+                ScrubEmptyOutlines(_doc);
+                ScrubDegenerateCropBoxes(_doc);
+                ScrubDeadSignatures(_doc);
+
                 bool hasAnnotations = _annotations.Values.Any(list => list.Count > 0);
                 WriteFormValuesToDocument();
                 // Always strip link annotation borders regardless of user annotation count
@@ -416,8 +423,8 @@ namespace AlphaPDF
                     }
 
                     DrawAnnotationsOnDocument();
-                    //_doc.Save(saveTarget);
-                    SafeSave(_doc, saveTarget);
+                    _doc.Save(saveTarget);
+                    
                     _doc.Close();
                     _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                     _currentFile = tempClean;
@@ -466,6 +473,10 @@ namespace AlphaPDF
             if (dlg.ShowDialog(this) != true) return;
             try
             {
+                ScrubEmptyOutlines(_doc);
+                ScrubDegenerateCropBoxes(_doc);
+                ScrubDeadSignatures(_doc);
+
                 bool hasAnnotations = _annotations.Values.Any(list => list.Count > 0);
                 WriteFormValuesToDocument();
                 // Always strip link annotation borders regardless of user annotation count.
@@ -485,8 +496,8 @@ namespace AlphaPDF
                     }
 
                     DrawAnnotationsOnDocument();
-                    //_doc.Save(dlg.FileName);
-                    SafeSave(_doc, dlg.FileName);
+                    _doc.Save(dlg.FileName);
+                    
                     _doc.Close();
                     _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                     _currentFile = tempClean;
@@ -523,6 +534,11 @@ namespace AlphaPDF
             // Burn any pending annotations into a temp source for rasterization
             // (must happen on UI thread before we go async)
             string sourcePath;
+            if (string.IsNullOrEmpty(dlg.FileName))
+            ScrubEmptyOutlines(_doc);
+            ScrubDegenerateCropBoxes(_doc);
+            ScrubDeadSignatures(_doc);
+
             bool hasAnnotations = _annotations.Values.Any(list => list.Count > 0);
             if (hasAnnotations)
             {
@@ -540,8 +556,8 @@ namespace AlphaPDF
 
 
                 DrawAnnotationsOnDocument();
-                //_doc.Save(tempBurned);
-                SafeSave(_doc, tempBurned);
+                _doc.Save(tempBurned);
+               
                 _doc.Close();
                 _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);
                 _currentFile = tempClean;
@@ -717,6 +733,11 @@ namespace AlphaPDF
             if (_doc is null || _currentFile is null) { AppDialog.Show(this, "Open a PDF first."); return; }
             CommitActiveTextBox();
 
+
+            ScrubEmptyOutlines(_doc);
+            ScrubDegenerateCropBoxes(_doc);
+            ScrubDeadSignatures(_doc);
+
             // Burn pending annotations into a temp copy on the UI thread before going off-thread
             bool hasAnnotations = _annotations.Values.Any(list => list.Count > 0);
             string printPath;
@@ -736,8 +757,7 @@ namespace AlphaPDF
 
                 DrawAnnotationsOnDocument();
                 printPath = App.MakeTempFile("print");
-                //_doc.Save(printPath);
-                SafeSave(_doc, printPath);
+                _doc.Save(printPath);
                 tempFlattened = printPath;
                 _doc.Close();
                 _doc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Modify);

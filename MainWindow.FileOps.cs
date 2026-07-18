@@ -1175,21 +1175,94 @@ namespace AlphaPDF
                 RenderPageLinks(pageIndex, dims.w, dims.h);
         }
 
-
-
-
-        private void SafeSave(PdfDocument doc, string path)
+        /*
+        private static PdfItem DerefItemStatic(PdfItem item)
         {
-            try { doc.Save(path); }
-            catch (Exception ex) when (IsXRefException(ex))
+            var valueProp = item.GetType().GetProperty("Value",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (valueProp?.GetValue(item) is PdfObject resolved) return resolved;
+            return item;
+        }
+        */
+
+
+        private static void ScrubEmptyOutlines(PdfDocument doc)
+        {
+            try
             {
-                var fixedPath = App.MakeTempFile("safesave");
-                if (!TryImportRepairToPath(path, fixedPath) &&   // ⚠ path = file ĐÍCH, ghi dở/hỏng
-                    !TryPdfiumSaveWithZeroRotations(path, fixedPath))
-                    throw;
-                File.Copy(fixedPath, path, overwrite: true);
+                var cat = doc.Internals.Catalog;
+                var item = cat.Elements["/Outlines"];
+                if (item == null) return;
+                var resolved = DerefItemStatic(item);
+                if (resolved is not PdfDictionary o || o.Elements["/First"] == null)
+                    cat.Elements.Remove("/Outlines");
+            }
+            catch { /* malformed catalog - leave the save as-is */ }
+        }
+
+        private static void ScrubDegenerateCropBoxes(PdfDocument doc)
+        {
+            try
+            {
+                for (int i = 0; i < doc.PageCount; i++)
+                {
+                    var elements = doc.Pages[i].Elements;
+                    var item = elements["/CropBox"];
+                    if (item is null) continue;
+                    var resolved = DerefItemStatic(item);
+
+                    double w = -1, h = -1;
+                    if (resolved is PdfRectangle rect)
+                    {
+                        w = Math.Abs(rect.X2 - rect.X1);
+                        h = Math.Abs(rect.Y2 - rect.Y1);
+                    }
+                    else if (resolved is PdfArray arr && arr.Elements.Count == 4 &&
+                             arr.Elements[0] is PdfReal or PdfInteger && arr.Elements[1] is PdfReal or PdfInteger &&
+                             arr.Elements[2] is PdfReal or PdfInteger && arr.Elements[3] is PdfReal or PdfInteger)
+                    {
+                        // Đoạn này cần dùng hàm RectNum như trong KillerPDF
+                        w = Math.Abs(RectNum(arr.Elements[2]) - RectNum(arr.Elements[0]));
+                        h = Math.Abs(RectNum(arr.Elements[3]) - RectNum(arr.Elements[1]));
+                    }
+
+                    if (w >= 0 && (w < 1 || h < 1))
+                        elements.Remove("/CropBox");
+                }
+            }
+            catch { /* malformed page tree - leave the save as-is */ }
+        }
+
+        private static void ScrubDeadSignatures(PdfDocument doc)
+        {
+            try
+            {
+                var cat = doc.Internals.Catalog;
+                cat.Elements.Remove("/Perms");
+                if (DerefItemStatic(cat.Elements["/AcroForm"]) is not PdfDictionary acro) return;
+                if (DerefItemStatic(acro.Elements["/Fields"]) is PdfArray fields)
+                    ScrubSigFieldValues(fields, 0);
+            }
+            catch { /* malformed catalog - leave the save as-is */ }
+        }
+
+        private static void ScrubSigFieldValues(PdfArray fields, int depth)
+        {
+            if (depth > 8) return;
+            foreach (var item in fields.Elements)
+            {
+                if (DerefItemStatic(item) is not PdfDictionary field) continue;
+                if (field.Elements.GetName("/FT") == "/Sig" && field.Elements["/V"] != null)
+                    field.Elements.Remove("/V");
+                if (DerefItemStatic(field.Elements["/Kids"]) is PdfArray kids)
+                    ScrubSigFieldValues(kids, depth + 1);
             }
         }
+
+        private static double RectNum(PdfItem item) =>
+            item is PdfReal r ? r.Value : item is PdfInteger n ? n.Value : 0;
+
+        
 
     }
 }
