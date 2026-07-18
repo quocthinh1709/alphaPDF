@@ -15,6 +15,7 @@
         TextOptions.TextFormattingMode="Display"
         TextOptions.TextRenderingMode="ClearType">
 
+
     <Window.Resources>
         <!-- Brush keys come from Application.Resources (theme dicts) via DynamicResource.
              Only non-colour styles live here. -->
@@ -660,7 +661,7 @@
                         <Button x:Name="ToolShapeBtn" Style="{StaticResource RibbonButton}" Click="ToolShapeBtn_Click" ToolTip="Shapes">
                             <StackPanel>
                                 <Grid Width="23" Height="23" Margin="0,3,0,4">
-                                    <!-- Chứa sẵn 4 Icon, ta sẽ dùng C# để Ẩn/Hiện chúng -->
+                                    
                                     <Line x:Name="IconLine" Visibility="Visible" X1="3" Y1="20" X2="20" Y2="3" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
                                     <Rectangle x:Name="IconRect" Visibility="Collapsed" Width="22" Height="16" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Fill="Transparent"/>
                                     <Ellipse x:Name="IconEllipse" Visibility="Collapsed" Width="22" Height="16" StrokeThickness="2.2" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Fill="Transparent"/>
@@ -670,14 +671,14 @@
                             </StackPanel>
                         </Button>
 
-                        <!-- Nút mũi tên mở Menu -->
+                        
                               <Button  Width="14" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes" BorderBrush="Transparent" Background="Transparent">
                              <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="14" Text="{StaticResource Ico_Chevron}" 
                                    HorizontalAlignment="Center" VerticalAlignment="Center" 
                                    
                                    
                                    Foreground="{DynamicResource TextSecondary}" Margin="1,0,0,0"/>
-                                                        <!-- Context Menu chứa danh sách -->
+                                                        
                                         <!-- Context Menu chứa danh sách -->
                             <Button.ContextMenu>
                                 <ContextMenu>
@@ -710,7 +711,7 @@
                     </StackPanel>
                     <Button x:Name="ToolEraserBtn" Style="{StaticResource RibbonButton}" Click="ToolEraser_Click" ToolTip="Eraser">
                         <StackPanel>
-                            <!-- Icon cục tẩy (thầy có thể thay thế bằng icon phù hợp) -->
+                            
                             <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="23" Text="&#xE75C;" HorizontalAlignment="Center"/>
                             <TextBlock Text="Eraser" Margin="0,5,0,0" HorizontalAlignment="Center"/>
                         </StackPanel>
@@ -1094,7 +1095,7 @@
                         </ScrollViewer>
                     </Border>
                 <Grid>
-                    <!-- Drop zone -->
+                    <!-- Drop zone 
                     <Border x:Name="DropZone" Background="Transparent"
                             AllowDrop="True" Drop="DropZone_Drop" DragOver="DropZone_DragOver"
                             MouseLeftButtonDown="DropZone_Click">
@@ -1138,8 +1139,95 @@
                             </StackPanel>
                         </Border>
                     </Border>
+                    -->
+                        <Border x:Name="DropZone" Background="Transparent"
+                            AllowDrop="True" Drop="DropZone_Drop" DragOver="DropZone_DragOver"
+                            MouseLeftButtonDown="DropZone_Click">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Vùng Drop zone chiếm phần còn lại -->
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- Recent Files nằm cố định bên phải -->
+                                </Grid.ColumnDefinitions>
 
-                    <!-- PDF page with annotation overlay. FlowDirection is pinned LeftToRight so
+                                <!-- Drop target, căn giữa vùng bên trái -->
+                                <Border Grid.Column="0" BorderBrush="{DynamicResource BorderDim}" BorderThickness="2"
+                                    CornerRadius="8" Margin="40" Padding="40"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Background="Transparent" Style="{x:Null}">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="320">
+                                        <TextBlock Text="Drop PDF here" FontFamily="{DynamicResource FontUI}" FontSize="20"
+                                            Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="or click to browse" FontFamily="{DynamicResource FontUI}" FontSize="13"
+                                            Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Recent files sidebar -->
+                                <Border x:Name="RecentFilesBox" Grid.Column="1" Width="340" Visibility="Visible"
+                                    Background="{DynamicResource BgPanel}"
+                                    BorderBrush="{DynamicResource Accent}" BorderThickness="1,0,0,0">
+                                    <Grid>
+                                        
+                                        <Border Background="{DynamicResource Accent}" IsHitTestVisible="False"
+                                            Opacity="{DynamicResource GrainOpacity}"/>
+
+                                        <DockPanel Margin="18,22,12,16">
+                                            <TextBlock DockPanel.Dock="Top" x:Name="RecentHeader" Text="{DynamicResource Str_Recent}" 
+                                               FontFamily="{DynamicResource FontUI}" FontSize="14" FontWeight="SemiBold"
+                                               Foreground="{DynamicResource Accent}" Margin="2,0,0,10"/>
+
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                                <ItemsControl x:Name="RecentList" HorizontalAlignment="Stretch">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="Transparent" Padding="8,6" Margin="0,1" CornerRadius="5"
+                                                                MouseLeftButtonDown="RecentRow_Click" Cursor="Hand" Tag="{Binding Path}">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <!-- Icon -->
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <!-- Tên file và đường dẫn -->
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <!-- Nút đóng -->
+                                                                    </Grid.ColumnDefinitions>
+
+                                                                    <!-- Icon (Cột 1) -->
+                                                                    <TextBlock Grid.Column="0" Text="&#xEA90;"
+                                                                       FontFamily="{DynamicResource FontIcon}" FontSize="18"
+                                                                       Foreground="{DynamicResource TextDim}" 
+                                                                       VerticalAlignment="Center" Margin="0,0,12,0"/>
+
+                                                                    <!-- Tên file và Đường dẫn (Cột 2) -->
+                                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0">
+                                                                        <TextBlock Text="{Binding FileName}" FontFamily="{DynamicResource FontUI}" 
+                                                                           FontSize="13" Foreground="{DynamicResource TextPrimary}" 
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                                        <TextBlock Text="{Binding Dir}" FontFamily="{DynamicResource FontUI}" 
+                                                                           FontSize="11" Foreground="{DynamicResource TextDim}" 
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                                    </StackPanel>
+
+                                                                    <!-- Nút đóng (Cột 3) -->
+                                                                    <Button Grid.Column="2" Content="{StaticResource Ico_WinClose}"
+                            FontFamily="{DynamicResource FontIcon}" Style="{StaticResource StudioIconButton}"
+                            ToolTip="{DynamicResource Str_Recent_Remove}" Tag="{Binding Path}"
+                            Click="RecentRemove_Click" VerticalAlignment="Center"/>
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </DockPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- PDF page with annotation overlay. FlowDirection is pinned LeftToRight so
                          a right-to-left UI locale (Hebrew/Arabic) never mirrors the document
                          coordinate space — otherwise canvas clicks and edit-box placement land
                          on the wrong side. The PDF page coordinate system is always LTR. -->
