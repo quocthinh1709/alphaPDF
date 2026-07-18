@@ -40,6 +40,7 @@ namespace AlphaPDF
             EditTool.Signature => Cursors.Pen,
             EditTool.Image => Cursors.Hand,
             EditTool.Crop => Cursors.Cross,
+            EditTool.Eraser => Cursors.Hand,
             _ => Cursors.Arrow
         };
 
@@ -65,6 +66,8 @@ namespace AlphaPDF
                 (_toolShapeBtn, EditTool.Rectangle),
                 (_toolShapeBtn, EditTool.Ellipse),
                 (_toolShapeBtn, EditTool.Arrow),
+
+                (_toolEraserBtn, EditTool.Eraser),
 
                 (_toolSignatureBtn, EditTool.Signature),
                 (_toolImageBtn, EditTool.Image),

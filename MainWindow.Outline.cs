@@ -257,5 +257,11 @@ namespace AlphaPDF
             ShowSignaturePopup();
         }
 
+        private void ToolEraser_Click(object sender, RoutedEventArgs e)
+        {
+            SetTool(EditTool.Eraser);
+            SetStatus("Using the eraser – Hover the mouse over the drawing stroke to delete.");
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace AlphaPDF
     {
         Select, Text, Highlight, Draw, Line,
         Rectangle, Ellipse, Arrow, // Add new
-        Signature, Image, Crop
+        Signature, Image, Crop, Eraser
     }
 
     public abstract class PageAnnotation

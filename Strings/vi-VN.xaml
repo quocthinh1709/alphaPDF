@@ -225,7 +225,7 @@
     <sys:String x:Key="Str_Lbl_Image">Hình ảnh</sys:String>
     <sys:String x:Key="Str_Lbl_Crop">Cắt</sys:String>
     <sys:String x:Key="Str_Lbl_Undo">Hoàn tác</sys:String>
-    <sys:String x:Key="Str_Lbl_Clear">Xóa</sys:String>
+    <sys:String x:Key="Str_Lbl_Clear">Xóa tất cả</sys:String>
     <sys:String x:Key="Str_Lbl_Merge">Gộp</sys:String>
     <sys:String x:Key="Str_Lbl_Extract">Xuất</sys:String>
     <sys:String x:Key="Str_Lbl_InsertPage">Chèn trang</sys:String>

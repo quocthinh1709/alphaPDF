@@ -189,6 +189,7 @@ namespace AlphaPDF
         private readonly Button _toolHighlightBtn = null!;
         private readonly Button _toolDrawBtn = null!;
         private readonly Button _toolSignatureBtn = null!;
+        private readonly Button  _toolEraserBtn = null!;
         private readonly Button _toolImageBtn = null!;
         private readonly Button _saveAsBtnRef = null!;
         private readonly MenuItem _closeFileBtnRef = null!;
@@ -225,6 +226,7 @@ namespace AlphaPDF
             _toolTextBtn = (Button)FindName("ToolTextBtn")!;
             _toolHighlightBtn = (Button)FindName("ToolHighlightBtn")!;
             _toolDrawBtn = (Button)FindName("ToolDrawBtn")!;
+            _toolEraserBtn = (Button)FindName("ToolEraserBtn")!;
             _toolSignatureBtn = (Button)FindName("ToolSignatureBtn")!;
             _toolImageBtn = (Button)FindName("ToolImageBtn")!;
             _toolCropBtn = (Button)FindName("ToolCropBtn")!;

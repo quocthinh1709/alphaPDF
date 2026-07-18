@@ -326,8 +326,30 @@ namespace AlphaPDF
                 return;
 
             var pos = e.GetPosition(_activeCanvas);
+
             pos.X = Math.Max(0, Math.Min(_activeCanvas.ActualWidth, pos.X));
             pos.Y = Math.Max(0, Math.Min(_activeCanvas.ActualHeight, pos.Y));
+
+            if (_currentTool == EditTool.Eraser && e.LeftButton == MouseButtonState.Pressed)
+            {
+                int pageIdx = PageList.SelectedIndex;
+                if (_annotations.TryGetValue(pageIdx, out var pageAnnotsList))
+                {
+                    // Tìm đối tượng gần vị trí chuột nhất (trong bán kính 15px)
+                    var toRemove = pageAnnotsList.FirstOrDefault(a => HitTestAnnotation(a, pos, out _));
+
+                    if (toRemove != null)
+                    {
+                        pageAnnotsList.Remove(toRemove);
+
+                        // Cập nhật lại canvas để thấy nét vẽ đã biến mất
+                        RenderAllAnnotations(pageIdx);
+                        MarkDirty();
+                        SetStatus("Đã xóa đối tượng");
+                    }
+                }
+            }
+
 
             // Signature resize drag
             if (_isResizingSig && _resizeSigAnnot is not null)
