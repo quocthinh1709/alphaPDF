@@ -149,6 +149,7 @@ namespace AlphaPDF
             var sizeBox = new ComboBox
             {
                 Width = 64, Height = 24,
+                SelectedItem = 12,
                 Style = (Style)FindResource("DarkComboBox"),
                 IsEditable = true,
                 VerticalContentAlignment = VerticalAlignment.Center,

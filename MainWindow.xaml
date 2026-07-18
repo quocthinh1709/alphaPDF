@@ -22,7 +22,7 @@
         <!-- Toolbar button -->
         <Style x:Key="ToolbarButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ChromeText}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="FontFamily" Value="{DynamicResource FontIcon}"/>
@@ -53,6 +53,46 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Nút chính của Split Button (Open/Save) -->
+        <Style x:Key="ToolbarSplitMain" TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ChromeText}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource FontIcon}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <!-- Nền thụt vào 7px bên phải để nhường chỗ cho nút mũi tên nhỏ -->
+                            <Border x:Name="bg" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3" Margin="0,0,7,0"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      ToolTip="{TemplateBinding ToolTip}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="{DynamicResource BgHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Nút Save chính (Màu Accent) -->
+        <Style x:Key="ToolbarSplitMainAccent" TargetType="Button" BasedOn="{StaticResource ToolbarSplitMain}">
+            <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
+        </Style>
+
         <Style x:Key="ToolbarButtonAccent" TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
             <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
         </Style>
@@ -452,6 +492,8 @@
                     <!-- QAT divider -->
                     <Border Width="1" Height="18" Background="{DynamicResource BorderDim}" Margin="12,0,8,0"/>
                     <!-- Quick Access Toolbar: persistent file actions (right-click Open/Save for more) -->
+                    <!--
+                    
                     <Button x:Name="OpenMenuBtn" Style="{StaticResource QatButton}" Click="Open_Click" Content="{StaticResource Ico_Open}" ToolTip="{DynamicResource Str_TT_Open}">
                         <Button.ContextMenu>
                             <ContextMenu x:Name="OpenContextMenu" Opened="OpenContextMenu_Opened">
@@ -469,6 +511,30 @@
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
+                    -->
+                    <!-- Nhóm nút OPEN -->
+                    <Button Style="{StaticResource ToolbarSplitMain}" Click="Open_Click" Content="{StaticResource Ico_Open}" ToolTip="{DynamicResource Str_TT_Open}"/>
+                    <Button Content="&#xE70D;" FontFamily="{DynamicResource FontIcon}" FontSize="10" Width="13" Padding="0" Margin="-6,0,0,0" Style="{StaticResource ToolbarButton}" Click="OpenArrow_Click" ToolTip="Open options">
+                        <Button.ContextMenu>
+                            <ContextMenu x:Name="OpenContextMenu" Opened="OpenContextMenu_Opened">
+                                <MenuItem Header="{DynamicResource Str_Lbl_Open}" Click="Open_Click"/>
+                                <MenuItem Header="{DynamicResource Str_Lbl_New}" Click="New_Click"/>
+                                <MenuItem x:Name="CloseFileMenuItem" Header="{DynamicResource Str_Lbl_CloseFile}" Click="CloseFile_Click" IsEnabled="False"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+
+                    <!-- Nhóm nút SAVE -->
+                    <Button x:Name="SaveAsBtn" Style="{StaticResource ToolbarSplitMainAccent}" Click="Save_Click" Content="{StaticResource Ico_Save}" ToolTip="{DynamicResource Str_TT_Save}" Margin="4,0,0,0"/>
+                    <Button Content="&#xE70D;" FontFamily="{DynamicResource FontIcon}" FontSize="10" Width="13" Padding="0" Margin="-6,0,0,0" Style="{StaticResource ToolbarButton}" Click="SaveArrow_Click" ToolTip="Save options">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{DynamicResource Str_Lbl_SaveAs}" Click="SaveAs_Click"/>
+                                <MenuItem Header="{DynamicResource Str_Lbl_SaveFlattened}" Click="SaveFlattened_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+                    
                     <Button Style="{StaticResource QatButton}" Click="Print_Click" Content="{StaticResource Ico_Print}" ToolTip="{DynamicResource Str_TT_Print}" Margin="1,0,0,0"/>
                     <Button Style="{StaticResource QatButton}" Click="Undo_Click" Content="{StaticResource Ico_Undo}" ToolTip="{DynamicResource Str_TT_UndoLast}" Margin="1,0,0,0"/>
                 </StackPanel>
@@ -605,15 +671,39 @@
                         </Button>
 
                         <!-- Nút mũi tên mở Menu -->
-                        <Button Style="{StaticResource RibbonButton}" Width="8" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes">
-                            <TextBlock FontFamily="Consolas" FontSize="10" Text="▼" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <!-- Context Menu chứa danh sách -->
+                              <Button  Width="14" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes" BorderBrush="Transparent" Background="Transparent">
+                             <TextBlock FontFamily="{DynamicResource FontIcon}" FontSize="14" Text="{StaticResource Ico_Chevron}" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   
+                                   
+                                   Foreground="{DynamicResource TextSecondary}" Margin="1,0,0,0"/>
+                                                        <!-- Context Menu chứa danh sách -->
+                                        <!-- Context Menu chứa danh sách -->
                             <Button.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="⁄ Line" Tag="Line" Click="ShapeMenuItem_Click"/>
-                                    <MenuItem Header="▢ Rectangle" Tag="Rectangle" Click="ShapeMenuItem_Click"/>
-                                    <MenuItem Header="◯ Oval" Tag="Ellipse" Click="ShapeMenuItem_Click"/>
-                                    <MenuItem Header="↗ Arrow" Tag="Arrow" Click="ShapeMenuItem_Click"/>
+                                    
+                                        <MenuItem Tag="Line" Click="ShapeMenuItem_Click">
+                                            <MenuItem.Header>
+                                                   <TextBlock Text="&#xE738;" FontFamily="{DynamicResource FontIcon}" FontSize="16"/>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+                                        <MenuItem Tag="Rectangle" Click="ShapeMenuItem_Click">
+                                            <MenuItem.Header>
+                                                   <TextBlock Text="&#xE739;" FontFamily="{DynamicResource FontIcon}" FontSize="16"/>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+                                        <MenuItem Tag="Oval" Click="ShapeMenuItem_Click">
+                                            <MenuItem.Header>
+                                                <TextBlock Text="&#xEA3A;" FontFamily="{DynamicResource FontIcon}" FontSize="16"/>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+                                        <MenuItem Tag="Arrow" Click="ShapeMenuItem_Click">
+                                            <MenuItem.Header>
+                                                <TextBlock Text="&#xEA62;" FontFamily="{DynamicResource FontIcon}" FontSize="16"/>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+
+                                                
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>

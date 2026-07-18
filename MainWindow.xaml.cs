@@ -84,7 +84,7 @@ namespace AlphaPDF
         private Border? _drawSettingsBar;
 
         // Text (typewriter) tool settings
-        private double _textFontSize = 24;
+        private double _textFontSize = 12;
         private TextAnnotation? _reeditOriginal;  // placed-text annotation currently being re-edited
         private Color _textColor = Colors.Black;
         private Border? _textSettingsBar;

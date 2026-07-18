@@ -44,6 +44,7 @@ namespace AlphaPDF
             _ => Cursors.Arrow
         };
 
+        /*
         private void SetTool(EditTool tool)
         {
             // Continuous view now supports annotation tools inline via per-page overlays.
@@ -61,6 +62,8 @@ namespace AlphaPDF
                 //(_toolRectBtn, EditTool.Rectangle), // THÊM MỚI
                 //(_toolEllipseBtn, EditTool.Ellipse), // THÊM MỚI
                 //(_toolArrowBtn, EditTool.Arrow),    // THÊM MỚI
+
+                
 
                 (_toolShapeBtn, EditTool.Line),
                 (_toolShapeBtn, EditTool.Rectangle),
@@ -99,6 +102,78 @@ namespace AlphaPDF
             // Show/hide draw settings bar
             if (tool == EditTool.Draw || tool == EditTool.Highlight || tool == EditTool.Line ||
                 tool == EditTool.Rectangle || tool == EditTool.Ellipse || tool == EditTool.Arrow ) //Thêm mới
+                ShowDrawSettings(tool);
+            else
+                HideDrawSettings();
+
+            // Show/hide text tool settings bar
+            if (tool == EditTool.Text)
+                ShowTextSettings();
+            else
+                HideTextSettings();
+
+            // Hide signature popup when switching away
+            if (tool != EditTool.Signature)
+            {
+                HideSignaturePopup();
+                _pendingSignature = null;
+            }
+
+            // Dismiss crop confirm bar when switching away from Crop
+            if (tool != EditTool.Crop)
+                HideCropConfirmBar();
+        }
+        */
+
+        private void SetTool(EditTool tool)
+        {
+            // Continuous view now supports annotation tools inline via per-page overlays.
+            CommitActiveTextBox();
+            ClearTextSelection();
+            _currentTool = tool;
+
+            // Sử dụng Dictionary để nhóm các công cụ vào từng nút tương ứng
+            var map = new Dictionary<Button, EditTool[]>
+    {
+        { _toolSelectBtn,    new[] { EditTool.Select } },
+        { _toolTextBtn,      new[] { EditTool.Text } },
+        { _toolHighlightBtn, new[] { EditTool.Highlight } },
+        { _toolDrawBtn,      new[] { EditTool.Draw } },
+        { _toolEraserBtn,    new[] { EditTool.Eraser } },
+        { _toolSignatureBtn, new[] { EditTool.Signature } },
+        { _toolImageBtn,     new[] { EditTool.Image } },
+        { _toolCropBtn,      new[] { EditTool.Crop } },
+        // Nhóm tất cả các hình khối vào chung 1 nút ToolShapeBtn
+        { _toolShapeBtn,     new[] { EditTool.Line, EditTool.Rectangle, EditTool.Ellipse, EditTool.Arrow } }
+    };
+
+            foreach (var kvp in map)
+            {
+                var btn = kvp.Key;
+                var toolsForBtn = kvp.Value;
+
+                // Nếu công cụ hiện tại nằm trong danh sách của nút này -> Tô màu Accent
+                if (toolsForBtn.Contains(tool))
+                {
+                    btn.SetResourceReference(Control.BackgroundProperty, "AccentDim");
+                    btn.SetResourceReference(Control.ForegroundProperty, "Accent");
+                }
+                else // Nếu không -> Xóa màu
+                {
+                    btn.Background = Brushes.Transparent;
+                    btn.SetResourceReference(Control.ForegroundProperty, "TextPrimary");
+                }
+            }
+
+            // Apply the tool cursor to every page surface...
+            var toolCursor = CursorForTool(tool);
+            _annotationCanvas.Cursor = toolCursor;
+            foreach (var overlay in _continuousCanvases.Values)
+                overlay.Cursor = toolCursor;
+
+            // Show/hide draw settings bar
+            if (tool == EditTool.Draw || tool == EditTool.Highlight || tool == EditTool.Line ||
+                tool == EditTool.Rectangle || tool == EditTool.Ellipse || tool == EditTool.Arrow)
                 ShowDrawSettings(tool);
             else
                 HideDrawSettings();
