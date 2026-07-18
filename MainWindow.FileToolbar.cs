@@ -406,6 +406,15 @@ namespace AlphaPDF
                     // from the clean copy so future saves don't double-burn.
                     var tempClean = App.MakeTempFile("clean");
                     _doc.Save(tempClean);
+
+                    using (var importDoc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Import))
+                    {
+                        var rebuilt = new PdfDocument();
+                        for (int i = 0; i < importDoc.PageCount; i++)
+                            rebuilt.Pages.Add(importDoc.Pages[i]);
+                        _doc = rebuilt;
+                    }
+
                     DrawAnnotationsOnDocument();
                     //_doc.Save(saveTarget);
                     SafeSave(_doc, saveTarget);
@@ -466,6 +475,15 @@ namespace AlphaPDF
                 {
                     var tempClean = App.MakeTempFile("clean");
                     _doc.Save(tempClean);
+
+                    using (var importDoc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Import))
+                    {
+                        var rebuilt = new PdfDocument();
+                        for (int i = 0; i < importDoc.PageCount; i++)
+                            rebuilt.Pages.Add(importDoc.Pages[i]);
+                        _doc = rebuilt;
+                    }
+
                     DrawAnnotationsOnDocument();
                     //_doc.Save(dlg.FileName);
                     SafeSave(_doc, dlg.FileName);
@@ -511,6 +529,16 @@ namespace AlphaPDF
                 var tempClean  = App.MakeTempFile("clean");
                 var tempBurned = App.MakeTempFile("burned");
                 _doc.Save(tempClean);
+
+                using (var importDoc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Import))
+                {
+                    var rebuilt = new PdfDocument();
+                    for (int i = 0; i < importDoc.PageCount; i++)
+                        rebuilt.Pages.Add(importDoc.Pages[i]);
+                    _doc = rebuilt;
+                }
+
+
                 DrawAnnotationsOnDocument();
                 //_doc.Save(tempBurned);
                 SafeSave(_doc, tempBurned);
@@ -697,6 +725,15 @@ namespace AlphaPDF
             {
                 var tempClean = App.MakeTempFile("clean");
                 _doc.Save(tempClean);
+
+                using (var importDoc = PdfReader.Open(tempClean, PdfDocumentOpenMode.Import))
+                {
+                    var rebuilt = new PdfDocument();
+                    for (int i = 0; i < importDoc.PageCount; i++)
+                        rebuilt.Pages.Add(importDoc.Pages[i]);
+                    _doc = rebuilt;
+                }
+
                 DrawAnnotationsOnDocument();
                 printPath = App.MakeTempFile("print");
                 //_doc.Save(printPath);

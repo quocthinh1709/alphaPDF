@@ -605,7 +605,7 @@
                         </Button>
 
                         <!-- Nút mũi tên mở Menu -->
-                        <Button Style="{StaticResource RibbonButton}" Width="16" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes">
+                        <Button Style="{StaticResource RibbonButton}" Width="8" Padding="0" Click="ShapeMenuOpen_Click" ToolTip="More Shapes">
                             <TextBlock FontFamily="Consolas" FontSize="10" Text="▼" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <!-- Context Menu chứa danh sách -->
                             <Button.ContextMenu>

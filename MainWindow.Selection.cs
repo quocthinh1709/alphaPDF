@@ -48,6 +48,7 @@ namespace AlphaPDF
                     double sminY = Math.Min(sa.Points[0].Y, sa.Points[1].Y);
                     double smaxX = Math.Max(sa.Points[0].X, sa.Points[1].X);
                     double smaxY = Math.Max(sa.Points[0].Y, sa.Points[1].Y);
+
                     Rect hitbox = new Rect(sminX - 10, sminY - 10, (smaxX - sminX) + 20, (smaxY - sminY) + 20);
                     if (hitbox.Contains(pos))
                     {
@@ -67,6 +68,14 @@ namespace AlphaPDF
                         double minY = ia.Points.Min(p => p.Y);
                         double maxX = ia.Points.Max(p => p.X);
                         double maxY = ia.Points.Max(p => p.Y);
+
+                        if (double.IsInfinity(minX) || double.IsInfinity(minY) ||
+                            double.IsInfinity(maxX) || double.IsInfinity(maxY))
+                        {
+                            bounds = Rect.Empty;
+                            return false;
+                        }
+
                         bounds = new Rect(minX, minY, Math.Max(maxX - minX, 4), Math.Max(maxY - minY, 4));
                         return true;
                     }
@@ -144,6 +153,12 @@ namespace AlphaPDF
 
         private void SelectAnnotation(PageAnnotation annot, Rect bounds)
         {
+            if (bounds == Rect.Empty || double.IsNaN(bounds.Width) || double.IsInfinity(bounds.Width))
+            {
+                // Tạo Rect mặc định tại vị trí (0,0) với kích thước 10x10
+                bounds = new Rect(0, 0, 10, 10);
+            }
+
             _selectedAnnotation = annot;
             // Continuous-view overlays are scaled down by their LayoutTransform, which would
             // shrink the selection outline and resize handle to near-invisibility. Compensate
@@ -162,6 +177,7 @@ namespace AlphaPDF
             };
             Canvas.SetLeft(_selectionBorder, bounds.X - 4);
             Canvas.SetTop(_selectionBorder, bounds.Y - 4);
+
             _activeCanvas.Children.Add(_selectionBorder);
 
             // Add four corner resize handles for placed annotations (signature, image).

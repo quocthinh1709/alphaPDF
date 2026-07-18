@@ -1180,14 +1180,11 @@ namespace AlphaPDF
 
         private void SafeSave(PdfDocument doc, string path)
         {
-            try
-            {
-                doc.Save(path);
-            }
+            try { doc.Save(path); }
             catch (Exception ex) when (IsXRefException(ex))
             {
                 var fixedPath = App.MakeTempFile("safesave");
-                if (!TryImportRepairToPath(path, fixedPath) &&
+                if (!TryImportRepairToPath(path, fixedPath) &&   // ⚠ path = file ĐÍCH, ghi dở/hỏng
                     !TryPdfiumSaveWithZeroRotations(path, fixedPath))
                     throw;
                 File.Copy(fixedPath, path, overwrite: true);

@@ -374,8 +374,16 @@ namespace AlphaPDF
                 var db = AnnotBounds(_dragAnnot);
                 if (_selectionBorder is not null)
                 {
-                    Canvas.SetLeft(_selectionBorder, db.X - 4);
-                    Canvas.SetTop(_selectionBorder, db.Y - 4);
+                    //Canvas.SetLeft(_selectionBorder, db.X - 4);
+                    //Canvas.SetTop(_selectionBorder, db.Y - 4);
+                    if (!double.IsInfinity(db.X) && !double.IsNaN(db.X))
+                    {
+                        Canvas.SetLeft(_selectionBorder, db.X - 4);
+                    }
+                    if (!double.IsInfinity(db.Y) && !double.IsNaN(db.Y))
+                    {
+                        Canvas.SetTop(_selectionBorder, db.Y - 4);
+                    }
                 }
                 if (_dragAnnot is PlacedAnnotation)
                     LayoutResizeHandles(db.X, db.Y, db.Width, db.Height);
@@ -517,11 +525,13 @@ namespace AlphaPDF
 
         // Draggable annotations (placed image/signature and typewriter text) expose a top-left
         // Position; these helpers read/write it generically so one drag path serves both.
-        private static bool IsDraggable(PageAnnotation a) => a is PlacedAnnotation or TextAnnotation;
+        private static bool IsDraggable(PageAnnotation a) => a is PlacedAnnotation or TextAnnotation or InkAnnotation or ShapeAnnotation;
         private static Point AnnotGetPos(PageAnnotation a) => a switch
         {
             PlacedAnnotation p => p.Position,
             TextAnnotation t   => t.Position,
+            ShapeAnnotation s => s.Points.Count > 0 ? s.Points[0] : default,
+            InkAnnotation i => i.Points.Count > 0 ? i.Points[0] : default,
             _                  => default
         };
         private static void AnnotSetPos(PageAnnotation a, Point pos)
@@ -530,6 +540,23 @@ namespace AlphaPDF
             {
                 case PlacedAnnotation p: p.Position = pos; break;
                 case TextAnnotation t:   t.Position = pos; break;
+                case ShapeAnnotation s:
+                    // Tính toán khoảng cách dịch chuyển để cập nhật tất cả các điểm của hình
+                    double dx = pos.X - s.Points[0].X;
+                    double dy = pos.Y - s.Points[0].Y;
+                    for (int i = 0; i < s.Points.Count; i++)
+                    {
+                        s.Points[i] = new Point(s.Points[i].X + dx, s.Points[i].Y + dy);
+                    }
+                    break;
+                case InkAnnotation iAnn:
+                    // Xử lý di chuyển cho Line, Arrow (vì chúng là InkAnnotation)
+                    if (iAnn.Points.Count == 0) return;
+                    double dxI = pos.X - iAnn.Points[0].X;
+                    double dyI = pos.Y - iAnn.Points[0].Y;
+                    for (int i = 0; i < iAnn.Points.Count; i++)
+                        iAnn.Points[i] = new Point(iAnn.Points[i].X + dxI, iAnn.Points[i].Y + dyI);
+                    break;
             }
         }
         private Rect AnnotBounds(PageAnnotation a)
