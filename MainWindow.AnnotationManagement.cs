@@ -50,11 +50,22 @@ namespace AlphaPDF
 
         private void RenderTextAnnotation(TextAnnotation ta)
         {
+            FontFamily displayFont;
+            try
+            {
+                displayFont = !string.IsNullOrEmpty(ta.FontName) ? new FontFamily(ta.FontName) : (FontFamily)FindResource("FontUI");
+            }
+            catch
+            {
+                displayFont = (FontFamily)FindResource("FontUI");
+            }
+
             var tb = new TextBlock
             {
                 Text = ta.Content,
                 Foreground = new SolidColorBrush(ta.GetColor()),
-                FontFamily = (FontFamily)FindResource("FontUI"),
+                //FontFamily = (FontFamily)FindResource("FontUI"),
+                FontFamily = displayFont,
                 FontSize = ta.FontSize,
                 Padding = new Thickness(2)
             };
