@@ -28,6 +28,8 @@ namespace AlphaPDF
 
         private void EditTextAtPosition(Point canvasPos, int pageIdx)
         {
+            
+
             if (_currentFile is null || !_renderDims.ContainsKey(pageIdx)) return;
 
             // Commit any existing edit first
@@ -87,16 +89,25 @@ namespace AlphaPDF
                     Canvas.SetTop(retb, reb.Y);
                     _activeCanvas.Children.Add(retb);
                     _activeTextBox = retb;
+
+                    double rewoVertPad = 8;
+                    double rewoHorizPad = 2;
+
                     var rewo = new Rectangle
                     {
                         Fill = Brushes.White,
-                        Width = reb.Width + 4,
-                        Height = reb.Height + 4,
+                        //Width = reb.Width + 4,
+                        //Height = reb.Height + 4,
+                        Width = reb.Width + (rewoHorizPad * 2),
+                        Height = reb.Height + (rewoVertPad * 2),
                         IsHitTestVisible = false,
                         Tag = "EditWhiteout"
                     };
-                    Canvas.SetLeft(rewo, reb.X - 2);
-                    Canvas.SetTop(rewo, reb.Y - 2);
+                    //Canvas.SetLeft(rewo, reb.X - 2);
+                    //Canvas.SetTop(rewo, reb.Y - 2);
+                    Canvas.SetLeft(rewo, reb.X - rewoHorizPad);
+                    Canvas.SetTop(rewo, reb.Y - rewoVertPad);
+
                     _activeCanvas.Children.Insert(_activeCanvas.Children.IndexOf(retb), rewo);
                     retb.KeyDown += EditTextBox_KeyDown;
                     retb.Loaded += (s, ev) => { retb.Focus(); Keyboard.Focus(retb); retb.SelectAll(); retb.LostFocus += EditTextBox_LostFocus; };
@@ -177,6 +188,7 @@ namespace AlphaPDF
                 if (canvasWords.Count == 0) { SetStatus("No selectable text — this page may be a scanned image"); return; }
 
                 // Find words on the same line as the click (Y overlap with tolerance)
+                /*
                 var clickY = canvasPos.Y;
                 var lineWords = canvasWords
                     .Where(cw => clickY >= cw.Rect.Top - 3 && clickY <= cw.Rect.Bottom + 3)
@@ -200,6 +212,67 @@ namespace AlphaPDF
                     SetStatus("No text line found at this position");
                     return;
                 }
+                */
+
+                // Find words on the same line as the click (Y overlap with tolerance)
+                var clickY = canvasPos.Y;
+                var lineWords = canvasWords
+                    .Where(cw => clickY >= cw.Rect.Top - 3 && clickY <= cw.Rect.Bottom + 3)
+                    .ToList(); // Tạm thời KHÔNG OrderBy ở đây để giữ nguyên thứ tự gốc của PdfPig
+
+                if (lineWords.Count == 0)
+                {
+                    // Try nearest line within 20px
+                    var nearest = canvasWords
+                        .OrderBy(cw => Math.Abs((cw.Rect.Top + cw.Rect.Bottom) / 2 - clickY))
+                        .FirstOrDefault();
+
+                    if (nearest != null)
+                    {
+                        double nearMidY = (nearest.Rect.Top + nearest.Rect.Bottom) / 2;
+                        lineWords = canvasWords
+                            .Where(cw => Math.Abs((cw.Rect.Top + cw.Rect.Bottom) / 2 - nearMidY) < 5)
+                            .ToList();
+                    }
+                }
+
+                if (lineWords.Count == 0)
+                {
+                    SetStatus("No text line found at this position");
+                    return;
+                }
+
+                // [FIX LỖI LẶP CHỮ]: Lọc bỏ các chữ cũ bị đè (nằm bên dưới mảng trắng)
+                // Mẹo: Dùng .Take(0) để tạo một list rỗng chứa kiểu Anonymous Type
+                var uniqueLineWords = lineWords.Take(0).ToList();
+
+                // Duyệt ngược từ cuối lên đầu (chữ mới nhất sẽ được xét trước)
+                for (int i = lineWords.Count - 1; i >= 0; i--)
+                {
+                    var current = lineWords[i];
+
+                    // Kiểm tra xem chữ này có bị chữ nào mới hơn đè lên không
+                    bool isCovered = uniqueLineWords.Any(topWord =>
+                    {
+                        double overlapLeft = Math.Max(current.Rect.Left, topWord.Rect.Left);
+                        double overlapRight = Math.Min(current.Rect.Right, topWord.Rect.Right);
+                        double overlapWidth = overlapRight - overlapLeft;
+
+                        // Nếu trùng lấp hơn 50% chiều rộng -> Chữ này là tàn dư cũ bị che khuất
+                        return overlapWidth > (current.Rect.Width * 0.5);
+                    });
+
+                    if (!isCovered)
+                    {
+                        uniqueLineWords.Add(current);
+                    }
+                }
+
+                // Sau khi đã lọc sạch tàn dư, sắp xếp lại chuẩn từ trái qua phải để hiển thị lên TextBox
+                lineWords = uniqueLineWords.OrderBy(cw => cw.Rect.Left).ToList();
+
+                //END
+
 
                 // Compute bounding box in canvas space
                 double cLeft = lineWords.Min(w => w.Rect.Left);
@@ -274,6 +347,8 @@ namespace AlphaPDF
                 catch { /* use fallbacks */ }
 
                 // Show editable TextBox over the line
+                double verticalPadding = 8;
+                double horizontalPadding = 2;
                 var tb = new TextBox
                 {
                     Text = lineText,
@@ -301,7 +376,13 @@ namespace AlphaPDF
                     {
                         PageIndex = pageIdx,
                         OriginalText = lineText,
-                        CanvasBounds = new Rect(cLeft, cTop, cWidth, cHeight),
+                        //CanvasBounds = new Rect(cLeft, cTop, cWidth, cHeight),
+                        CanvasBounds = new Rect(
+                            cLeft - horizontalPadding,
+                            cTop - verticalPadding,
+                            cWidth + (horizontalPadding * 2),
+                            cHeight + (verticalPadding * 2)
+                        ),
                         Position = new Point(cLeft, cTop),
                         FontSize = Math.Max(canvasFontSize, 10),
                         FontName = fontName,
@@ -326,16 +407,22 @@ namespace AlphaPDF
                 }
 
                 // Show white-out behind the edit box so original text is hidden
+                
+
                 var whiteout = new Rectangle
                 {
                     Fill = Brushes.White,
-                    Width = cWidth + 4,
-                    Height = cHeight + 4,
+                    //Width = cWidth + 4,
+                    //Height = cHeight + 4,
+                    Width = cWidth + (horizontalPadding * 2),
+                    Height = cHeight + (verticalPadding * 2), // Nới rộng chiều cao
                     IsHitTestVisible = false,
                     Tag = "EditWhiteout"
                 };
-                Canvas.SetLeft(whiteout, cLeft - 2);
-                Canvas.SetTop(whiteout, cTop - 2);
+                //Canvas.SetLeft(whiteout, cLeft - 2);
+                //Canvas.SetTop(whiteout, cTop - 2);
+                Canvas.SetLeft(whiteout, cLeft - horizontalPadding);
+                Canvas.SetTop(whiteout, cTop - verticalPadding);
                 int tbIdx = _activeCanvas.Children.IndexOf(tb);
                 _activeCanvas.Children.Insert(tbIdx, whiteout);
 

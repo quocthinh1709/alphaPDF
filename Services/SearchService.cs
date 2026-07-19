@@ -44,38 +44,63 @@ namespace AlphaPDF.Services
         }
 
         internal static List<(double Left, double Bottom, double Right, double Top)> FindMatchesOnPage(
-            UglyToad.PdfPig.Content.Page page, string lowerQuery)
+    UglyToad.PdfPig.Content.Page page, string lowerQuery)
         {
             var result = new List<(double, double, double, double)>();
             var words = page.GetWords().ToList();
 
             for (int i = 0; i < words.Count; i++)
             {
+                // 1. Khớp từ đơn (Single word match)
                 if (words[i].Text.ToLowerInvariant().Contains(lowerQuery))
                 {
                     var bb = words[i].BoundingBox;
+                    double safeH = words[i].Letters.Count > 0
+                        ? words[i].Letters.Max(l => l.PointSize)
+                        : bb.Height;
+                    double safeB = bb.Top - safeH;
+
                     result.Add((bb.Left, bb.Bottom, bb.Right, bb.Top));
                     continue;
                 }
 
-                // Multi-word match
+                // 2. Khớp cụm từ (Multi-word match)
                 string combined = words[i].Text;
                 for (int j = i + 1; j < words.Count && combined.Length < lowerQuery.Length + 20; j++)
                 {
                     combined += " " + words[j].Text;
-                    if (combined.ToLowerInvariant().Contains(lowerQuery))
+
+                    // Dùng IndexOf thay vì Contains để biết chính xác vị trí khớp
+                    int matchIndex = combined.ToLowerInvariant().IndexOf(lowerQuery);
+                    if (matchIndex >= 0)
                     {
-                        double minX = double.MaxValue, minY = double.MaxValue;
-                        double maxX = double.MinValue, maxY = double.MinValue;
-                        for (int k = i; k <= j; k++)
+                        // Chỉ chấp nhận nếu phần khớp có dính dáng đến từ BẮT ĐẦU (words[i]).
+                        // Nếu matchIndex >= độ dài words[i], nghĩa là từ khóa nằm tuốt ở các từ phía sau.
+                        if (matchIndex < words[i].Text.Length)
                         {
-                            var wbb = words[k].BoundingBox;
-                            minX = Math.Min(minX, wbb.Left);
-                            minY = Math.Min(minY, wbb.Bottom);
-                            maxX = Math.Max(maxX, wbb.Right);
-                            maxY = Math.Max(maxY, wbb.Top);
+                            double minX = double.MaxValue, minY = double.MaxValue;
+                            double maxX = double.MinValue, maxY = double.MinValue;
+
+                            for (int k = i; k <= j; k++)
+                            {
+                                var wbb = words[k].BoundingBox;
+                                double safeH = words[k].Letters.Count > 0
+                                    ? words[k].Letters.Max(l => l.PointSize)
+                                    : wbb.Height;
+                                double safeB = wbb.Top - safeH;
+
+                                minX = Math.Min(minX, wbb.Left);
+                                minY = Math.Min(minY, wbb.Bottom);
+                                maxX = Math.Max(maxX, wbb.Right);
+                                maxY = Math.Max(maxY, wbb.Top);
+                            }
+                            result.Add((minX, minY, maxX, maxY));
+
+                            // [QUAN TRỌNG] Nhảy cóc biến i qua các từ đã được gộp để tránh quét lại gây đè highlight
+                            i = j;
                         }
-                        result.Add((minX, minY, maxX, maxY));
+
+                        // Vì combined đã bao hàm từ khóa, nối thêm từ cũng vô ích. Ngắt inner loop.
                         break;
                     }
                 }

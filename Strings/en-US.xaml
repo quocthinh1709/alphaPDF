@@ -240,7 +240,7 @@ You can uninstall via Add/Remove Programs at any time.</sys:String>
     <sys:String x:Key="Str_DocInfo_Pages">pages</sys:String>
     <sys:String x:Key="Str_DocInfo_Created">created</sys:String>
     <sys:String x:Key="Str_Lbl_New">New</sys:String>
-    <sys:String x:Key="Str_Lbl_CloseFile">Close File</sys:String>
+    <sys:String x:Key="Str_Lbl_CloseFile">Close</sys:String>
     <sys:String x:Key="Str_Lbl_SaveFlattened">Save Flattened</sys:String>
     <sys:String x:Key="Str_Lbl_Select">Select</sys:String>
     <sys:String x:Key="Str_Lbl_Text">Text</sys:String>
