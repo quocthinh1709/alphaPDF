@@ -66,13 +66,18 @@ namespace AlphaPDF
             bool bold = style == XFontStyle.Bold || style == XFontStyle.BoldItalic;
             bool italic = style == XFontStyle.Italic || style == XFontStyle.BoldItalic;
 
+            XPdfFontOptions fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
+
             if (!AlphaPDF.Services.BidiReorder.ContainsRtl(text))
             {
                 // LTR (incl. Cyrillic): pick a covering face so Russian doesn't render as boxes.
                 // forceCandidate (an extracted embedded font already verified to cover the text)
                 // bypasses the script-substitution heuristic so the exact font is used.
                 string ltrFace = forceCandidate ? candidateFamily : PickFace(text, candidateFamily, bold, italic);
-                gfx.DrawString(text, new XFont(ltrFace, fontSizePx, style), brush, leftX, baselineY);
+                //gfx.DrawString(text, new XFont(ltrFace, fontSizePx, style), brush, leftX, baselineY);
+                
+                gfx.DrawString(text, new XFont(ltrFace, fontSizePx, style, fontOptions), brush, leftX, baselineY);
+
                 return;
             }
 
@@ -81,7 +86,10 @@ namespace AlphaPDF
                 ? AlphaPDF.Services.ArabicShaper.Shape(text)
                 : text;
             string family = forceCandidate ? candidateFamily : PickFace(shaped, candidateFamily, bold, italic);
-            var font = new XFont(family, fontSizePx, style);
+            //var font = new XFont(family, fontSizePx, style);
+            
+            var font = new XFont(family, fontSizePx, style, fontOptions);
+
             string visual = AlphaPDF.Services.BidiReorder.ToVisual(shaped);
             double width = gfx.MeasureString(visual, font).Width;
             double x = rightX > leftX ? rightX - width : leftX;
@@ -126,7 +134,7 @@ namespace AlphaPDF
                             foreach (var line in lines)
                             {
                                 if (!string.IsNullOrEmpty(line))
-                                    DrawTextRun(gfx, line, "Geist", ta.FontSize * sy, XFontStyle.Regular,
+                                    DrawTextRun(gfx, line, ta.FontName, ta.FontSize * sy, XFontStyle.Regular,
                                         taBrush, taLeft, taLeft, ty); // rightX==leftX → left-anchored
                                 ty += lineH;
                             }

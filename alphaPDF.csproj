@@ -65,7 +65,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\alphaPDF.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Fonts\Geist-Regular.ttf" />
     <Resource Include="Resources\Fonts\Geist-Medium.ttf" />

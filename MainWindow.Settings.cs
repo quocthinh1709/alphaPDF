@@ -51,9 +51,10 @@ namespace AlphaPDF
             LangHeRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.He;
             LangArRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Ar;
             LangRuRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Ru;
+            LangArRadio.IsChecked   = curLoc == AlphaPDF.Services.Locale.Vi;
             // Sync without re-triggering the toggle handler (would log a spurious
             // logging.toggle and re-save the setting on every Settings open).
-            _suppressLogToggleEvent = true;
+            //_suppressLogToggleEvent = true;
             //LogEnabledCheck.IsChecked = AlphaPDF.Services.Logger.Enabled;
             _suppressLogToggleEvent = false;
             //SyncUpdateToggle();
